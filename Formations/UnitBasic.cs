@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Formations
 {
-    abstract class UnitAbstract
+    class UnitBasic : UnitAbstract
     {
-        public abstract void update();
+        public override void update()
+        {
+        }
     }
 }
