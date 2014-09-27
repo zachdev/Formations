@@ -35,6 +35,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="PlayerBoard.cs" />
+    <Compile Include="GameBoard.cs" />
     <Compile Include="UnitBasic.cs" />
     <Compile Include="TileBasic.cs" />
     <Compile Include="TileAbstract.cs" />
