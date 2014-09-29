@@ -6,21 +6,19 @@ using System.Text;
 
 namespace Formations
 {
-    class GameBoard
+    class PlayerBoard
     {
-        private PlayerBoard hostBoard;
-        private PlayerBoard guestBoard;
+        private TileAbstract[] tiles = new TileBasic[1];
 
-        public GameBoard()
+        public PlayerBoard()
         {
-
+            tiles[0] = new TileBasic(100, 100);
         }
 
-        public void init(GraphicsDevice graphicsDevice)
+        public void init()
         {
-            hostBoard = new PlayerBoard();
-            hostBoard.init();
-
+            
+            tiles[0].init();
         }
 
         public void update()
@@ -30,7 +28,7 @@ namespace Formations
 
         public void draw()
         {
-            hostBoard.draw();
+            tiles[0].draw();
         }
     }
 }

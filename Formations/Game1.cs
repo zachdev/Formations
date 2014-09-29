@@ -11,7 +11,7 @@ namespace Formations
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        GameBoard gb;
         public Game1()
             : base()
         {
@@ -28,8 +28,10 @@ namespace Formations
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            
             base.Initialize();
+            gb = new GameBoard();
+            gb.init(GraphicsDevice);
         }
 
         /// <summary>
@@ -60,8 +62,8 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+           // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+           //     Exit();
 
             // TODO: Add your update logic here
 
@@ -75,7 +77,7 @@ namespace Formations
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            gb.draw();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
