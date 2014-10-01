@@ -17,6 +17,9 @@ namespace Formations
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace Formations
             // TODO: Add your initialization logic here
             
             base.Initialize();
+
             gb = new GameBoard();
             gb.init(GraphicsDevice);
         }
