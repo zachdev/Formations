@@ -77,7 +77,7 @@ namespace Formations
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            gb.draw();
+            gb.draw(spriteBatch);
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

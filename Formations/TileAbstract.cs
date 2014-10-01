@@ -11,9 +11,9 @@ namespace Formations
     abstract class TileAbstract
     {
         protected Vector2 location { get; set; }
-        public abstract void init();
+        public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
         public abstract void update();
 
-        public abstract void draw();
+        public abstract void draw(SpriteBatch spriteBatch);
     }
 }

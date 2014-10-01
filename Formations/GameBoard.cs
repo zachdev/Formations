@@ -19,7 +19,7 @@ namespace Formations
         public void init(GraphicsDevice graphicsDevice)
         {
             hostBoard = new PlayerBoard();
-            hostBoard.init();
+            hostBoard.init(graphicsDevice);
 
         }
 
@@ -28,9 +28,9 @@ namespace Formations
 
         }
 
-        public void draw()
+        public void draw(SpriteBatch spriteBatch)
         {
-            hostBoard.draw();
+            hostBoard.draw(spriteBatch);
         }
     }
 }

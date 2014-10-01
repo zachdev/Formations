@@ -8,17 +8,36 @@ namespace Formations
 {
     class PlayerBoard
     {
-        private TileAbstract[] tiles = new TileBasic[1];
+        private TileAbstract[,] tiles = new TileBasic[6,6];
 
         public PlayerBoard()
         {
-            tiles[0] = new TileBasic(100, 100);
+            for (int i = 0; i <= 5; i++)
+            {
+                for(int j = 0; j <= 5; j++)
+               {
+                   tiles[i,j] = new TileBasic();
+               }
+            }
         }
 
-        public void init()
+        public void init(GraphicsDevice graphicsDevice)
         {
+            for (int i = 0; i <= 5; i++ )
+            {
+                for(int j = 0; j <= 5; j++)
+                {
+                    if (j % 2 == 0)
+                    {
+                        tiles[i, j].init(100 + (i * 50), 100 + (j * 44), graphicsDevice);
+                    }
+                    else
+                    {
+                        tiles[i, j].init(125 + (i * 50), 100 + (j * 44), graphicsDevice);
+                    }
+                }
+            }
             
-            tiles[0].init();
         }
 
         public void update()
@@ -26,9 +45,15 @@ namespace Formations
 
         }
 
-        public void draw()
+        public void draw(SpriteBatch spriteBatch)
         {
-            tiles[0].draw();
+            for (int i = 0; i <= 5; i++)
+            {
+                for (int j = 0; j <= 5; j++)
+                {
+                    tiles[i,j].draw(spriteBatch);
+                }
+            }
         }
     }
 }
