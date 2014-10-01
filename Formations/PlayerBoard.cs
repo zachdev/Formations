@@ -12,9 +12,9 @@ namespace Formations
 
         public PlayerBoard()
         {
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 2; i++)
             {
-                for(int j = 0; j <= 5; j++)
+                for(int j = 0; j <= 2; j++)
                {
                    tiles[i,j] = new TileBasic();
                }
@@ -23,17 +23,17 @@ namespace Formations
 
         public void init(GraphicsDevice graphicsDevice)
         {
-            for (int i = 0; i <= 5; i++ )
+            for (int i = 0; i <= 2; i++ )
             {
-                for(int j = 0; j <= 5; j++)
+                for(int j = 0; j <= 2; j++)
                 {
                     if (j % 2 == 0)
                     {
-                        tiles[i, j].init(100 + (i * 50), 100 + (j * 44), graphicsDevice);
+                        tiles[i, j].init(i * 1.75f, -j * 1.52f, graphicsDevice);
                     }
                     else
                     {
-                        tiles[i, j].init(125 + (i * 50), 100 + (j * 44), graphicsDevice);
+                        tiles[i, j].init(.875f + i * 1.75f, -j * 1.52f, graphicsDevice);
                     }
                 }
             }
@@ -47,9 +47,9 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 2; i++)
             {
-                for (int j = 0; j <= 5; j++)
+                for (int j = 0; j <= 2; j++)
                 {
                     tiles[i,j].draw(spriteBatch);
                 }
