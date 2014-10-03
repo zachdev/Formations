@@ -9,7 +9,6 @@ namespace Formations
 {
     class Hexagon
     {
-        VertexBuffer vertexBuffer;
         Vector3[] vectors;
         VertexPositionColor[] vertices;
         BasicEffect basicEffect;
@@ -25,7 +24,7 @@ namespace Formations
             basicEffect.Projection = Matrix.CreateOrthographicOffCenter
                (0, graphicsDevice.Viewport.Width,     // left, right
                 graphicsDevice.Viewport.Height, 0,    // bottom, top
-                0, 1);                                         // near, far plane
+                0, 1);                                // near, far plane
  
             vectors= CalculateVertices(25, new Vector3(x, y,0));
 
@@ -80,23 +79,20 @@ namespace Formations
         {
           
             bool isInside = false;
-           /* for (int i = 0, j = vectors.Length - 1; i < vectors.Length; j = i++)
+            for (int i = 0, j = vectors.Length - 1; i < vectors.Length; j = i++)
             {
-                Vector3 temp1 = Vector3.Transform(vectors[i], world);
-                temp1 = Vector3.Transform(temp1, view);
-                temp1 = Vector3.Transform(temp1, projection);
-
-                Vector3 temp2 = Vector3.Transform(vectors[j], world);
-                if (((temp1.Y > point.Y) != (temp2.Y > point.Y)) &&
+                Vector3 temp1 = vectors[i];
+                Vector3 temp2 = vectors[j];
+                if (((temp1 .Y > point.Y) != (temp2.Y > point.Y)) &&
                     (point.X < (temp2.X - temp1.X) * (point.Y - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
                  {
                     isInside = !isInside;
                  }
-                Console.WriteLine(" temp1: " + temp1.X + " ," + temp1.Y);
+                //Console.WriteLine(" temp1: " + temp1.X + " ," + temp1.Y);
                 //Console.WriteLine(" temp2: " + temp2.X + " ," + temp2.Y);
             }
             
-            */Console.WriteLine(isInside);
+            Console.WriteLine(isInside);
             return isInside;
         }
 
