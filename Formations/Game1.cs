@@ -14,6 +14,10 @@ namespace Formations
         SpriteBatch spriteBatch;
         GameBoard gb;
         int calls = 0;
+
+        private SpriteFont font;
+        private int score = 0;
+
         public Game1()
             : base()
         {
@@ -48,6 +52,8 @@ namespace Formations
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            font = Content.Load<SpriteFont>("spriteFont");
 
             // TODO: use this.Content to load your game content here
         }
@@ -86,6 +92,12 @@ namespace Formations
             GraphicsDevice.Clear(Color.Black);
             gb.draw(spriteBatch);
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(font, "The Cool Game", new Vector2(100, 100), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
