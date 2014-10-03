@@ -23,9 +23,9 @@ namespace Formations
 
             
         }
-        public override void update()
+        public override void update(Vector2 point)
         {
-
+            if (hex.IsPointInPolygon(point)) { hex.setColor(Color.Red); }
         }
         public override void draw(SpriteBatch spriteBatch)
         {

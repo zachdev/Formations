@@ -12,7 +12,7 @@ namespace Formations
     {
         protected Vector2 location { get; set; }
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
-        public abstract void update();
+        public abstract void update(Vector2 point);
 
         public abstract void draw(SpriteBatch spriteBatch);
     }

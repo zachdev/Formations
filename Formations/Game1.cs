@@ -33,7 +33,7 @@ namespace Formations
             // TODO: Add your initialization logic here
             
             base.Initialize();
-
+            this.IsMouseVisible = true;
             gb = new GameBoard();
             gb.init(GraphicsDevice);
         }
@@ -68,7 +68,8 @@ namespace Formations
         {
            // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
            //     Exit();
-
+            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            gb.update(new Vector2(mouseState.X, mouseState.Y));
             // TODO: Add your update logic here
 
             base.Update(gameTime);

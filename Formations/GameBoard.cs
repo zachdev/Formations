@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,9 @@ namespace Formations
 
         }
 
-        public void update()
+        public void update(Vector2 point)
         {
-
+            hostBoard.update(point);
         }
 
         public void draw(SpriteBatch spriteBatch)

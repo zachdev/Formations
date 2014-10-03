@@ -10,97 +10,109 @@ namespace Formations
     class Hexagon
     {
         VertexBuffer vertexBuffer;
-
+        Vector3[] vectors;
+        VertexPositionColor[] vertices;
         BasicEffect basicEffect;
-        Matrix world;
-        Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 10), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-        Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), 1200f / 600f , 0.01f, 100f);
-
+       
         public Hexagon()
         {
 
         }
         public void init(float x, float y, GraphicsDevice graphicsDevice)
         {
-            world = Matrix.CreateTranslation(x, y, 0);
             basicEffect = new BasicEffect(graphicsDevice);
-            Vector3[] vectors= CalculateVertices(6, 1, new Vector3(0,1,0));
+            basicEffect.VertexColorEnabled = true;
+            basicEffect.Projection = Matrix.CreateOrthographicOffCenter
+               (0, graphicsDevice.Viewport.Width,     // left, right
+                graphicsDevice.Viewport.Height, 0,    // bottom, top
+                0, 1);                                         // near, far plane
+ 
+            vectors= CalculateVertices(25, new Vector3(x, y,0));
 
-            VertexPositionColor[] vertices = new VertexPositionColor[18];
-            vertices[0] = new VertexPositionColor(new Vector3(-0.855f, 1.5f, 0), Color.Blue);
+            vertices = new VertexPositionColor[18];
+            vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[1] = new VertexPositionColor(vectors[0], Color.Green);
             vertices[2] = new VertexPositionColor(vectors[1], Color.Green);
-            vertices[3] = new VertexPositionColor(new Vector3(-0.855f, 1.5f, 0), Color.Blue);
+            vertices[3] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[4] = new VertexPositionColor(vectors[1], Color.Green);
             vertices[5] = new VertexPositionColor(vectors[2], Color.Green);
 
-            vertices[6] = new VertexPositionColor(new Vector3(-0.855f,1.5f,0), Color.Blue);
+            vertices[6] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[7] = new VertexPositionColor(vectors[2], Color.Green);
             vertices[8] = new VertexPositionColor(vectors[3], Color.Green);
-            vertices[9] = new VertexPositionColor(new Vector3(-0.855f, 1.5f, 0), Color.Blue);
+            vertices[9] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[10] = new VertexPositionColor(vectors[3], Color.Green);
             vertices[11] = new VertexPositionColor(vectors[4], Color.Green);
 
-            vertices[12] = new VertexPositionColor(new Vector3(-0.855f, 1.5f, 0), Color.Blue);
+            vertices[12] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[13] = new VertexPositionColor(vectors[4], Color.Green);
             vertices[14] = new VertexPositionColor(vectors[5], Color.Green);
-            vertices[15] = new VertexPositionColor(new Vector3(-0.855f, 1.5f, 0), Color.Blue);
+            vertices[15] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
             vertices[16] = new VertexPositionColor(vectors[5], Color.Green);
             vertices[17] = new VertexPositionColor(vectors[0], Color.Green);
 
-            vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionColor), 100, BufferUsage.WriteOnly);
-            vertexBuffer.SetData<VertexPositionColor>(vertices);
         }
-        public static Vector3[] CalculateVertices(int nSides, double nSideLength, Vector3 ptFirstVertex)
+        public static Vector3[] CalculateVertices(float sideLenght, Vector3 center)
         {
-            if (nSides < 3)
-                throw new ArgumentException("Polygons can't have less than 3 sides...");
-
-            Vector3[] aptsVertices = new Vector3[nSides];
-            double deg = (45.0 * (nSides - 2)) / nSides;
-            double step = 360.0 / nSides;
-            double rad = deg * (Math.PI / 180);
-
-            double nSinDeg = Math.Sin(rad);
-            double nCosDeg = Math.Cos(rad);
-
-            aptsVertices[0] = ptFirstVertex;
-
-            for (int i = 1; i < aptsVertices.Length; i++)
+            Vector3[] tempVectors = new Vector3[6];
+            double angle;
+            Vector3 temp = new Vector3();
+            for (int i = 0; i < tempVectors.Length; i++)
             {
-                double x = aptsVertices[i - 1].X - nCosDeg * nSideLength;
-                double y = aptsVertices[i - 1].Y - nSinDeg * nSideLength;
-                aptsVertices[i] = new Vector3((float)x, (float)y, 0);
+                angle = 2 * Math.PI / 6 * (i + 0.05);
 
-
-                //recalculate the degree for the next vertex
-                deg -= step;
-                rad = deg * (Math.PI / 180);
-
-                nSinDeg = Math.Sin(rad);
-                nCosDeg = Math.Cos(rad);
-
+                temp.X = (float)(center.X + sideLenght * Math.Cos(angle));
+                temp.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
+                temp.Z = 0f;
+                tempVectors[i] = temp;
             }
-            return aptsVertices;
+            return tempVectors;
+
         }
+        public void setColor(Color color)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                if (i % 3 == 0) { vertices[i].Color = color; }
+            }
+        }
+        public bool IsPointInPolygon(Vector2 point)
+        {
+          
+            bool isInside = false;
+           /* for (int i = 0, j = vectors.Length - 1; i < vectors.Length; j = i++)
+            {
+                Vector3 temp1 = Vector3.Transform(vectors[i], world);
+                temp1 = Vector3.Transform(temp1, view);
+                temp1 = Vector3.Transform(temp1, projection);
+
+                Vector3 temp2 = Vector3.Transform(vectors[j], world);
+                if (((temp1.Y > point.Y) != (temp2.Y > point.Y)) &&
+                    (point.X < (temp2.X - temp1.X) * (point.Y - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
+                 {
+                    isInside = !isInside;
+                 }
+                Console.WriteLine(" temp1: " + temp1.X + " ," + temp1.Y);
+                //Console.WriteLine(" temp2: " + temp2.X + " ," + temp2.Y);
+            }
+            
+            */Console.WriteLine(isInside);
+            return isInside;
+        }
+
         public void draw(SpriteBatch spriteBatch)
         {
-            
-            basicEffect.World = world;
-            basicEffect.View = view;
-            basicEffect.Projection = projection;
-            basicEffect.VertexColorEnabled = true;
 
-            spriteBatch.GraphicsDevice.SetVertexBuffer(vertexBuffer);
-
+/*
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
             spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
-
+*/
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
+            
                 pass.Apply();
-                spriteBatch.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 6);
+                spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 6);
             }
         }
     }
