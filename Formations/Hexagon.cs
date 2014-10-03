@@ -26,7 +26,7 @@ namespace Formations
                 graphicsDevice.Viewport.Height, 0,    // bottom, top
                 0, 1);                                // near, far plane
  
-            vectors= CalculateVertices(25, new Vector3(x, y,0));
+            vectors= CalculateVertices(50, new Vector3(x, y,0));
 
             vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
@@ -58,8 +58,7 @@ namespace Formations
             Vector3 temp = new Vector3();
             for (int i = 0; i < tempVectors.Length; i++)
             {
-                angle = 2 * Math.PI / 6 * (i + 0.05);
-
+                angle = 2 * Math.PI / 6 * (i + 0.05) -.57;
                 temp.X = (float)(center.X + sideLenght * Math.Cos(angle));
                 temp.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
                 temp.Z = 0f;
@@ -79,37 +78,27 @@ namespace Formations
         {
           
             bool isInside = false;
+            Vector3 temp1;
+            Vector3 temp2;
             for (int i = 0, j = vectors.Length - 1; i < vectors.Length; j = i++)
             {
-                Vector3 temp1 = vectors[i];
-                Vector3 temp2 = vectors[j];
+                temp1 = vectors[i];
+                temp2 = vectors[j];
                 if (((temp1 .Y > point.Y) != (temp2.Y > point.Y)) &&
                     (point.X < (temp2.X - temp1.X) * (point.Y - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
                  {
                     isInside = !isInside;
                  }
-                //Console.WriteLine(" temp1: " + temp1.X + " ," + temp1.Y);
-                //Console.WriteLine(" temp2: " + temp2.X + " ," + temp2.Y);
             }
-            
-            Console.WriteLine(isInside);
             return isInside;
         }
 
         public void draw(SpriteBatch spriteBatch)
         {
 
-/*
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
-*/
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
-            {
-            
-                pass.Apply();
+                basicEffect.CurrentTechnique.Passes[0].Apply();
                 spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 6);
-            }
+            
         }
     }
 }

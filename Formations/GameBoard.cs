@@ -11,6 +11,7 @@ namespace Formations
     {
         private PlayerBoard hostBoard;
         private PlayerBoard guestBoard;
+        int calls = 0;
 
         public GameBoard()
         {
@@ -27,10 +28,11 @@ namespace Formations
         public void update(Vector2 point)
         {
             hostBoard.update(point);
+
         }
 
         public void draw(SpriteBatch spriteBatch)
-        {
+        { 
             hostBoard.draw(spriteBatch);
         }
     }

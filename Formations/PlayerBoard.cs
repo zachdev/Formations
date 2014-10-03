@@ -9,7 +9,7 @@ namespace Formations
 {   
     class PlayerBoard
     {
-        private int sizeOfBoard = 1;
+        private int sizeOfBoard = 4;
         private TileAbstract[,] tiles = new TileBasic[6,6];
 
         public PlayerBoard()
@@ -31,11 +31,11 @@ namespace Formations
                 {
                     if (j % 2 == 0)
                     {
-                        tiles[i, j].init(100 + (i * 25), 100 + (j * 25), graphicsDevice);
+                        tiles[i, j].init(100 + (i * 88), 100 + (j * 76), graphicsDevice);
                     }
                     else
                     {
-                        tiles[i, j].init(125 + (i * 25), 125 + (j * 25), graphicsDevice);
+                        tiles[i, j].init(144 + (i * 88), 100 + (j * 76), graphicsDevice);
                     }
 
                 }

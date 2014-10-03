@@ -11,6 +11,8 @@ namespace Formations
     class TileBasic : TileAbstract
     {
         private Hexagon hex;
+        private bool selected = false;
+   
         public TileBasic()
         {
 
@@ -25,7 +27,22 @@ namespace Formations
         }
         public override void update(Vector2 point)
         {
-            if (hex.IsPointInPolygon(point)) { hex.setColor(Color.Red); }
+            if (hex.IsPointInPolygon(point))
+            {
+                if (!selected)
+                {
+                    selected = true;
+                    hex.setColor(Color.Red);
+                }
+            }
+            else
+            {
+                if (selected)
+                {
+                    selected = false;
+                    hex.setColor(Color.Blue);
+                }
+            }
         }
         public override void draw(SpriteBatch spriteBatch)
         {
