@@ -106,7 +106,7 @@ namespace Formations
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(font, "The Cool Game", new Vector2(100, 100), Color.White);
+            spriteBatch.DrawString(font, "The Cool Game", new Vector2(100, 25), Color.White);
 
             spriteBatch.End();
 

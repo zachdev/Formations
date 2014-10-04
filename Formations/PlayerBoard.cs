@@ -10,7 +10,7 @@ namespace Formations
 {   
     class PlayerBoard
     {
-        private int sizeOfBoard = 4;
+        private int sizeOfBoard = 6;
         private TileBasic[,] tiles = new TileBasic[6,6];
 
         public PlayerBoard()
