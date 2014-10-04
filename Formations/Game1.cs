@@ -13,6 +13,8 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoard gb;
+       // MouseState mouseState;
+        MouseListener mouseListener;
         int calls = 0;
         public Game1()
             : base()
@@ -36,6 +38,8 @@ namespace Formations
             
             base.Initialize();
             this.IsMouseVisible = true;
+            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            mouseListener = new MouseListener(mouseState, this);
             gb = new GameBoard();
             gb.init(GraphicsDevice);
         }
@@ -68,13 +72,20 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-           // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-           //     Exit();
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            gb.update(new Vector2(mouseState.X, mouseState.Y));
+            gb.update(mouseState);
+            mouseListener.update(mouseState);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+        }
+        public void mousePressed(MouseState mouseState)
+        {
+            gb.mousePressed(mouseState);
+        }
+        public void mouseReleased(MouseState mouseState)
+        {
+            gb.mouseReleased(mouseState);
         }
 
         /// <summary>

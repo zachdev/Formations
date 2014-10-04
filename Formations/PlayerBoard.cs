@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,13 @@ namespace Formations
     class PlayerBoard
     {
         private int sizeOfBoard = 4;
-        private TileAbstract[,] tiles = new TileBasic[6,6];
+        private TileBasic[,] tiles = new TileBasic[6,6];
 
         public PlayerBoard()
         {
-            for (int i = 0; i <= sizeOfBoard; i++)
+            for (int i = 0; i < sizeOfBoard; i++)
             {
-                for (int j = 0; j <= sizeOfBoard; j++)
+                for (int j = 0; j < sizeOfBoard; j++)
                {
                    tiles[i,j] = new TileBasic();
                }
@@ -25,9 +26,9 @@ namespace Formations
 
         public void init(GraphicsDevice graphicsDevice)
         {
-            for (int i = 0; i <= sizeOfBoard; i++)
+            for (int i = 0; i < sizeOfBoard; i++)
             {
-                for (int j = 0; j <= sizeOfBoard; j++)
+                for (int j = 0; j < sizeOfBoard; j++)
                 {
                     if (j % 2 == 0)
                     {
@@ -42,23 +43,47 @@ namespace Formations
             }
             
         }
-
-        public void update(Vector2 point)
+        public void mousePressed(MouseState mouseState)
         {
-            for (int i = 0; i <= sizeOfBoard; i++)
+            for (int i = 0; i < sizeOfBoard; i++)
             {
-                for (int j = 0; j <= sizeOfBoard; j++)
+                for (int j = 0; j < sizeOfBoard; j++)
                 {
-                    tiles[i, j].update(point);
+                    if (tiles[i, j].isHovered())
+                    {
+                        if (tiles[i, j].isSelected())
+                        {
+                            tiles[i, j].setSelected(false);
+                        }
+                        else
+                        {
+                            tiles[i, j].setSelected(true);
+                        }
+                        
+                    }
+                }
+            }
+        }
+        public void mouseReleased(MouseState mouseState)
+        {
+
+        }
+        public void update(MouseState mouseState)
+        {
+            for (int i = 0; i < sizeOfBoard; i++)
+            {
+                for (int j = 0; j < sizeOfBoard; j++)
+                {
+                    tiles[i, j].update(mouseState);
                 }
             }
         }
 
         public void draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i <= sizeOfBoard; i++)
+            for (int i = 0; i < sizeOfBoard; i++)
             {
-                for (int j = 0; j <= sizeOfBoard; j++)
+                for (int j = 0; j < sizeOfBoard; j++)
                 {
                     tiles[i,j].draw(spriteBatch);
                 }

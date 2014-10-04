@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace Formations
     class GameBoard
     {
         private PlayerBoard hostBoard;
-        private PlayerBoard guestBoard;
-        int calls = 0;
+        //private PlayerBoard guestBoard;
 
         public GameBoard()
         {
@@ -24,10 +24,17 @@ namespace Formations
             hostBoard.init(graphicsDevice);
 
         }
-
-        public void update(Vector2 point)
+        public void mousePressed(MouseState mouseState)
         {
-            hostBoard.update(point);
+            hostBoard.mousePressed(mouseState);
+        }
+        public void mouseReleased(MouseState mouseState)
+        {
+            hostBoard.mouseReleased(mouseState);
+        }
+        public void update(MouseState mouseState)
+        {
+            hostBoard.update(mouseState);
 
         }
 

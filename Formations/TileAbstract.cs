@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Formations
     {
         protected Vector2 location { get; set; }
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
-        public abstract void update(Vector2 point);
+        public abstract void update(MouseState mouseState);
 
         public abstract void draw(SpriteBatch spriteBatch);
     }

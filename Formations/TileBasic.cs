@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Formations
     {
         private Hexagon hex;
         private bool selected = false;
+        private bool hovered = false;
    
         public TileBasic()
         {
@@ -25,21 +27,51 @@ namespace Formations
 
             
         }
-        public override void update(Vector2 point)
+        public bool isSelected()
         {
-            if (hex.IsPointInPolygon(point))
+            return selected;
+        }
+        public void setSelected(bool isSelected)
+        {
+            selected = isSelected;
+            if (selected)
             {
+                setTileColor(Color.Purple);
+            }
+        }
+        public bool isHovered()
+        {
+            return hovered;
+        }
+        public void setTileColor(Color color)
+        {
+            hex.setColor(color);
+        }
+        public bool isPoininTile(MouseState mouseState)
+        {
+            return hex.IsPointInPolygon(mouseState.X, mouseState.Y);
+        }
+        public override void update(MouseState mouseState)
+        {
+            if (hex.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                if (!hovered)
+                {
+                    hovered = true;   
+                }
                 if (!selected)
                 {
-                    selected = true;
                     hex.setColor(Color.Red);
                 }
             }
             else
             {
-                if (selected)
+                if (hovered)
                 {
-                    selected = false;
+                    hovered = false;
+                }
+                if (!selected)
+                {
                     hex.setColor(Color.Blue);
                 }
             }

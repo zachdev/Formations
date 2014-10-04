@@ -67,6 +67,7 @@ namespace Formations
             return tempVectors;
 
         }
+
         public void setColor(Color color)
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -74,7 +75,7 @@ namespace Formations
                 if (i % 3 == 0) { vertices[i].Color = color; }
             }
         }
-        public bool IsPointInPolygon(Vector2 point)
+        public bool IsPointInPolygon(int pointX, int pointY)
         {
           
             bool isInside = false;
@@ -84,8 +85,8 @@ namespace Formations
             {
                 temp1 = vectors[i];
                 temp2 = vectors[j];
-                if (((temp1 .Y > point.Y) != (temp2.Y > point.Y)) &&
-                    (point.X < (temp2.X - temp1.X) * (point.Y - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
+                if (((temp1.Y > pointY) != (temp2.Y > pointY)) &&
+                    (pointX < (temp2.X - temp1.X) * (pointY - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
                  {
                     isInside = !isInside;
                  }
