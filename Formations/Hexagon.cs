@@ -9,13 +9,14 @@ namespace Formations
 {
     class Hexagon
     {
-        Vector3[] vectors;
-        VertexPositionColor[] vertices;
-        BasicEffect basicEffect;
+        private Vector3[] vectors;
+        private VertexPositionColor[] vertices;
+        private BasicEffect basicEffect;
+        private int tileSideLength;
        
-        public Hexagon()
+        public Hexagon(int tileSideLength)
         {
-
+            this.tileSideLength = tileSideLength;
         }
         public void init(float x, float y, GraphicsDevice graphicsDevice)
         {
@@ -26,7 +27,7 @@ namespace Formations
                 graphicsDevice.Viewport.Height, 0,    // bottom, top
                 0, 1);                                // near, far plane
  
-            vectors= CalculateVertices(50, new Vector3(x, y,0));
+            vectors= CalculateVertices(tileSideLength, new Vector3(x, y,0));
 
             vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);

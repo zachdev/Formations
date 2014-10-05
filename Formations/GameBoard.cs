@@ -10,8 +10,8 @@ namespace Formations
 {
     class GameBoard
     {
-        private PlayerBoard hostBoard;
-        //private PlayerBoard guestBoard;
+        private PlayerBoard playerBoard;
+        private GuestBoard guestBoard;
 
         public GameBoard()
         {
@@ -20,27 +20,30 @@ namespace Formations
 
         public void init(GraphicsDevice graphicsDevice)
         {
-            hostBoard = new PlayerBoard();
-            hostBoard.init(graphicsDevice);
-
+            playerBoard = new PlayerBoard();
+            guestBoard = new GuestBoard();
+            playerBoard.init(graphicsDevice);
+            guestBoard.init(graphicsDevice);
         }
         public void mousePressed(MouseState mouseState)
         {
-            hostBoard.mousePressed(mouseState);
+            playerBoard.mousePressed(mouseState);
         }
         public void mouseReleased(MouseState mouseState)
         {
-            hostBoard.mouseReleased(mouseState);
+            playerBoard.mouseReleased(mouseState);
         }
         public void update(MouseState mouseState)
         {
-            hostBoard.update(mouseState);
+            playerBoard.update(mouseState);
+            guestBoard.update();
 
         }
 
         public void draw(SpriteBatch spriteBatch)
         { 
-            hostBoard.draw(spriteBatch);
+            playerBoard.draw(spriteBatch);
+            guestBoard.draw(spriteBatch);
         }
     }
 }

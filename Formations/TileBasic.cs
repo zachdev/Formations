@@ -14,15 +14,16 @@ namespace Formations
         private Hexagon hex;
         private bool selected = false;
         private bool hovered = false;
+        private int tileSideLength;
    
-        public TileBasic()
+        public TileBasic(int tileSideLength)
         {
-
+            this.tileSideLength = tileSideLength;
         }
 
         public override void init(float x, float y, GraphicsDevice graphicsDevice)
         {
-            hex = new Hexagon();
+            hex = new Hexagon(tileSideLength);
             hex.init(x, y, graphicsDevice);
 
             

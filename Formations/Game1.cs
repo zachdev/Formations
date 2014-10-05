@@ -15,10 +15,8 @@ namespace Formations
         GameBoard gb;
        // MouseState mouseState;
         MouseListener mouseListener;
-        int calls = 0;
 
         private SpriteFont font;
-        private int score = 0;
 
         public Game1()
             : base()
@@ -100,7 +98,7 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Maroon);
             gb.draw(spriteBatch);
             // TODO: Add your drawing code here
 
