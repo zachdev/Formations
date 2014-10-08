@@ -10,13 +10,20 @@ namespace Formations
 {   
     class Player
     {
+        private string playerName;
+        private Vector2 playerInfoLocation = new Vector2(800,10);
+        private UnitAbstract[] units;
+        private SpriteFont font;
         public Player()
         {
 
         }
 
-        public void init(GraphicsDevice graphicsDevice)
+        public void init(string nameOfPlayer, int numberOfUnits, SpriteFont font)
         {
+            this.playerName = nameOfPlayer;
+            units = new UnitAbstract[numberOfUnits];
+            this.font = font;
 
         }
 
@@ -28,7 +35,7 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.DrawString(font, playerName, playerInfoLocation,Color.Wheat);
         }
     }
 }

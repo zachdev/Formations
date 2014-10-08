@@ -7,6 +7,10 @@ namespace Formations
 {
     class UnitBasic : UnitAbstract
     {
+        public override void init()
+        {
+            
+        }
         public override void update()
         {
 

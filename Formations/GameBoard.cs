@@ -39,11 +39,11 @@ namespace Formations
             }
         }
 
-        public void init(GraphicsDevice graphicsDevice)
+        public void init(GraphicsDevice graphicsDevice, SpriteFont font)
         {
             player = new Player();
             guest = new Guest();
-            player.init(graphicsDevice);
+            player.init("Bob", 20, font);
             guest.init(graphicsDevice);
 
             basicEffect = new BasicEffect(graphicsDevice);
@@ -154,6 +154,7 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
+            
             basicEffect.CurrentTechnique.Passes[0].Apply();
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
@@ -166,6 +167,7 @@ namespace Formations
                     tiles[i,j].draw(spriteBatch);
                 }
             }
+            player.draw(spriteBatch);
         }
     }
 }

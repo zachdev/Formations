@@ -43,7 +43,7 @@ namespace Formations
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
             gb = new GameBoard();
-            gb.init(GraphicsDevice);
+            gb.init(GraphicsDevice, font);
         }
 
         /// <summary>
@@ -99,11 +99,11 @@ namespace Formations
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Maroon);
-            gb.draw(spriteBatch);
+            
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-
+            gb.draw(spriteBatch);
             spriteBatch.DrawString(font, "The Cool Game", new Vector2(100, 25), Color.White);
 
             spriteBatch.End();
