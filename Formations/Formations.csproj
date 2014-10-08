@@ -35,10 +35,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GuestBoard.cs" />
+    <Compile Include="Guest.cs" />
     <Compile Include="MouseListener.cs" />
     <Compile Include="Hexagon.cs" />
-    <Compile Include="PlayerBoard.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="UnitBasic.cs" />
     <Compile Include="TileBasic.cs" />

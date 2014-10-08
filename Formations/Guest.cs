@@ -10,7 +10,7 @@ namespace Formations
     /// <summary>
     /// GuestBoard
     /// </summary>
-    class GuestBoard
+    class Guest
     {
         private const int sizeOfBoard = 8;
         private int tileSideLength = 30;
@@ -24,7 +24,7 @@ namespace Formations
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
         private BasicEffect basicEffect;
-        public GuestBoard()
+        public Guest()
         {
             for (int i = 0; i < sizeOfBoard; i++)
             {
