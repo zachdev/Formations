@@ -11,22 +11,47 @@ namespace Formations
     
     class TileBasic : TileAbstract
     {
-        private Hexagon hex;
+        private UnitAbstract unit = null;
+        private Hexagon tileHex;
+        private Hexagon attUnit;
+        private Hexagon defUnit;
+        private Hexagon mulUnit;
         private bool selected = false;
         private bool hovered = false;
         private int tileSideLength;
+        private int unitSideLength;
    
         public TileBasic(int tileSideLength)
         {
             this.tileSideLength = tileSideLength;
+            unitSideLength = tileSideLength / 2;
         }
-
         public override void init(float x, float y, GraphicsDevice graphicsDevice)
         {
-            hex = new Hexagon(tileSideLength);
-            hex.init(x, y, graphicsDevice);
+            tileHex = new Hexagon(tileSideLength);
+            tileHex.init(x, y, graphicsDevice);
+            float changeInX = (float)Math.Sqrt((float)(tileSideLength*tileSideLength) - (float)(tileSideLength/2)*(float)(tileSideLength/2));
+            float changeInY = (float)(tileSideLength/2);
+            attUnit = new Hexagon(unitSideLength);
+            defUnit = new Hexagon(unitSideLength);
+            mulUnit = new Hexagon(unitSideLength);
+            attUnit.init(x, y - tileSideLength, graphicsDevice);
+            defUnit.init(x + changeInX, y + changeInY, graphicsDevice);
+            mulUnit.init(x - changeInX, y + changeInY, graphicsDevice);
 
-            
+        }
+        public void setUnit(UnitAbstract unit)
+        {
+            if (this.unit == null)
+            {
+                this.unit = unit;
+            }
+
+        }
+        public bool hasUnit()
+        {
+            if (unit == null) { return false; }
+            return true;
         }
         public bool isSelected()
         {
@@ -50,19 +75,33 @@ namespace Formations
         }
         public void setTileColor(Color color)
         {
-            hex.setColor(color);
+            tileHex.setColor(color);
         }
         public bool isPoininTile(MouseState mouseState)
         {
-            return hex.IsPointInPolygon(mouseState.X, mouseState.Y);
+            return tileHex.IsPointInPolygon(mouseState.X, mouseState.Y);
         }
         public override void mousePressed(MouseState mouseState)
         {
-            
+            if (isSelected())
+            {
+                setSelected(false);
+            }
+            else
+            {
+                setSelected(true);
+            }
         }
         public override void mouseReleased(MouseState mouseState)
         {
-            
+            if (isSelected())
+            {
+                setSelected(false);
+            }
+            else
+            {
+                setSelected(true);
+            }
         }
         public override void mouseDragged(MouseState mouseState)
         {
@@ -70,7 +109,7 @@ namespace Formations
         }
         public override void mouseMoved(MouseState mouseState)
         {
-            if (hex.IsPointInPolygon(mouseState.X, mouseState.Y))
+            if (tileHex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 if (!hovered)
                 {
@@ -78,7 +117,7 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    hex.setColor(Color.Red);
+                    tileHex.setColor(Color.Red);
                 }
             }
             else
@@ -89,7 +128,7 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    hex.setColor(Color.Blue);
+                    tileHex.setColor(Color.Blue);
                 }
             }
         }
@@ -97,9 +136,19 @@ namespace Formations
         {
 
         }
+        public void drawButtons(SpriteBatch spriteBatch)
+        {
+            if (isSelected())
+            {
+                attUnit.draw(spriteBatch);
+                defUnit.draw(spriteBatch);
+                mulUnit.draw(spriteBatch);
+            }
+        }
         public override void draw(SpriteBatch spriteBatch)
         {
-            hex.draw(spriteBatch);
+            tileHex.draw(spriteBatch);
+
         }
     }
 }

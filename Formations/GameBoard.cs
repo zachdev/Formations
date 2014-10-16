@@ -124,25 +124,33 @@ namespace Formations
                 {
                     if (tiles[i, j].isHovered())
                     {
-                        if (tiles[i, j].isSelected())
-                        {
-                            tiles[i, j].setSelected(false);
-                        }
-                        else
-                        {
-                            tiles[i, j].setSelected(true);
-                        }
+                        tiles[i, j].mousePressed(mouseState);
                     }
                 }
             }
         }
         public void mouseReleased(MouseState mouseState)
         {
-
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    if (tiles[i, j].isSelected())
+                    {
+                        tiles[i, j].mouseReleased(mouseState);
+                    }
+                }
+            }
         }
         public void mouseDragged(MouseState mouseState)
         {
-            
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    tiles[i, j].mouseDragged(mouseState);
+                }
+            }
         }
         public void mouseMoved(MouseState mouseState)
         {
@@ -172,6 +180,16 @@ namespace Formations
                 for (int j = 0; j < boardHeight; j++)
                 {
                     tiles[i,j].draw(spriteBatch);
+                }
+            }
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    if (tiles[i, j].isSelected())
+                    {
+                        tiles[i, j].drawButtons(spriteBatch);
+                    } 
                 }
             }
             player.draw(spriteBatch);
