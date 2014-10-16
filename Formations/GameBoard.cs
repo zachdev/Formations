@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Formations
 {
-    class GameBoard
+    class GameBoard : IMouseListener, IKeyboardListener
     {
         private Player player;
         private Guest guest;
@@ -73,7 +73,7 @@ namespace Formations
         }
         private void createButtonArea()
         {
-            float border = 10;
+            
             float width = boardOffsetX - 50;
             float height = 600 - boardOffsetY - 10;
             buttonsBackground[0] = new VertexPositionColor(new Vector3( 10, boardOffsetY - 40, 0), Color.MistyRose);
@@ -132,7 +132,6 @@ namespace Formations
                         {
                             tiles[i, j].setSelected(true);
                         }
-                        
                     }
                 }
             }
@@ -141,15 +140,23 @@ namespace Formations
         {
 
         }
-        public void update(MouseState mouseState)
+        public void mouseDragged(MouseState mouseState)
+        {
+            
+        }
+        public void mouseMoved(MouseState mouseState)
         {
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
-                    tiles[i, j].update(mouseState);
+                    tiles[i, j].mouseMoved(mouseState);
                 }
             }
+        }
+        public void update()
+        {
+
         }
 
         public void draw(SpriteBatch spriteBatch)

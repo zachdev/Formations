@@ -39,6 +39,10 @@ namespace Formations
             {
                 setTileColor(Color.Purple);
             }
+            else
+            {
+                setTileColor(Color.Red);
+            }
         }
         public bool isHovered()
         {
@@ -52,7 +56,19 @@ namespace Formations
         {
             return hex.IsPointInPolygon(mouseState.X, mouseState.Y);
         }
-        public override void update(MouseState mouseState)
+        public override void mousePressed(MouseState mouseState)
+        {
+            
+        }
+        public override void mouseReleased(MouseState mouseState)
+        {
+            
+        }
+        public override void mouseDragged(MouseState mouseState)
+        {
+
+        }
+        public override void mouseMoved(MouseState mouseState)
         {
             if (hex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
@@ -76,6 +92,10 @@ namespace Formations
                     hex.setColor(Color.Blue);
                 }
             }
+        }
+        public override void update()
+        {
+
         }
         public override void draw(SpriteBatch spriteBatch)
         {

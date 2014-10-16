@@ -9,12 +9,14 @@ using System.Text;
 
 namespace Formations
 {
-    abstract class TileAbstract
+    abstract class TileAbstract : IUpdateDraw, IMouseListener
     {
-        protected Vector2 location { get; set; }
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
-        public abstract void update(MouseState mouseState);
-
+        public abstract void mousePressed(MouseState mouseState);
+        public abstract void mouseReleased(MouseState mouseState);
+        public abstract void mouseDragged(MouseState mouseState);
+        public abstract void mouseMoved(MouseState mouseState);
+        public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
     }
 }

@@ -36,6 +36,6 @@ namespace Formations
         public void draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(font, playerName, playerInfoLocation,Color.Wheat);
-        }
+        }    
     }
 }

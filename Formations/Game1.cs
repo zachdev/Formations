@@ -8,7 +8,7 @@ namespace Formations
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Game, IMouseListener, IKeyboardListener
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -77,7 +77,7 @@ namespace Formations
         protected override void Update(GameTime gameTime)
         {
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            gb.update(mouseState);
+            gb.update();
             mouseListener.update(mouseState);
             // TODO: Add your update logic here
 
@@ -91,6 +91,14 @@ namespace Formations
         {
             gb.mouseReleased(mouseState);
         }
+        public void mouseDragged(MouseState mouseState)
+        {
+
+        }
+        public void mouseMoved(MouseState mouseState)
+        {
+            gb.mouseMoved(mouseState);
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -98,7 +106,7 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Maroon);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
             
             // TODO: Add your drawing code here
 

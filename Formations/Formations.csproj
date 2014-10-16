@@ -36,6 +36,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Guest.cs" />
+    <Compile Include="IKeyboardListener.cs" />
+    <Compile Include="IMouseListener.cs" />
+    <Compile Include="IUpdateDraw.cs" />
     <Compile Include="MouseListener.cs" />
     <Compile Include="Hexagon.cs" />
     <Compile Include="Player.cs" />
