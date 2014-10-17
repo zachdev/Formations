@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    class UnitBasic : UnitAbstract
+    class UnitAtt : UnitAbstract
     {
         public override void init()
         {

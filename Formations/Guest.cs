@@ -14,7 +14,7 @@ namespace Formations
     {
         private string guestName;
         private Vector2 guestInfoLocation = new Vector2(100, 10);
-        private UnitAbstract[] units;
+        private UnitAbstract[,] units;
         private SpriteFont font;
         public Guest()
         {
@@ -22,7 +22,7 @@ namespace Formations
 
         }
 
-        public void init(string nameOfGuest, UnitAbstract[] units, SpriteFont font)
+        public void init(string nameOfGuest, UnitAbstract[,] units, SpriteFont font)
         {
             guestName = nameOfGuest;
             this.units = units;

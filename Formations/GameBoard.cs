@@ -40,15 +40,33 @@ namespace Formations
                }
             }
         }
+        private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
+        {
+            UnitAbstract[,] tempArray = new UnitAbstract[3,20];
 
+            for (int i = 0; i < numberAtt; i++)
+            {
+                tempArray[0, i] = new UnitAtt();
+            }
+            for (int i = 0; i < numberAtt; i++)
+            {
+                tempArray[1, i] = new UnitDef();
+            }
+            for (int i = 0; i < numberAtt; i++)
+            {
+                tempArray[2, i] = new UnitMul();
+            }
+            return tempArray;
+        }
         public void init(GraphicsDevice graphicsDevice, SpriteFont font, string gameName)
         {
             this.font = font;
             this.gameName = gameName;
             player = new Player();
             guest = new Guest();
-            player.init("<PlayerNameHere>",new UnitAbstract[20], font);
-            guest.init("<GuestNameHere>", new UnitAbstract[20], font);
+
+            player.init("<PlayerNameHere>", createUnitArray(5, 5, 5), font, graphicsDevice);
+            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font);
 
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
