@@ -19,10 +19,10 @@ namespace Formations
 
         }
 
-        public void init(string nameOfPlayer, int numberOfUnits, SpriteFont font)
+        public void init(string nameOfPlayer, UnitAbstract[] units, SpriteFont font)
         {
-            this.playerName = nameOfPlayer;
-            units = new UnitAbstract[numberOfUnits];
+            playerName = nameOfPlayer;
+            this.units = units;
             this.font = font;
 
         }

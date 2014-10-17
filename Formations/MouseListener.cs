@@ -30,7 +30,7 @@ namespace Formations
             {
                 if (oldState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Pressed)
                 {
-                    
+                    game.mouseDragged(newState);
                 }
                 else
                 {

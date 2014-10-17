@@ -36,8 +36,12 @@ namespace Formations
             defUnit = new Hexagon(unitSideLength);
             mulUnit = new Hexagon(unitSideLength);
             attUnit.init(x, y - tileSideLength, graphicsDevice);
+            attUnit.setColor(Color.Brown);
             defUnit.init(x + changeInX, y + changeInY, graphicsDevice);
+            defUnit.setColor(Color.Black);
             mulUnit.init(x - changeInX, y + changeInY, graphicsDevice);
+            mulUnit.setColor(Color.AliceBlue);
+
 
         }
         public void setUnit(UnitAbstract unit)
@@ -77,7 +81,7 @@ namespace Formations
         {
             tileHex.setColor(color);
         }
-        public bool isPoininTile(MouseState mouseState)
+        public bool isPointInTile(MouseState mouseState)
         {
             return tileHex.IsPointInPolygon(mouseState.X, mouseState.Y);
         }
