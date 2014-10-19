@@ -133,17 +133,27 @@ namespace Formations
                         tiles[i, j].mouseReleased(mouseState);
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            tiles[i, j].setUnit(player.getAttUnit());
+                            if (player.getTotalAtt() > 0 && !tiles[i,j].hasUnit())
+                            { 
+                                tiles[i, j].setUnit(player.getAttUnit());
+                            }
+                            
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            tiles[i, j].setUnit(player.getDefUnit());
+                            if (player.getTotalDef() > 0 && !tiles[i, j].hasUnit()) 
+                            {
+                                tiles[i, j].setUnit(player.getDefUnit()); 
+                            }
                             
                         }
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            
-                            tiles[i, j].setUnit(player.getMulUnit());
+
+                            if (player.getTotalMul() > 0 && !tiles[i, j].hasUnit())
+                            { 
+                                tiles[i, j].setUnit(player.getMulUnit()); 
+                            }
                         }
                     }
                 }
@@ -205,15 +215,9 @@ namespace Formations
                 //Console.WriteLine("currentTile");
                 float x = currentTile.getX();
                 float y = currentTile.getY();
-                attUnit.init(x, y - tileSideLength, spriteBatch.GraphicsDevice);
-                defUnit.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice);
-                mulUnit.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice);
-                attUnit.setOutsideColor(Color.Black);
-                attUnit.setInsideColor(Color.Gray);
-                defUnit.setOutsideColor(Color.IndianRed);
-                defUnit.setInsideColor(Color.Gray);
-                mulUnit.setOutsideColor(Color.AliceBlue);
-                mulUnit.setInsideColor(Color.Gray);
+                attUnit.init(x, y - tileSideLength, spriteBatch.GraphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+                defUnit.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+                mulUnit.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
                 attUnit.draw(spriteBatch);
                 defUnit.draw(spriteBatch);
                 mulUnit.draw(spriteBatch);

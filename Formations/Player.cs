@@ -15,6 +15,7 @@ namespace Formations
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
         private UnitMul[] mulUnitArray = new UnitMul[20];
+
         private int totalAtt = 0;
         private int totalDef = 0;
         private int totalMul = 0;
@@ -59,12 +60,9 @@ namespace Formations
             attHex = new Hexagon(7);
             defHex = new Hexagon(7);
             mulHex = new Hexagon(7);
-            attHex.init(800, 50, graphicsDevice);
-            defHex.init(800, 65, graphicsDevice);
-            mulHex.init(800, 80, graphicsDevice);
-            attHex.setOutsideColor(Color.Brown);
-            defHex.setOutsideColor(Color.Black);
-            mulHex.setOutsideColor(Color.AliceBlue);
+            attHex.init(800, 50, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defHex.init(800, 65, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            mulHex.init(800, 80, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
         }
         public int getTotalAtt()

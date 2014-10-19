@@ -29,7 +29,7 @@ namespace Formations
             this.x = x;
             this.y = y;
             tileHex = new Hexagon(tileSideLength);
-            tileHex.init(x, y, graphicsDevice);
+            tileHex.init(x, y, graphicsDevice, GameColors.startingInsideColor, GameColors.startingOutsideColor);
         }
         public float getX()
         {
@@ -39,12 +39,38 @@ namespace Formations
         {
             return y;
         }
-        public void setUnit(UnitAbstract unit)
+        public void setUnit(UnitAbstract newUnit)
         {
-            if (this.unit == null)
+            if (newUnit == null)//if the passed in unit is null then it is ok to switch
             {
-                this.unit = unit;
+                tileHex.setOutsideColor(GameColors.startingOutsideColor);
+                tileHex.setInsideColor(GameColors.startingInsideColor);
+                unit = newUnit;
             }
+            else//if the passed in unit is not null then you need to check if there is already a unit and what type the passed in unit is
+            {
+                if (newUnit.GetType() == typeof(UnitAtt) && unit == null) 
+                {
+                    tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
+                    tileHex.setInsideColor(GameColors.attUnitInsideColor);
+                    unit = newUnit;
+                }
+                if (newUnit.GetType() == typeof(UnitDef) && unit == null) 
+                {
+                    tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
+                    tileHex.setInsideColor(GameColors.defUnitInsideColor);
+                    unit = newUnit;
+                }
+                if (newUnit.GetType() == typeof(UnitMul) && unit == null) 
+                { 
+                    tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
+                    tileHex.setInsideColor(GameColors.mulUnitInsideColor);
+                    unit = newUnit;
+                }
+            }
+                
+            
+
 
         }
         public bool hasUnit()
@@ -61,11 +87,29 @@ namespace Formations
             selected = isSelected;
             if (selected)
             {
-                setTileInsideColor(Color.Purple);
+                setTileInsideColor(GameColors.selectedInsideColor);
             }
             else
             {
-                setTileInsideColor(Color.Red);
+                if (unit == null)
+                {
+                    tileHex.setInsideColor(GameColors.startingInsideColor);
+                }
+                else
+                {
+                    if (unit.GetType() == typeof(UnitAtt))
+                    {
+                        tileHex.setInsideColor(GameColors.attUnitInsideColor);
+                    }
+                    if (unit.GetType() == typeof(UnitDef))
+                    {
+                        tileHex.setInsideColor(GameColors.defUnitInsideColor);
+                    }
+                    if (unit.GetType() == typeof(UnitMul))
+                    {
+                        tileHex.setInsideColor(GameColors.mulUnitInsideColor);
+                    }
+                }
             }
         }
         public bool isHovered()
@@ -120,7 +164,8 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    tileHex.setInsideColor(Color.Red);
+
+                    tileHex.setInsideColor(GameColors.hoverInsideColor);
                 }
             }
             else
@@ -131,7 +176,25 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    tileHex.setInsideColor(Color.Blue);
+                    if (unit != null)
+                    {
+                        if (unit.GetType() == typeof(UnitAtt))
+                        {
+                            tileHex.setInsideColor(GameColors.attUnitInsideColor);
+                        }
+                        if (unit.GetType() == typeof(UnitDef))
+                        {
+                            tileHex.setInsideColor(GameColors.defUnitInsideColor);
+                        }
+                        if (unit.GetType() == typeof(UnitMul))
+                        {
+                            tileHex.setInsideColor(GameColors.mulUnitInsideColor);
+                        }
+                    }
+                    else
+                    {
+                        tileHex.setInsideColor(GameColors.startingInsideColor);
+                    }
                 }
             }
         }
@@ -145,15 +208,7 @@ namespace Formations
         }
         public override void draw(SpriteBatch spriteBatch)
         {
-            if(unit != null)
-            {
-                Console.WriteLine("Unit Type: " + unit.GetType().ToString());
-                if (unit.GetType() == typeof(UnitAtt)) { tileHex.setOutsideColor(Color.Black); }
-                else if (unit.GetType() == typeof(UnitDef)) { tileHex.setOutsideColor(Color.IndianRed); }
-                else if (unit.GetType() == typeof(UnitMul)) { tileHex.setOutsideColor(Color.AliceBlue); }
-            }
             tileHex.draw(spriteBatch);
-
         }
     }
 }

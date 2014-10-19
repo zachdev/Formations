@@ -18,7 +18,7 @@ namespace Formations
         {
             this.tileSideLength = tileSideLength;
         }
-        public void init(float x, float y, GraphicsDevice graphicsDevice)
+        public void init(float x, float y, GraphicsDevice graphicsDevice, Color insideColor, Color outsideColor)
         {
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
@@ -30,26 +30,26 @@ namespace Formations
             vectors= CalculateVertices(tileSideLength, new Vector3(x, y,0));
 
             vertices = new VertexPositionColor[18];
-            vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[1] = new VertexPositionColor(vectors[0], Color.Green);
-            vertices[2] = new VertexPositionColor(vectors[1], Color.Green);
-            vertices[3] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[4] = new VertexPositionColor(vectors[1], Color.Green);
-            vertices[5] = new VertexPositionColor(vectors[2], Color.Green);
+            vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[1] = new VertexPositionColor(vectors[0], outsideColor);
+            vertices[2] = new VertexPositionColor(vectors[1], outsideColor);
+            vertices[3] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[4] = new VertexPositionColor(vectors[1], outsideColor);
+            vertices[5] = new VertexPositionColor(vectors[2], outsideColor);
 
-            vertices[6] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[7] = new VertexPositionColor(vectors[2], Color.Green);
-            vertices[8] = new VertexPositionColor(vectors[3], Color.Green);
-            vertices[9] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[10] = new VertexPositionColor(vectors[3], Color.Green);
-            vertices[11] = new VertexPositionColor(vectors[4], Color.Green);
+            vertices[6] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[7] = new VertexPositionColor(vectors[2], outsideColor);
+            vertices[8] = new VertexPositionColor(vectors[3], outsideColor);
+            vertices[9] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[10] = new VertexPositionColor(vectors[3], outsideColor);
+            vertices[11] = new VertexPositionColor(vectors[4], outsideColor);
 
-            vertices[12] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[13] = new VertexPositionColor(vectors[4], Color.Green);
-            vertices[14] = new VertexPositionColor(vectors[5], Color.Green);
-            vertices[15] = new VertexPositionColor(new Vector3(x, y, 0), Color.Blue);
-            vertices[16] = new VertexPositionColor(vectors[5], Color.Green);
-            vertices[17] = new VertexPositionColor(vectors[0], Color.Green);
+            vertices[12] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[13] = new VertexPositionColor(vectors[4], outsideColor);
+            vertices[14] = new VertexPositionColor(vectors[5], outsideColor);
+            vertices[15] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
+            vertices[16] = new VertexPositionColor(vectors[5], outsideColor);
+            vertices[17] = new VertexPositionColor(vectors[0], outsideColor);
 
         }
         public static Vector3[] CalculateVertices(float sideLenght, Vector3 center)
