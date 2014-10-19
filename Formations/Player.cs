@@ -12,9 +12,9 @@ namespace Formations
     {
         private string playerName;
         private Vector2 playerInfoLocation = new Vector2(800,10);
-        private UnitAbstract[] attUnitArray = new UnitAbstract[20];
-        private UnitAbstract[] defUnitArray = new UnitAbstract[20];
-        private UnitAbstract[] mulUnitArray = new UnitAbstract[20];
+        private UnitAtt[] attUnitArray = new UnitAtt[20];
+        private UnitDef[] defUnitArray = new UnitDef[20];
+        private UnitMul[] mulUnitArray = new UnitMul[20];
         private int totalAtt = 0;
         private int totalDef = 0;
         private int totalMul = 0;
@@ -34,7 +34,7 @@ namespace Formations
             {
                 if (units[0, i] != null)
                 {
-                    attUnitArray[i] = units[0 , i];
+                    attUnitArray[i] = (UnitAtt)units[0, i];
                     totalAtt++;
                 }
                     
@@ -43,7 +43,7 @@ namespace Formations
             {
                 if (units[1, i] != null)
                 {
-                    defUnitArray[i] = units[1, i];
+                    defUnitArray[i] = (UnitDef)units[1, i];
                     totalDef++;
                 }
             }
@@ -51,7 +51,7 @@ namespace Formations
             {
                 if (units[2, i] != null)
                 {
-                    mulUnitArray[i] = units[2, i];
+                    mulUnitArray[i] = (UnitMul)units[2, i];
                     totalMul++;
                 }
             }
@@ -62,13 +62,51 @@ namespace Formations
             attHex.init(800, 50, graphicsDevice);
             defHex.init(800, 65, graphicsDevice);
             mulHex.init(800, 80, graphicsDevice);
-            attHex.setColor(Color.Brown);
-            defHex.setColor(Color.Black);
-            mulHex.setColor(Color.AliceBlue);
+            attHex.setOutsideColor(Color.Brown);
+            defHex.setOutsideColor(Color.Black);
+            mulHex.setOutsideColor(Color.AliceBlue);
 
         }
-
-
+        public int getTotalAtt()
+        {
+            return totalAtt;
+        }
+        public UnitAtt getAttUnit()
+        {
+            if (totalAtt > 0) 
+            {
+                totalAtt--;
+                return attUnitArray[totalAtt]; 
+            }
+            return null;
+        }
+        public int getTotalDef()
+        {
+            return totalDef;
+        }
+        public UnitDef getDefUnit()
+        {
+            
+            if (totalDef > 0) 
+            { 
+                totalDef--;
+                return defUnitArray[totalDef];
+            }
+            return null;
+        }
+        public int getTotalMul()
+        {
+            return totalMul;
+        }
+        public UnitMul getMulUnit()
+        { 
+            if (totalMul > 0) 
+            {
+                totalMul--;
+                return mulUnitArray[totalMul]; 
+            }
+            return null;
+        }
         public void update(MouseState mouseState)
         {
 
@@ -76,10 +114,11 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
+            
             spriteBatch.DrawString(font, playerName, playerInfoLocation,Color.Wheat);
-            spriteBatch.DrawString(font, totalAtt + "", new Vector2(815, 40), Color.Wheat);
-            spriteBatch.DrawString(font, totalDef + "", new Vector2(815, 55), Color.Wheat);
-            spriteBatch.DrawString(font, totalMul + "", new Vector2(815, 70), Color.Wheat);
+            spriteBatch.DrawString(font, totalAtt + "", new Vector2(815, 40), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
+            spriteBatch.DrawString(font, totalDef + "", new Vector2(815, 55), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
+            spriteBatch.DrawString(font, totalMul + "", new Vector2(815, 70), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
             attHex.draw(spriteBatch);
             defHex.draw(spriteBatch);
             mulHex.draw(spriteBatch);

@@ -69,11 +69,18 @@ namespace Formations
 
         }
 
-        public void setColor(Color color)
+        public void setInsideColor(Color color)
         {
             for (int i = 0; i < vertices.Length; i++)
             {
                 if (i % 3 == 0) { vertices[i].Color = color; }
+            }
+        }
+        public void setOutsideColor(Color color)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                if (i % 3 != 0) { vertices[i].Color = color; }
             }
         }
         public bool IsPointInPolygon(int pointX, int pointY)

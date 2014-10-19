@@ -15,6 +15,11 @@ namespace Formations
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private SpriteFont font;
+        private Hexagon attUnit;
+        private Hexagon defUnit;
+        private Hexagon mulUnit;
+        private TileBasic currentTile;
+        private int unitSideLength;
         private const int boardHeight = 10;
         private const int boardWidth = 19;
         private int tileSideLength = 30;
@@ -23,7 +28,8 @@ namespace Formations
         private int xTileOffset = 27;
         private int xAdjustment = 53;
         private int yAdjustment = 46;
-
+        private float changeInX;
+        private float changeInY;
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
@@ -39,6 +45,7 @@ namespace Formations
                    tiles[i,j] = new TileBasic(tileSideLength);
                }
             }
+            unitSideLength = tileSideLength / 2;
         }
         private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
         {
@@ -48,11 +55,11 @@ namespace Formations
             {
                 tempArray[0, i] = new UnitAtt();
             }
-            for (int i = 0; i < numberAtt; i++)
+            for (int i = 0; i < numberDef; i++)
             {
                 tempArray[1, i] = new UnitDef();
             }
-            for (int i = 0; i < numberAtt; i++)
+            for (int i = 0; i < numberMul; i++)
             {
                 tempArray[2, i] = new UnitMul();
             }
@@ -65,7 +72,7 @@ namespace Formations
             player = new Player();
             guest = new Guest();
 
-            player.init("<PlayerNameHere>", createUnitArray(5, 5, 5), font, graphicsDevice);
+            player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice);
             guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font);
 
             basicEffect = new BasicEffect(graphicsDevice);
@@ -91,6 +98,13 @@ namespace Formations
 
                 }
             }
+            changeInX = (float)Math.Sqrt((float)(tileSideLength * tileSideLength) - (float)(tileSideLength / 2) * (float)(tileSideLength / 2));
+            changeInY = (float)(tileSideLength / 2);
+            attUnit = new Hexagon(unitSideLength);
+            defUnit = new Hexagon(unitSideLength);
+            mulUnit = new Hexagon(unitSideLength);
+            
+
             
         }
 
@@ -117,6 +131,20 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
+                        if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            tiles[i, j].setUnit(player.getAttUnit());
+                        }
+                        else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            tiles[i, j].setUnit(player.getDefUnit());
+                            
+                        }
+                        else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            
+                            tiles[i, j].setUnit(player.getMulUnit());
+                        }
                     }
                 }
             }
@@ -154,22 +182,41 @@ namespace Formations
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, buttonsBackground, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, buttonsBorderLines, 0, 4);
+            bool found = false;
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
                     tiles[i,j].draw(spriteBatch);
-                }
-            }
-            for (int i = 0; i < boardWidth; i++)
-            {
-                for (int j = 0; j < boardHeight; j++)
-                {
                     if (tiles[i, j].isSelected())
                     {
-                        tiles[i, j].drawButtons(spriteBatch);
-                    } 
+                       // Console.WriteLine("selected: " + i + ", " + j);
+                        currentTile = tiles[i, j];
+                        found = true;
+                    }
+                    else if(!found){
+                        currentTile = null;
+                    }
+
                 }
+            }
+            if (currentTile != null)
+            {
+                //Console.WriteLine("currentTile");
+                float x = currentTile.getX();
+                float y = currentTile.getY();
+                attUnit.init(x, y - tileSideLength, spriteBatch.GraphicsDevice);
+                defUnit.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice);
+                mulUnit.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice);
+                attUnit.setOutsideColor(Color.Black);
+                attUnit.setInsideColor(Color.Gray);
+                defUnit.setOutsideColor(Color.IndianRed);
+                defUnit.setInsideColor(Color.Gray);
+                mulUnit.setOutsideColor(Color.AliceBlue);
+                mulUnit.setInsideColor(Color.Gray);
+                attUnit.draw(spriteBatch);
+                defUnit.draw(spriteBatch);
+                mulUnit.draw(spriteBatch);
             }
             spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
             guest.draw(spriteBatch);

@@ -13,36 +13,31 @@ namespace Formations
     {
         private UnitAbstract unit = null;
         private Hexagon tileHex;
-        private Hexagon attUnit;
-        private Hexagon defUnit;
-        private Hexagon mulUnit;
+
         private bool selected = false;
         private bool hovered = false;
         private int tileSideLength;
-        private int unitSideLength;
-   
+        private float x;
+        private float y;
         public TileBasic(int tileSideLength)
         {
             this.tileSideLength = tileSideLength;
-            unitSideLength = tileSideLength / 2;
+
         }
         public override void init(float x, float y, GraphicsDevice graphicsDevice)
         {
+            this.x = x;
+            this.y = y;
             tileHex = new Hexagon(tileSideLength);
             tileHex.init(x, y, graphicsDevice);
-            float changeInX = (float)Math.Sqrt((float)(tileSideLength*tileSideLength) - (float)(tileSideLength/2)*(float)(tileSideLength/2));
-            float changeInY = (float)(tileSideLength/2);
-            attUnit = new Hexagon(unitSideLength);
-            defUnit = new Hexagon(unitSideLength);
-            mulUnit = new Hexagon(unitSideLength);
-            attUnit.init(x, y - tileSideLength, graphicsDevice);
-            attUnit.setColor(Color.Brown);
-            defUnit.init(x + changeInX, y + changeInY, graphicsDevice);
-            defUnit.setColor(Color.Black);
-            mulUnit.init(x - changeInX, y + changeInY, graphicsDevice);
-            mulUnit.setColor(Color.AliceBlue);
-
-
+        }
+        public float getX()
+        {
+            return x;
+        }
+        public float getY()
+        {
+            return y;
         }
         public void setUnit(UnitAbstract unit)
         {
@@ -66,20 +61,24 @@ namespace Formations
             selected = isSelected;
             if (selected)
             {
-                setTileColor(Color.Purple);
+                setTileInsideColor(Color.Purple);
             }
             else
             {
-                setTileColor(Color.Red);
+                setTileInsideColor(Color.Red);
             }
         }
         public bool isHovered()
         {
             return hovered;
         }
-        public void setTileColor(Color color)
+        public void setTileInsideColor(Color color)
         {
-            tileHex.setColor(color);
+            tileHex.setInsideColor(color);
+        }
+        public void setTileOutsideColor(Color color)
+        {
+            tileHex.setOutsideColor(color);
         }
         public bool isPointInTile(MouseState mouseState)
         {
@@ -121,7 +120,7 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    tileHex.setColor(Color.Red);
+                    tileHex.setInsideColor(Color.Red);
                 }
             }
             else
@@ -132,7 +131,7 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    tileHex.setColor(Color.Blue);
+                    tileHex.setInsideColor(Color.Blue);
                 }
             }
         }
@@ -142,15 +141,17 @@ namespace Formations
         }
         public void drawButtons(SpriteBatch spriteBatch)
         {
-            if (isSelected())
-            {
-                attUnit.draw(spriteBatch);
-                defUnit.draw(spriteBatch);
-                mulUnit.draw(spriteBatch);
-            }
+
         }
         public override void draw(SpriteBatch spriteBatch)
         {
+            if(unit != null)
+            {
+                Console.WriteLine("Unit Type: " + unit.GetType().ToString());
+                if (unit.GetType() == typeof(UnitAtt)) { tileHex.setOutsideColor(Color.Black); }
+                else if (unit.GetType() == typeof(UnitDef)) { tileHex.setOutsideColor(Color.IndianRed); }
+                else if (unit.GetType() == typeof(UnitMul)) { tileHex.setOutsideColor(Color.AliceBlue); }
+            }
             tileHex.draw(spriteBatch);
 
         }
