@@ -9,7 +9,7 @@ namespace Formations
 {
     class Hexagon
     {
-        private Vector3[] vectors;
+        private VertexPositionColor[] vectors;
         private VertexPositionColor[] vertices;
         private BasicEffect basicEffect;
         private int tileSideLength;
@@ -31,38 +31,39 @@ namespace Formations
 
             vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[1] = new VertexPositionColor(vectors[0], outsideColor);
-            vertices[2] = new VertexPositionColor(vectors[1], outsideColor);
+            vertices[1] = new VertexPositionColor(vectors[0].Position, outsideColor);
+            vertices[2] = new VertexPositionColor(vectors[1].Position, outsideColor);
             vertices[3] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[4] = new VertexPositionColor(vectors[1], outsideColor);
-            vertices[5] = new VertexPositionColor(vectors[2], outsideColor);
+            vertices[4] = new VertexPositionColor(vectors[1].Position, outsideColor);
+            vertices[5] = new VertexPositionColor(vectors[2].Position, outsideColor);
 
             vertices[6] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[7] = new VertexPositionColor(vectors[2], outsideColor);
-            vertices[8] = new VertexPositionColor(vectors[3], outsideColor);
+            vertices[7] = new VertexPositionColor(vectors[2].Position, outsideColor);
+            vertices[8] = new VertexPositionColor(vectors[3].Position, outsideColor);
             vertices[9] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[10] = new VertexPositionColor(vectors[3], outsideColor);
-            vertices[11] = new VertexPositionColor(vectors[4], outsideColor);
+            vertices[10] = new VertexPositionColor(vectors[3].Position, outsideColor);
+            vertices[11] = new VertexPositionColor(vectors[4].Position, outsideColor);
 
             vertices[12] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[13] = new VertexPositionColor(vectors[4], outsideColor);
-            vertices[14] = new VertexPositionColor(vectors[5], outsideColor);
+            vertices[13] = new VertexPositionColor(vectors[4].Position, outsideColor);
+            vertices[14] = new VertexPositionColor(vectors[5].Position, outsideColor);
             vertices[15] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
-            vertices[16] = new VertexPositionColor(vectors[5], outsideColor);
-            vertices[17] = new VertexPositionColor(vectors[0], outsideColor);
+            vertices[16] = new VertexPositionColor(vectors[5].Position, outsideColor);
+            vertices[17] = new VertexPositionColor(vectors[0].Position, outsideColor);
 
         }
-        public static Vector3[] CalculateVertices(float sideLenght, Vector3 center)
+        public static VertexPositionColor[] CalculateVertices(float sideLenght, Vector3 center)
         {
-            Vector3[] tempVectors = new Vector3[6];
+            VertexPositionColor[] tempVectors = new VertexPositionColor[6];
             double angle;
-            Vector3 temp = new Vector3();
+            VertexPositionColor temp = new VertexPositionColor();
             for (int i = 0; i < tempVectors.Length; i++)
             {
                 angle = 2 * Math.PI / 6 * (i + 0.05) -.57;
-                temp.X = (float)(center.X + sideLenght * Math.Cos(angle));
-                temp.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
-                temp.Z = 0f;
+                temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
+                temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
+                temp.Position.Z = 0f;
+                //temp.Color = Color.Black;
                 tempVectors[i] = temp;
             }
             return tempVectors;
@@ -87,14 +88,14 @@ namespace Formations
         {
           
             bool isInside = false;
-            Vector3 temp1;
-            Vector3 temp2;
+            VertexPositionColor temp1;
+            VertexPositionColor temp2;
             for (int i = 0, j = vectors.Length - 1; i < vectors.Length; j = i++)
             {
                 temp1 = vectors[i];
                 temp2 = vectors[j];
-                if (((temp1.Y > pointY) != (temp2.Y > pointY)) &&
-                    (pointX < (temp2.X - temp1.X) * (pointY - temp1.Y) / (temp2.Y - temp1.Y) + temp1.X))
+                if (((temp1.Position.Y > pointY) != (temp2.Position.Y > pointY)) &&
+                    (pointX < (temp2.Position.X - temp1.Position.X) * (pointY - temp1.Position.Y) / (temp2.Position.Y - temp1.Position.Y) + temp1.Position.X))
                  {
                     isInside = !isInside;
                  }
@@ -107,6 +108,7 @@ namespace Formations
 
                 basicEffect.CurrentTechnique.Passes[0].Apply();
                 spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 6);
+                spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, vectors, 0, 3);
             
         }
     }

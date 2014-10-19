@@ -93,7 +93,7 @@ namespace Formations
             {
                 if (unit == null)
                 {
-                    tileHex.setInsideColor(GameColors.startingInsideColor);
+                    tileHex.setInsideColor(GameColors.hoverInsideColor);
                 }
                 else
                 {
@@ -164,8 +164,8 @@ namespace Formations
                 }
                 if (!selected)
                 {
-
-                    tileHex.setInsideColor(GameColors.hoverInsideColor);
+                    if (unit == null) { tileHex.setInsideColor(GameColors.hoverInsideColor); }
+                    else { tileHex.setOutsideColor(GameColors.hoverOutsideColor); }
                 }
             }
             else
@@ -180,14 +180,17 @@ namespace Formations
                     {
                         if (unit.GetType() == typeof(UnitAtt))
                         {
+                            tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
                             tileHex.setInsideColor(GameColors.attUnitInsideColor);
                         }
                         if (unit.GetType() == typeof(UnitDef))
                         {
+                            tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
                             tileHex.setInsideColor(GameColors.defUnitInsideColor);
                         }
                         if (unit.GetType() == typeof(UnitMul))
                         {
+                            tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
                             tileHex.setInsideColor(GameColors.mulUnitInsideColor);
                         }
                     }
