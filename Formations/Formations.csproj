@@ -55,17 +55,35 @@
     <Compile Include="UnitMul.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Lidgren.Network.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Tao.Sdl.dll</HintPath>
+    </Reference>
+    <Reference Include="TomShane.Neoforce.Controls">
+      <HintPath>..\..\..\Downloads\Neoforce-Mono-master\Neoforce-Mono-master\bin\Debug\TomShane.Neoforce.Controls.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Hex_Selected_Green.png" />
     <Content Include="Content\Hex_Unselected.png" />
     <Content Include="Content\Hex_Unselected_Green.png" />
     <Content Include="Icon.ico" />
+    <Content Include="Lidgren.Network.dll" />
+    <Content Include="OpenTK.dll" />
+    <Content Include="Tao.Sdl.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\spriteFont.xnb">
@@ -73,11 +91,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Skins\Blue.skin" />
-    <None Include="Skins\Default.skin" />
-    <None Include="Skins\Green.skin" />
-    <None Include="Skins\Magenta.skin" />
-    <None Include="Skins\Purple.skin" />
+    <None Include="Content\Skins\Blue.skin" />
+    <None Include="Content\Skins\Default.skin" />
+    <None Include="Content\Skins\Green.skin" />
+    <None Include="Content\Skins\Magenta.skin" />
+    <None Include="Content\Skins\Purple.skin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
