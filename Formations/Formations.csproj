@@ -73,7 +73,7 @@
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Tao.Sdl.dll</HintPath>
     </Reference>
     <Reference Include="TomShane.Neoforce.Controls">
-      <HintPath>..\..\..\Downloads\Neoforce-Mono-master\Neoforce-Mono-master\bin\Debug\TomShane.Neoforce.Controls.dll</HintPath>
+      <HintPath>.\TomShane.Neoforce.Controls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
