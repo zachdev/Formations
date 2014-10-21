@@ -15,6 +15,8 @@ namespace Formations
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private SpriteFont font;
+        private bool isPlayersTurn = true;
+        private Hexagon turnButton;
         private Hexagon attUnit;
         private Hexagon defUnit;
         private Hexagon mulUnit;
@@ -73,7 +75,7 @@ namespace Formations
             guest = new Guest();
 
             player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice);
-            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font);
+            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font, graphicsDevice);
 
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
@@ -100,12 +102,11 @@ namespace Formations
             }
             changeInX = (float)Math.Sqrt((float)(tileSideLength * tileSideLength) - (float)(tileSideLength / 2) * (float)(tileSideLength / 2));
             changeInY = (float)(tileSideLength / 2);
+            turnButton = new Hexagon(20);
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
             mulUnit = new Hexagon(unitSideLength);
-            
-
-            
+            turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
         }
 
 
@@ -124,6 +125,11 @@ namespace Formations
         }
         public void mouseReleased(MouseState mouseState)
         {
+            if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                newTurn();
+                return;
+            }
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -133,26 +139,40 @@ namespace Formations
                         tiles[i, j].mouseReleased(mouseState);
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (player.getTotalAtt() > 0 && !tiles[i,j].hasUnit())
+                            
+                            if (player.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && isPlayersTurn)
                             { 
                                 tiles[i, j].setUnit(player.getAttUnit());
+                            }
+                            if(guest.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && !isPlayersTurn)
+                            {
+                                
+                                tiles[i, j].setUnit(guest.getAttUnit());
                             }
                             
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (player.getTotalDef() > 0 && !tiles[i, j].hasUnit()) 
+                            if (player.getTotalDef() > 0 && !tiles[i, j].hasUnit() && isPlayersTurn) 
                             {
                                 tiles[i, j].setUnit(player.getDefUnit()); 
+                            }
+                            if (guest.getTotalDef() > 0 && !tiles[i, j].hasUnit() && !isPlayersTurn)
+                            {
+                                tiles[i, j].setUnit(guest.getDefUnit());
                             }
                             
                         }
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
 
-                            if (player.getTotalMul() > 0 && !tiles[i, j].hasUnit())
+                            if (player.getTotalMul() > 0 && !tiles[i, j].hasUnit() && isPlayersTurn)
                             { 
                                 tiles[i, j].setUnit(player.getMulUnit()); 
+                            }
+                            if (guest.getTotalMul() > 0 && !tiles[i, j].hasUnit() && !isPlayersTurn)
+                            {
+                                tiles[i, j].setUnit(guest.getMulUnit());
                             }
                         }
                     }
@@ -177,6 +197,19 @@ namespace Formations
                 {
                     tiles[i, j].mouseMoved(mouseState);
                 }
+            }
+        }
+        private void newTurn()
+        {
+            if (isPlayersTurn)
+            {
+                turnButton.setInsideColor(GameColors.turnButtonInsideColorGuest);
+                isPlayersTurn = false;
+            }
+            else
+            {
+                turnButton.setInsideColor(GameColors.turnButtonInsideColor);
+                isPlayersTurn = true;
             }
         }
         public void update()
@@ -225,6 +258,7 @@ namespace Formations
             spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
             guest.draw(spriteBatch);
             player.draw(spriteBatch);
+            turnButton.draw(spriteBatch);
         }
         private void createButtonArea()
         {

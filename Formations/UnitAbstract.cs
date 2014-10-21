@@ -8,7 +8,12 @@ namespace Formations
 {
     abstract class UnitAbstract : IUpdateDraw
     {
-        public abstract void init();
+        protected bool isPlayersUnit;
+        public abstract void init(bool isOwnedByPlayer);
+        public bool isOwnedByPlayer()
+        {
+            return isPlayersUnit;
+        }
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
     }

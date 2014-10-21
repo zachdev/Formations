@@ -16,9 +16,15 @@ namespace Formations
         public static Color selectedOutsideColor = Color.Green;
         public static Color attUnitInsideColor = Color.Black;
         public static Color attUnitOutsideColor = Color.Black;
+        public static Color attUnitOutsideColorGuest = Color.LightPink;
         public static Color defUnitInsideColor = Color.Orange;
         public static Color defUnitOutsideColor = Color.Orange;
+        public static Color defUnitOutsideColorGuest = Color.LightPink;
         public static Color mulUnitInsideColor = Color.AliceBlue;
         public static Color mulUnitOutsideColor = Color.AliceBlue;
+        public static Color mulUnitOutsideColorGuest = Color.LightPink;
+        public static Color turnButtonInsideColor = Color.Red;
+        public static Color turnButtonOutsideColor = Color.Purple;
+        public static Color turnButtonInsideColorGuest = Color.White;
     }
 }

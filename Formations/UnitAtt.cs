@@ -8,9 +8,9 @@ namespace Formations
 {
     class UnitAtt : UnitAbstract
     {
-        public override void init()
+        public override void init(bool isPlayerUnit)
         {
-            
+            this.isPlayersUnit = isPlayerUnit;
         }
         public override void update()
         {

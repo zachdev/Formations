@@ -36,15 +36,17 @@ namespace Formations
                 if (units[0, i] != null)
                 {
                     attUnitArray[i] = (UnitAtt)units[0, i];
+                    attUnitArray[i].init(true);
                     totalAtt++;
                 }
-                    
+
             }
             for (int i = 0; i < 20; i++)
             {
                 if (units[1, i] != null)
                 {
                     defUnitArray[i] = (UnitDef)units[1, i];
+                    defUnitArray[i].init(true);
                     totalDef++;
                 }
             }
@@ -53,6 +55,7 @@ namespace Formations
                 if (units[2, i] != null)
                 {
                     mulUnitArray[i] = (UnitMul)units[2, i];
+                    mulUnitArray[i].init(true);
                     totalMul++;
                 }
             }
