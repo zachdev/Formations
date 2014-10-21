@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-//using Microsoft.Xna.Framework.DrawableGameComponent;
 using System;
-using TomShane.Neoforce.Controls;
+
 
 namespace Formations
 {
@@ -20,10 +19,6 @@ namespace Formations
         MouseListener mouseListener;
 
         private SpriteFont font;
-
-        // Neoforce GUI manager
-        TomShane.Neoforce.Controls.Manager theManager;
-        Window window;
 
         public Game1()
             : base()
@@ -52,17 +47,7 @@ namespace Formations
             gb = new GameBoard();
             gb.init(GraphicsDevice, font, "<GameNameHere>");
 
-            theManager = new Manager(this, graphics, "Default");
-            theManager.Initialize();
 
-            window = new Window(theManager);
-            window.Init();
-            window.Text = "My First Neoforce Window";
-            window.Top = 150; // this is in pixels, top-left is the origin
-            window.Left = 250;
-            window.Width = 350;
-            window.Height = 350;
-            theManager.Add(window);
         }
 
         /// <summary>
@@ -102,7 +87,6 @@ namespace Formations
 
             base.Update(gameTime);
 
-            theManager.Update(gameTime);
         }
         public void mousePressed(MouseState mouseState)
         {
@@ -137,7 +121,6 @@ namespace Formations
 
             base.Draw(gameTime);
 
-            theManager.Draw(gameTime);
 
         }
     }

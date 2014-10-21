@@ -60,12 +60,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-    <Reference Include="TomShane.Neoforce.Controls">
-      <HintPath>Content\neoforce\TomShane.Neoforce.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="TomShane.Neoforce.Importers">
-      <HintPath>Content\neoforce\TomShane.Neoforce.Importers.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Hex_Selected_Green.png" />
@@ -77,6 +71,13 @@
     <Content Include="Content\spriteFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Skins\Blue.skin" />
+    <None Include="Skins\Default.skin" />
+    <None Include="Skins\Green.skin" />
+    <None Include="Skins\Magenta.skin" />
+    <None Include="Skins\Purple.skin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
