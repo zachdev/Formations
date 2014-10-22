@@ -60,6 +60,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="TomShane.Neoforce.Controls">
+      <HintPath>Content\neoforce\TomShane.Neoforce.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="TomShane.Neoforce.Importers">
+      <HintPath>Content\neoforce\TomShane.Neoforce.Importers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Hex_Selected_Green.png" />
