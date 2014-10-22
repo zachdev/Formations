@@ -8,9 +8,15 @@ namespace Formations
 {
     class UnitAtt : UnitAbstract
     {
+        
         public override void init(bool isPlayerUnit)
         {
             this.isPlayersUnit = isPlayerUnit;
+
+        }
+        public override string getUnitType()
+        {
+            return "Attack Unit";
         }
         public override void update()
         {

@@ -90,13 +90,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Content\Skins\Blue.skin" />
-    <None Include="Content\Skins\Default.skin" />
-    <None Include="Content\Skins\Green.skin" />
-    <None Include="Content\Skins\Magenta.skin" />
-    <None Include="Content\Skins\Purple.skin" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -25,10 +25,10 @@ namespace Formations
         private const int boardHeight = 10;
         private const int boardWidth = 19;
         private int tileSideLength = 30;
-        private int boardOffsetX = 175;
+        private int boardOffsetX = 160;
         private int boardOffsetY = 130;
         private int xTileOffset = 27;
-        private int xAdjustment = 53;
+        private int xAdjustment = 54;
         private int yAdjustment = 46;
         private float changeInX;
         private float changeInY;
@@ -143,11 +143,13 @@ namespace Formations
                             if (player.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && isPlayersTurn)
                             { 
                                 tiles[i, j].setUnit(player.getAttUnit());
+                                
                             }
                             if(guest.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && !isPlayersTurn)
                             {
                                 
                                 tiles[i, j].setUnit(guest.getAttUnit());
+
                             }
                             
                         }
@@ -178,6 +180,7 @@ namespace Formations
                     }
                 }
             }
+            recalculateControlArea();
         }
         public void mouseDragged(MouseState mouseState)
         {
@@ -210,6 +213,78 @@ namespace Formations
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColor);
                 isPlayersTurn = true;
+            }
+        }
+        private void recalculateControlArea()
+        {
+            //resets the board to have no control
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    tiles[i, j].updateGuestControl(false);
+                    tiles[i,j].updatePlayerControl(false);
+                }
+            }
+            //finds units and set the area of their control
+            bool isPlayersUnit;
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    if(tiles[i, j].hasUnit()){
+                        isPlayersUnit = tiles[i,j].getUnit().isOwnedByPlayer();
+                        int k = 1;//this needs to be worked on    
+                        if (isPlayersUnit)//this check dosn't matter if the row is odd or even
+                        {
+                            if (i - k >= 0) tiles[i - k, j].updatePlayerControl(true);
+                            tiles[i, j].updatePlayerControl(true);
+                            if (i + k < boardWidth) tiles[i + k, j].updatePlayerControl(true);
+                        }
+                        else
+                        {
+                            if (i - k >= 0) tiles[i - k, j].updateGuestControl(true);
+                            tiles[i, j].updateGuestControl(true);
+                            if (i + k < boardWidth) tiles[i + k, j].updateGuestControl(true);
+                        }
+                        //if we are on an even row or odd
+                        if (j % 2 == 0)
+                        {
+                            if (isPlayersUnit)
+                            {
+                                if (j - k >= 0) tiles[i, j - k].updatePlayerControl(true);
+                                if (i - k >= 0 && j - k >= 0) tiles[i - k, j - k].updatePlayerControl(true);
+                                if (j + k < boardHeight) tiles[i, j + k].updatePlayerControl(true);
+                                if (i - k >= 0  && j + k < boardHeight) tiles[i - k, j + k].updatePlayerControl(true);
+                            }
+                            else
+                            {
+                                if (j - k >= 0) tiles[i, j - k].updateGuestControl(true);
+                                if (i - k >= 0 && j - k >= 0) tiles[i - k, j - k].updateGuestControl(true);
+                                if (j + k < boardHeight) tiles[i, j + k].updateGuestControl(true);
+                                if (i - k >= 0 && j + k < boardHeight) tiles[i - k, j + k].updateGuestControl(true);
+                            } 
+                        }
+                        else
+                        {
+                            if (isPlayersUnit) 
+                            {
+                                if (j - k >= 0) tiles[i, j - k].updatePlayerControl(true);
+                                if (i + k < boardWidth && j - k >= 0) tiles[i + k, j - k].updatePlayerControl(true);
+                                if (j + k < boardHeight) tiles[i, j + k].updatePlayerControl(true);
+                                if (i + k < boardWidth && j + k< boardHeight) tiles[i + k, j + k].updatePlayerControl(true);
+                            }
+                            else 
+                            {
+                                if (j - k >= 0) tiles[i, j - k].updateGuestControl(true);
+                                if (i + k < boardWidth && j - k >= 0) tiles[i + k, j - k].updateGuestControl(true);
+                                if (j + k < boardHeight) tiles[i, j + k].updateGuestControl(true);
+                                if (i + k < boardWidth && j + k < boardHeight) tiles[i + k, j + k].updateGuestControl(true);
+                            }                                
+                        }
+
+                    }
+                }
             }
         }
         public void update()
@@ -254,6 +329,8 @@ namespace Formations
                 attUnit.draw(spriteBatch);
                 defUnit.draw(spriteBatch);
                 mulUnit.draw(spriteBatch);
+
+                if(currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
             }
             spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
             guest.draw(spriteBatch);
@@ -286,7 +363,7 @@ namespace Formations
         {
             float border = 10;
             float halfHexWidth = (float)Math.Sqrt(tileSideLength * tileSideLength - (tileSideLength / 2) * (tileSideLength / 2));
-            float widthOfBoard = halfHexWidth * (boardWidth * 2) + boardWidth * 2 - 10;
+            float widthOfBoard = halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border;
             float heightOfBoard = tileSideLength * (boardHeight * 1.5f) + (boardHeight * 1.5f) - (tileSideLength / 2f) + border;
             vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.MistyRose);
             vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), Color.MistyRose);

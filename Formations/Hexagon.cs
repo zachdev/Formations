@@ -11,6 +11,7 @@ namespace Formations
     {
         private VertexPositionColor[] vectors;
         private VertexPositionColor[] vertices;
+        private VertexPositionColor[] borders;
         private BasicEffect basicEffect;
         private int tileSideLength;
        
@@ -28,7 +29,7 @@ namespace Formations
                 0, 1);                                // near, far plane
  
             vectors= CalculateVertices(tileSideLength, new Vector3(x, y,0));
-
+            createBorder();
             vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
             vertices[1] = new VertexPositionColor(vectors[0].Position, outsideColor);
@@ -63,13 +64,40 @@ namespace Formations
                 temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
                 temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
                 temp.Position.Z = 0f;
-                //temp.Color = Color.Black;
                 tempVectors[i] = temp;
             }
             return tempVectors;
 
         }
 
+        private void createBorder()
+        {
+            borders = new VertexPositionColor[12];
+
+            borders[0] = vectors[0];
+            
+            borders[1] = vectors[1];
+            borders[2] = vectors[1];
+            borders[3] = vectors[2];
+            borders[4] = vectors[2];
+            borders[5] = vectors[3];
+            borders[6] = vectors[3];
+            borders[7] = vectors[4];
+            borders[8] = vectors[4];
+            borders[9] = vectors[5];
+            borders[10] = vectors[5];
+            borders[11] = vectors[0];
+            borders[0] = vectors[0];
+
+            setBorderColor(GameColors.normalBorderColor);
+        }
+        public void setBorderColor(Color color)
+        {
+            for (int i = 0; i < borders.Length; i++)
+            {
+                borders[i].Color = color;
+            }
+        }
         public void setInsideColor(Color color)
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -108,7 +136,7 @@ namespace Formations
 
                 basicEffect.CurrentTechnique.Passes[0].Apply();
                 spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 6);
-                spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, vectors, 0, 3);
+                spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borders, 0, 6);
             
         }
     }

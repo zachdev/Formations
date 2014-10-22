@@ -12,6 +12,10 @@ namespace Formations
         {
             this.isPlayersUnit = isPlayerUnit;
         }
+        public override string getUnitType()
+        {
+            return "Mulnipulating Unit";
+        }
         public override void update()
         {
 

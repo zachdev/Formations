@@ -66,9 +66,9 @@ namespace Formations
             attHex = new Hexagon(7);
             defHex = new Hexagon(7);
             mulHex = new Hexagon(7);
-            attHex.init(50, 50, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColorGuest);
-            defHex.init(50, 65, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColorGuest);
-            mulHex.init(50, 80, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColorGuest);
+            attHex.init(50, 50, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defHex.init(50, 65, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            mulHex.init(50, 80, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
         }
         public int getTotalAtt()

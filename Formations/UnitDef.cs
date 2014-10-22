@@ -11,6 +11,11 @@ namespace Formations
         public override void init(bool isPlayerUnit)
         {
             this.isPlayersUnit = isPlayerUnit;
+
+        }
+        public override string getUnitType()
+        {
+            return "Defense Unit";
         }
         public override void update()
         {

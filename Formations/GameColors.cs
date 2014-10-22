@@ -8,23 +8,33 @@ namespace Formations
 {
     class GameColors
     {
-        public static Color startingInsideColor = Color.Blue;
-        public static Color startingOutsideColor = Color.Green;
-        public static Color hoverInsideColor = Color.Red;
-        public static Color hoverOutsideColor = Color.DarkCyan;
-        public static Color selectedInsideColor = Color.Purple;
-        public static Color selectedOutsideColor = Color.Green;
-        public static Color attUnitInsideColor = Color.Black;
-        public static Color attUnitOutsideColor = Color.Black;
-        public static Color attUnitOutsideColorGuest = Color.LightPink;
-        public static Color defUnitInsideColor = Color.Orange;
-        public static Color defUnitOutsideColor = Color.Orange;
-        public static Color defUnitOutsideColorGuest = Color.LightPink;
-        public static Color mulUnitInsideColor = Color.AliceBlue;
-        public static Color mulUnitOutsideColor = Color.AliceBlue;
-        public static Color mulUnitOutsideColorGuest = Color.LightPink;
+
+
+        //Inside Colors
+        public static Color noUnitInsideColor = Color.Green;
+        public static Color attUnitInsideColor = Color.Gray;
+        public static Color defUnitInsideColor = Color.LightGoldenrodYellow;
+        public static Color mulUnitInsideColor = Color.Purple; 
+        //Outside Colors
+        public static Color noControlOutsideColor = Color.DarkGreen;
+        public static Color playerControlOutsideColor = Color.MidnightBlue;
+        public static Color guestControlOutsideColor = Color.Orange;
+        public static Color bothControlOutsideColor = Color.Salmon;
+        public static Color attUnitOutsideColor = attUnitInsideColor;
+        public static Color defUnitOutsideColor = defUnitInsideColor;
+        public static Color mulUnitOutsideColor = mulUnitInsideColor;
+
+        //Border Colors
+        public static Color hoverBorderColor = Color.Gold;
+        public static Color selectedBorderColor = Color.Purple;
+        public static Color normalBorderColor = Color.Black;
+
+
+
+
+        //Button Colors
         public static Color turnButtonInsideColor = Color.Red;
-        public static Color turnButtonOutsideColor = Color.Purple;
+        public static Color turnButtonOutsideColor = Color.DarkOrange;
         public static Color turnButtonInsideColorGuest = Color.White;
     }
 }

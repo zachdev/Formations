@@ -13,7 +13,8 @@ namespace Formations
     {
         private UnitAbstract unit = null;
         private Hexagon tileHex;
-    
+        private bool guestControled;
+        private bool playerControled;
         private bool selected = false;
         private bool hovered = false;
         private int tileSideLength;
@@ -29,7 +30,7 @@ namespace Formations
             this.x = x;
             this.y = y;
             tileHex = new Hexagon(tileSideLength);
-            tileHex.init(x, y, graphicsDevice, GameColors.startingInsideColor, GameColors.startingOutsideColor);
+            tileHex.init(x, y, graphicsDevice, GameColors.noUnitInsideColor, GameColors.noControlOutsideColor);
         }
         public float getX()
         {
@@ -47,56 +48,57 @@ namespace Formations
         {
             if (newUnit == null)//if the passed in unit is null then it is ok to switch
             {
-                tileHex.setOutsideColor(GameColors.startingOutsideColor);
-                tileHex.setInsideColor(GameColors.startingInsideColor);
+                tileHex.setOutsideColor(GameColors.noControlOutsideColor);
+                tileHex.setInsideColor(GameColors.noUnitInsideColor);
                 unit = newUnit;
             }
             else//if the passed in unit is not null then you need to check if there is already a unit and what type the passed in unit is
             {
                 if (newUnit.GetType() == typeof(UnitAtt) && unit == null) 
                 {
-                    if (newUnit.isOwnedByPlayer())
-                    {
-                        tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
-                    }
-                    else
-                    {
-                        tileHex.setOutsideColor(GameColors.attUnitOutsideColorGuest);
-                    }
                     tileHex.setInsideColor(GameColors.attUnitInsideColor);
+                    tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
                     unit = newUnit;
                 }
                 if (newUnit.GetType() == typeof(UnitDef) && unit == null) 
                 {
-                    if (newUnit.isOwnedByPlayer())
-                    {
-                        tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
-                    }
-                    else
-                    {
-                        tileHex.setOutsideColor(GameColors.defUnitOutsideColorGuest);
-                    }
                     tileHex.setInsideColor(GameColors.defUnitInsideColor);
+                    tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
+
                     unit = newUnit;
                 }
                 if (newUnit.GetType() == typeof(UnitMul) && unit == null) 
                 {
-                    if (newUnit.isOwnedByPlayer())
-                    {
-                        tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
-                    }
-                    else
-                    {
-                        tileHex.setOutsideColor(GameColors.mulUnitOutsideColorGuest);
-                    }
                     tileHex.setInsideColor(GameColors.mulUnitInsideColor);
+                    tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
+
                     unit = newUnit;
                 }
             }
-                
-            
-
-
+        }
+        public bool isGuestControled()
+        {
+            return guestControled;
+        }
+        public void updateGuestControl(bool control){
+            guestControled = control;
+            updateControlColor();
+        }
+        public void updatePlayerControl(bool control){
+            playerControled = control;
+            updateControlColor();
+        }
+        private void updateControlColor()
+        {
+            if (guestControled && !playerControled && unit == null) { setTileOutsideColor(GameColors.guestControlOutsideColor); }
+            if (!guestControled && playerControled && unit == null) { setTileOutsideColor(GameColors.playerControlOutsideColor); }
+            if (guestControled && playerControled && unit == null) { setTileOutsideColor(GameColors.bothControlOutsideColor); }
+            if (!guestControled && !playerControled && unit == null) { setTileOutsideColor(GameColors.noControlOutsideColor); }
+        }
+        
+        public bool isPlayerControled()
+        {
+            return playerControled;
         }
         public bool hasUnit()
         {
@@ -112,29 +114,11 @@ namespace Formations
             selected = isSelected;
             if (selected)
             {
-                setTileInsideColor(GameColors.selectedInsideColor);
+                tileHex.setBorderColor(GameColors.selectedBorderColor);
             }
             else
             {
-                if (unit == null)
-                {
-                    tileHex.setInsideColor(GameColors.hoverInsideColor);
-                }
-                else
-                {
-                    if (unit.GetType() == typeof(UnitAtt))
-                    {
-                        tileHex.setInsideColor(GameColors.attUnitInsideColor);
-                    }
-                    if (unit.GetType() == typeof(UnitDef))
-                    {
-                        tileHex.setInsideColor(GameColors.defUnitInsideColor);
-                    }
-                    if (unit.GetType() == typeof(UnitMul))
-                    {
-                        tileHex.setInsideColor(GameColors.mulUnitInsideColor);
-                    }
-                }
+                tileHex.setBorderColor(GameColors.hoverBorderColor);
             }
         }
         public bool isHovered()
@@ -189,8 +173,7 @@ namespace Formations
                 }
                 if (!selected)
                 {
-                    if (unit == null) { tileHex.setInsideColor(GameColors.hoverInsideColor); }
-                    else { tileHex.setOutsideColor(GameColors.hoverOutsideColor); }
+                    tileHex.setBorderColor(GameColors.hoverBorderColor);
                 }
             }
             else
@@ -203,47 +186,20 @@ namespace Formations
                 {
                     if (unit != null)
                     {
-                        if (unit.GetType() == typeof(UnitAtt))
+                        if (unit.isOwnedByPlayer())
                         {
-                            if (unit.isOwnedByPlayer())
-                            {
-                                tileHex.setOutsideColor(GameColors.attUnitOutsideColor);                                
-                            }
-                            else
-                            {
-                                tileHex.setOutsideColor(GameColors.attUnitOutsideColorGuest);
-                            }
-                            tileHex.setInsideColor(GameColors.attUnitInsideColor);
+                            tileHex.setBorderColor(GameColors.playerControlOutsideColor);
                         }
-                        if (unit.GetType() == typeof(UnitDef))
+                        else
                         {
-                            if (unit.isOwnedByPlayer())
-                            {
-                                tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
-                            }
-                            else
-                            {
-                                tileHex.setOutsideColor(GameColors.defUnitOutsideColorGuest);
-                            }
-                            tileHex.setInsideColor(GameColors.defUnitInsideColor);
-                        }
-                        if (unit.GetType() == typeof(UnitMul))
-                        {
-                            if (unit.isOwnedByPlayer())
-                            {
-                                tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
-                            }
-                            else
-                            {
-                                tileHex.setOutsideColor(GameColors.mulUnitOutsideColorGuest);
-                            }
-                            tileHex.setInsideColor(GameColors.mulUnitInsideColor);
+                            tileHex.setBorderColor(GameColors.guestControlOutsideColor);
                         }
                     }
                     else
                     {
-                        tileHex.setInsideColor(GameColors.startingInsideColor);
+                        tileHex.setBorderColor(GameColors.normalBorderColor);
                     }
+                    
                 }
             }
         }
