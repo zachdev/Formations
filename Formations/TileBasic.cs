@@ -90,10 +90,10 @@ namespace Formations
         }
         private void updateControlColor()
         {
-            if (guestControled && !playerControled && unit == null) { setTileOutsideColor(GameColors.guestControlOutsideColor); }
-            if (!guestControled && playerControled && unit == null) { setTileOutsideColor(GameColors.playerControlOutsideColor); }
-            if (guestControled && playerControled && unit == null) { setTileOutsideColor(GameColors.bothControlOutsideColor); }
-            if (!guestControled && !playerControled && unit == null) { setTileOutsideColor(GameColors.noControlOutsideColor); }
+            if (guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
+            if (!guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.playerControlOutsideColor); }
+            if (guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
+            if (!guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.noControlOutsideColor); }
         }
         
         public bool isPlayerControled()

@@ -16,6 +16,10 @@ namespace Formations
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private SpriteFont font;
         private bool isPlayersTurn = true;
+        private int movesLeftInPhase = 10;
+        private bool isFirstPhase = true;
+        private bool isGamePhase = false;
+        private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
         private Hexagon defUnit;
@@ -25,7 +29,7 @@ namespace Formations
         private const int boardHeight = 10;
         private const int boardWidth = 19;
         private int tileSideLength = 30;
-        private int boardOffsetX = 160;
+        private int boardOffsetX = 150;
         private int boardOffsetY = 130;
         private int xTileOffset = 27;
         private int xAdjustment = 54;
@@ -102,11 +106,13 @@ namespace Formations
             }
             changeInX = (float)Math.Sqrt((float)(tileSideLength * tileSideLength) - (float)(tileSideLength / 2) * (float)(tileSideLength / 2));
             changeInY = (float)(tileSideLength / 2);
+            firstPhase = new Hexagon(20);
             turnButton = new Hexagon(20);
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
             mulUnit = new Hexagon(unitSideLength);
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
+            firstPhase.init(400, 50, graphicsDevice, GameColors.turnButtonOutsideColor, GameColors.turnButtonInsideColor);
         }
 
 
@@ -125,11 +131,11 @@ namespace Formations
         }
         public void mouseReleased(MouseState mouseState)
         {
-            if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
+           /* if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 newTurn();
                 return;
-            }
+            }*/
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -151,6 +157,7 @@ namespace Formations
                                 tiles[i, j].setUnit(guest.getAttUnit());
 
                             }
+                            move();
                             
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -163,6 +170,7 @@ namespace Formations
                             {
                                 tiles[i, j].setUnit(guest.getDefUnit());
                             }
+                            move();
                             
                         }
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -176,6 +184,7 @@ namespace Formations
                             {
                                 tiles[i, j].setUnit(guest.getMulUnit());
                             }
+                            move();
                         }
                     }
                 }
@@ -202,17 +211,34 @@ namespace Formations
                 }
             }
         }
+        private void move()
+        {
+            if (isFirstPhase)
+            { 
+                movesLeftInPhase--;
+                newTurn();
+            }
+        }
         private void newTurn()
         {
             if (isPlayersTurn)
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColorGuest);
                 isPlayersTurn = false;
+                
             }
             else
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColor);
                 isPlayersTurn = true;
+                
+            }
+            if (movesLeftInPhase == 0)
+            {
+                firstPhase.setInsideColor(Color.Gray);
+                firstPhase.setOutsideColor(Color.Gray);
+                isFirstPhase = false;
+                isGamePhase = true;
             }
         }
         private void recalculateControlArea()
@@ -336,6 +362,7 @@ namespace Formations
             guest.draw(spriteBatch);
             player.draw(spriteBatch);
             turnButton.draw(spriteBatch);
+            firstPhase.draw(spriteBatch);
         }
         private void createButtonArea()
         {
