@@ -130,12 +130,16 @@ namespace Formations
             GraphicsDevice.Clear(Color.DarkSlateGray);
             
             // TODO: Add your drawing code here
-            
+
+
+            theManager.BeginDraw(gameTime);
             spriteBatch.Begin();
-           // theManager.Draw(gameTime);
+            
             gb.draw(spriteBatch);
             spriteBatch.End();
+            //theManager.Draw(gameTime);
 
+            theManager.EndDraw();
             base.Draw(gameTime);
 
             
