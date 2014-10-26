@@ -33,17 +33,15 @@ namespace Formations
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            //theManager = new Manager(this, "Default");
             theManager = new Manager(this, graphics, "Default");
             theManager.AutoCreateRenderTarget = true;
             theManager.TargetFrames = 60;
             theManager.LogUnhandledExceptions = false;
             theManager.ShowSoftwareCursor = true;
 
-
-            //graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
-            //graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
-            //graphics.ApplyChanges();
+            graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Formations
         private bool isPlayersTurn = true;
         private int movesLeftInPhase = 10;
         private bool isFirstPhase = true;
-        private bool isGamePhase = false;
+       //private bool isGamePhase = false;
         private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
@@ -246,7 +246,7 @@ namespace Formations
                 firstPhase.setInsideColor(Color.Gray);
                 firstPhase.setOutsideColor(Color.Gray);
                 isFirstPhase = false;
-                isGamePhase = true;
+                //isGamePhase = true;
             }
         }
         private void recalculateControlArea()
@@ -261,7 +261,6 @@ namespace Formations
                 }
             }
             //finds units and set the area of their control
-            bool isPlayersUnit;
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -271,7 +270,6 @@ namespace Formations
                     if (!tiles[i, j].getUnit().isOwnedByPlayer()) { tiles[i, j].updateSurroundingTilesControl(true, false); }
                 }
             }
-
         }
         public void update()
         {
