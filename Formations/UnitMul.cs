@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    class UnitMul: UnitAbstract
+    class UnitManipulate: UnitAbstract
     {
         const double _Damage = 1;
         const double _Damage_Multiplyer = 1;
@@ -21,6 +21,18 @@ namespace Formations
         public override string getUnitType()
         {
             return "Mulnipulating Unit";
+        }
+        public override void attack(UnitAbstract unit)
+        {
+
+        }
+        public override void defend(UnitAbstract unit)
+        {
+
+        }
+        public override void manipulate(UnitAbstract unit)
+        {
+
         }
         public override void calculateAtt(UnitAbstract unit)
         {

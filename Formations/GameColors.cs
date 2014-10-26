@@ -14,7 +14,7 @@ namespace Formations
         public static Color noUnitInsideColor = Color.Green;
         public static Color attUnitInsideColor = Color.Gray;
         public static Color defUnitInsideColor = Color.LightGoldenrodYellow;
-        public static Color mulUnitInsideColor = Color.Purple; 
+        public static Color mulUnitInsideColor = Color.Purple;
 
         //Outside Colors
         public static Color noControlOutsideColor = Color.DarkGreen;
@@ -34,5 +34,7 @@ namespace Formations
         public static Color turnButtonInsideColor = Color.Red;
         public static Color turnButtonOutsideColor = Color.DarkOrange;
         public static Color turnButtonInsideColorGuest = Color.White;
+        public static Color attButton = Color.Red;
+        public static Color ManipulateButton = Color.LightPink;
     }
 }

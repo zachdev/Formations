@@ -92,7 +92,7 @@ namespace Formations
 
                     unit = newUnit;
                 }
-                if (newUnit.GetType() == typeof(UnitMul) && unit == null) 
+                if (newUnit.GetType() == typeof(UnitManipulate) && unit == null) 
                 {
                     tileHex.setInsideColor(GameColors.mulUnitInsideColor);
                     tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);

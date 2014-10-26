@@ -24,6 +24,8 @@ namespace Formations
         private Hexagon attUnit;
         private Hexagon defUnit;
         private Hexagon mulUnit;
+        private Hexagon attAction;
+        private Hexagon manipulateAction;
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -67,7 +69,7 @@ namespace Formations
             }
             for (int i = 0; i < numberMul; i++)
             {
-                tempArray[2, i] = new UnitMul();
+                tempArray[2, i] = new UnitManipulate();
             }
             return tempArray;
         }
@@ -119,6 +121,8 @@ namespace Formations
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
             mulUnit = new Hexagon(unitSideLength);
+            attAction = new Hexagon(unitSideLength);
+            manipulateAction = new Hexagon(unitSideLength);
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
             firstPhase.init(400, 50, graphicsDevice, GameColors.turnButtonOutsideColor, GameColors.turnButtonInsideColor);
         }
@@ -139,11 +143,12 @@ namespace Formations
         }
         public void mouseReleased(MouseState mouseState)
         {
-           /* if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
+            if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 newTurn();
                 return;
-            }*/
+            }
+
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -151,48 +156,65 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
+                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                            && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            Console.WriteLine("Attack");
+                            return;
+                        }
+                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                            && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            Console.WriteLine("Manipulate");
+                            return;
+                        }
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             
-                            if (player.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && isPlayersTurn)
+                            if (isPlayersTurn && playerCanSetUnit(i,j,mouseState))
                             { 
                                 tiles[i, j].setUnit(player.getAttUnit());
+                                move();
                                 
                             }
-                            if(guest.getTotalAtt() > 0 && !tiles[i,j].hasUnit() && !isPlayersTurn)
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
                             {
                                 
                                 tiles[i, j].setUnit(guest.getAttUnit());
-
+                                move();
                             }
-                            move();
-                            
+
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (player.getTotalDef() > 0 && !tiles[i, j].hasUnit() && isPlayersTurn) 
+                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState)) 
                             {
-                                tiles[i, j].setUnit(player.getDefUnit()); 
+                                tiles[i, j].setUnit(player.getDefUnit());
+                                move();
                             }
-                            if (guest.getTotalDef() > 0 && !tiles[i, j].hasUnit() && !isPlayersTurn)
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
                             {
                                 tiles[i, j].setUnit(guest.getDefUnit());
+                                move();
                             }
-                            move();
                             
                         }
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
 
-                            if (player.getTotalMul() > 0 && !tiles[i, j].hasUnit() && isPlayersTurn)
+                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState))
                             { 
-                                tiles[i, j].setUnit(player.getMulUnit()); 
+                                tiles[i, j].setUnit(player.getMulUnit());
+                                move();
                             }
-                            if (guest.getTotalMul() > 0 && !tiles[i, j].hasUnit() && !isPlayersTurn)
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
                             {
                                 tiles[i, j].setUnit(guest.getMulUnit());
+                                move();
                             }
-                            move();
+
                         }
                     }
                 }
@@ -227,19 +249,63 @@ namespace Formations
                 newTurn();
             }
         }
+        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
+        {
+            bool result = false;
+            if (player.getTotalAtt() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
+                else if (tiles[tileX, tileY].isPlayerControled()  && !tiles[tileX, tileY].isGuestControled() ) { result = true; }
+                
+            }
+            else if (player.getTotalDef() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
+                else if (tiles[tileX, tileY].isPlayerControled() && !tiles[tileX, tileY].isGuestControled()) { result = true; }
+
+            }
+            else if (player.getTotalMul() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
+                else if (tiles[tileX, tileY].isPlayerControled() && !tiles[tileX, tileY].isGuestControled()) { result = true; }
+
+            }
+            return result;
+        }
+        private bool guestCanSetUnit(int tileX, int tileY, MouseState mouseState)
+        {
+            bool result = false;
+            if (guest.getTotalAtt() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
+                else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
+
+            }
+            else if (guest.getTotalDef() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
+                else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
+
+            }
+            else if (guest.getTotalMul() > 0 && !tiles[tileX, tileY].hasUnit())
+            {
+                if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
+                else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
+
+            }
+            return result;
+        }
         private void newTurn()
         {
             if (isPlayersTurn)
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColorGuest);
                 isPlayersTurn = false;
-                
             }
             else
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColor);
                 isPlayersTurn = true;
-                
             }
             if (movesLeftInPhase == 0)
             {
@@ -304,23 +370,47 @@ namespace Formations
             }
             if (currentTile != null)
             {
-                //Console.WriteLine("currentTile");
-                float x = currentTile.getX();
-                float y = currentTile.getY();
+                drawUnitButtons(currentTile, spriteBatch);
+                drawUnitInfo(spriteBatch);
+            }
+
+            spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
+            guest.draw(spriteBatch);
+            player.draw(spriteBatch);
+            turnButton.draw(spriteBatch);
+            firstPhase.draw(spriteBatch);
+        }
+        private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
+        {
+            float x = currentTile.getX();
+            float y = currentTile.getY();
+            
+            if(currentTile.hasUnit())
+            {
+                UnitAbstract currentUnit = currentTile.getUnit();
+                if((currentUnit.isOwnedByPlayer() && isPlayersTurn ) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
+                {
+                    attAction.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.attButton, GameColors.attButton);
+                    manipulateAction.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                    attAction.draw(spriteBatch);
+                    manipulateAction.draw(spriteBatch);
+                }
+            }
+            else
+            {
                 attUnit.init(x, y - tileSideLength, spriteBatch.GraphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
                 defUnit.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
                 mulUnit.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
                 attUnit.draw(spriteBatch);
                 defUnit.draw(spriteBatch);
                 mulUnit.draw(spriteBatch);
-
-                if(currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
             }
-            spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
-            guest.draw(spriteBatch);
-            player.draw(spriteBatch);
-            turnButton.draw(spriteBatch);
-            firstPhase.draw(spriteBatch);
+
+
+        }
+        private void drawUnitInfo(SpriteBatch spriteBatch)
+        {
+            if (currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
         }
         private void createButtonArea()
         {

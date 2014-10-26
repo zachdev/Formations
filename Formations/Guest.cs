@@ -17,7 +17,7 @@ namespace Formations
         private Vector2 playerInfoLocation = new Vector2(50,10);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
-        private UnitMul[] mulUnitArray = new UnitMul[20];
+        private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
 
         private int totalAtt = 0;
         private int totalDef = 0;
@@ -57,7 +57,7 @@ namespace Formations
             {
                 if (units[2, i] != null)
                 {
-                    mulUnitArray[i] = (UnitMul)units[2, i];
+                    mulUnitArray[i] = (UnitManipulate)units[2, i];
                     mulUnitArray[i].init(false);
                     totalMul++;
                 }
@@ -102,7 +102,7 @@ namespace Formations
         {
             return totalMul;
         }
-        public UnitMul getMulUnit()
+        public UnitManipulate getMulUnit()
         { 
             if (totalMul > 0) 
             {

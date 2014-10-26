@@ -22,6 +22,18 @@ namespace Formations
         {
             return "Attack Unit";
         }
+        public override void attack(UnitAbstract unit)
+        {
+
+        }
+        public override void defend(UnitAbstract unit)
+        {
+
+        }
+        public override void manipulate(UnitAbstract unit)
+        {
+
+        }
         public override void calculateAtt(UnitAbstract unit)
         {
 

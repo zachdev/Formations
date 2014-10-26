@@ -24,7 +24,7 @@ namespace Formations
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
         
-        TextBox txtWindow;
+        //TextBox txtWindow;
         Label testLable;
         Button testButton;
         public Game1()

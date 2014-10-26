@@ -20,6 +20,9 @@ namespace Formations
             return isPlayersUnit;
         }
         public abstract string  getUnitType();
+        public abstract void attack(UnitAbstract unit);
+        public abstract void defend(UnitAbstract unit);
+        public abstract void manipulate(UnitAbstract unit);
         public abstract void calculateAtt(UnitAbstract unit);
         public abstract void calculateDef(UnitAbstract unit);
         public abstract void calculateMul(UnitAbstract unit);
