@@ -13,6 +13,7 @@ namespace Formations
     {
         private UnitAbstract unit = null;
         private Hexagon tileHex;
+        private TileBasic[] surroundingTiles;
         private bool guestControled;
         private bool playerControled;
         private bool selected = false;
@@ -31,6 +32,30 @@ namespace Formations
             this.y = y;
             tileHex = new Hexagon(tileSideLength);
             tileHex.init(x, y, graphicsDevice, GameColors.noUnitInsideColor, GameColors.noControlOutsideColor);
+            surroundingTiles = new TileBasic[7];
+        }
+        public void initTileArray(TileBasic[,] tiles, int boardWidth, int boardHeight, int i, int j)
+        {
+
+            surroundingTiles[0] = tiles[i, j];
+            if (i + 1 < boardWidth) surroundingTiles[1] = tiles[i + 1, j];
+            if (i - 1 >= 0) surroundingTiles[4] = tiles[i - 1, j];
+
+            //if we are on an even row or odd
+            if (j % 2 == 0)
+            {
+                if (j - 1 >= 0) surroundingTiles[2] = tiles[i, j - 1];
+                if (i - 1 >= 0 && j - 1 >= 0) surroundingTiles[3] = tiles[i - 1, j - 1];
+                if (j + 1 < boardHeight) surroundingTiles[5] = tiles[i, j + 1];
+                if (i - 1 >= 0 && j + 1 < boardHeight) surroundingTiles[6] = tiles[i - 1, j + 1];
+            }
+            else
+            {
+                if (j - 1 >= 0) surroundingTiles[2] = tiles[i, j - 1];
+                if (i + 1 < boardWidth && j - 1 >= 0) surroundingTiles[3] = tiles[i + 1, j - 1];
+                if (j + 1 < boardHeight) surroundingTiles[5] = tiles[i, j + 1];
+                if (i + 1 < boardWidth && j + 1 < boardHeight) surroundingTiles[6] = tiles[i + 1, j + 1];
+            }
         }
         public float getX()
         {
@@ -80,11 +105,24 @@ namespace Formations
         {
             return guestControled;
         }
-        public void updateGuestControl(bool control){
+        public void updateSurroundingTilesControl(bool control, bool playerControl)
+        {
+            for (int i = 0; i < surroundingTiles.Length; i++)
+            {
+                if(surroundingTiles[i] != null)
+                {
+                    if(playerControl ){ surroundingTiles[i].updatePlayerControl(control); }
+                    else { surroundingTiles[i].updateGuestControl(control); }
+                }
+            }
+        }
+        public void updateGuestControl(bool control)
+        {
             guestControled = control;
             updateControlColor();
         }
-        public void updatePlayerControl(bool control){
+        public void updatePlayerControl(bool control)
+        {
             playerControled = control;
             updateControlColor();
         }

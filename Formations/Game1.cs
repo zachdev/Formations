@@ -22,17 +22,28 @@ namespace Formations
         private SpriteFont font;
 
         // Neoforce GUI manager
-        Manager theManager;
-        Window window;
-
+        private Manager theManager{ get; set; }
+        
+        TextBox txtWindow;
+        Label testLable;
+        Button testButton;
         public Game1()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
-            graphics.ApplyChanges();
+
+            //theManager = new Manager(this, "Default");
+            theManager = new Manager(this, graphics, "Default");
+            theManager.AutoCreateRenderTarget = true;
+            theManager.TargetFrames = 60;
+            theManager.LogUnhandledExceptions = false;
+            theManager.ShowSoftwareCursor = true;
+
+
+            //graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            //graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
+            //graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -49,12 +60,17 @@ namespace Formations
             this.IsMouseVisible = true;
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
-            gb = new GameBoard();
-            gb.init(GraphicsDevice, font, "<GameNameHere>");
-
-            theManager = new Manager(this, graphics, "Default");
             theManager.Initialize();
-
+            testButton = new Button(theManager);
+            txtWindow = new TextBox(theManager);
+            testLable = new Label(theManager);
+            theManager.Add(testLable);
+            testLable.Text = "HI";
+            //theManager.Add(txtWindow);
+            //txtWindow.SendMessage();
+            //theManager.Add(testButton);
+            
+            /*
             window = new Window(theManager);
             window.Init();
             window.Text = "My First Neoforce Window";
@@ -63,6 +79,7 @@ namespace Formations
             window.Width = 350;
             window.Height = 350;
             theManager.Add(window);
+            */
         }
 
         /// <summary>
@@ -74,9 +91,11 @@ namespace Formations
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            font = Content.Load<SpriteFont>("spriteFont");
-
             // TODO: use this.Content to load your game content here
+            font = Content.Load<SpriteFont>("spriteFont");
+            gb = new GameBoard();
+            gb.init(GraphicsDevice, font, "<GameNameHere>");
+
         }
 
         /// <summary>
@@ -130,19 +149,20 @@ namespace Formations
             GraphicsDevice.Clear(Color.DarkSlateGray);
             
             // TODO: Add your drawing code here
-
-
             theManager.BeginDraw(gameTime);
+
+            
+
             spriteBatch.Begin();
             
+            theManager.Draw(gameTime);
+
             gb.draw(spriteBatch);
+
             spriteBatch.End();
-            //theManager.Draw(gameTime);
-
             theManager.EndDraw();
-            base.Draw(gameTime);
 
-            
+            base.Draw(gameTime);
 
         }
     }

@@ -9,7 +9,10 @@ namespace Formations
     abstract class UnitAbstract : IUpdateDraw
     {
         protected bool isPlayersUnit;
-        private int life = 4;
+        protected int life = 4;
+        protected double Damage;
+        protected double Defense;
+
 
         public abstract void init(bool isOwnedByPlayer);
         public bool isOwnedByPlayer()
@@ -17,6 +20,9 @@ namespace Formations
             return isPlayersUnit;
         }
         public abstract string  getUnitType();
+        public abstract void calculateAtt(UnitAbstract unit);
+        public abstract void calculateDef(UnitAbstract unit);
+        public abstract void calculateMul(UnitAbstract unit);
         public int getLife()
         {
             return life;

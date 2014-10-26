@@ -104,6 +104,14 @@ namespace Formations
 
                 }
             }
+            //setting the surrounding tiles for each tile
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    tiles[i, j].initTileArray(tiles, boardWidth, boardHeight, i, j);
+                }
+            }
             changeInX = (float)Math.Sqrt((float)(tileSideLength * tileSideLength) - (float)(tileSideLength / 2) * (float)(tileSideLength / 2));
             changeInY = (float)(tileSideLength / 2);
             firstPhase = new Hexagon(20);
@@ -258,60 +266,12 @@ namespace Formations
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
-                    if(tiles[i, j].hasUnit()){
-                        isPlayersUnit = tiles[i,j].getUnit().isOwnedByPlayer();
-                        int k = 1;//this needs to be worked on    
-                        if (isPlayersUnit)//this check dosn't matter if the row is odd or even
-                        {
-                            if (i - k >= 0) tiles[i - k, j].updatePlayerControl(true);
-                            tiles[i, j].updatePlayerControl(true);
-                            if (i + k < boardWidth) tiles[i + k, j].updatePlayerControl(true);
-                        }
-                        else
-                        {
-                            if (i - k >= 0) tiles[i - k, j].updateGuestControl(true);
-                            tiles[i, j].updateGuestControl(true);
-                            if (i + k < boardWidth) tiles[i + k, j].updateGuestControl(true);
-                        }
-                        //if we are on an even row or odd
-                        if (j % 2 == 0)
-                        {
-                            if (isPlayersUnit)
-                            {
-                                if (j - k >= 0) tiles[i, j - k].updatePlayerControl(true);
-                                if (i - k >= 0 && j - k >= 0) tiles[i - k, j - k].updatePlayerControl(true);
-                                if (j + k < boardHeight) tiles[i, j + k].updatePlayerControl(true);
-                                if (i - k >= 0  && j + k < boardHeight) tiles[i - k, j + k].updatePlayerControl(true);
-                            }
-                            else
-                            {
-                                if (j - k >= 0) tiles[i, j - k].updateGuestControl(true);
-                                if (i - k >= 0 && j - k >= 0) tiles[i - k, j - k].updateGuestControl(true);
-                                if (j + k < boardHeight) tiles[i, j + k].updateGuestControl(true);
-                                if (i - k >= 0 && j + k < boardHeight) tiles[i - k, j + k].updateGuestControl(true);
-                            } 
-                        }
-                        else
-                        {
-                            if (isPlayersUnit) 
-                            {
-                                if (j - k >= 0) tiles[i, j - k].updatePlayerControl(true);
-                                if (i + k < boardWidth && j - k >= 0) tiles[i + k, j - k].updatePlayerControl(true);
-                                if (j + k < boardHeight) tiles[i, j + k].updatePlayerControl(true);
-                                if (i + k < boardWidth && j + k< boardHeight) tiles[i + k, j + k].updatePlayerControl(true);
-                            }
-                            else 
-                            {
-                                if (j - k >= 0) tiles[i, j - k].updateGuestControl(true);
-                                if (i + k < boardWidth && j - k >= 0) tiles[i + k, j - k].updateGuestControl(true);
-                                if (j + k < boardHeight) tiles[i, j + k].updateGuestControl(true);
-                                if (i + k < boardWidth && j + k < boardHeight) tiles[i + k, j + k].updateGuestControl(true);
-                            }                                
-                        }
-
-                    }
+                    if (tiles[i, j].getUnit() == null) { continue; }
+                    if (tiles[i, j].getUnit().isOwnedByPlayer()) { tiles[i, j].updateSurroundingTilesControl(true, true); }
+                    if (!tiles[i, j].getUnit().isOwnedByPlayer()) { tiles[i, j].updateSurroundingTilesControl(true, false); }
                 }
             }
+
         }
         public void update()
         {
