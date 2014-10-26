@@ -59,16 +59,34 @@ namespace Formations
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
+
             testButton = new Button(theManager);
-            txtWindow = new TextBox(theManager);
+            
+            //txtWindow = new TextBox(theManager);
+            /*
+             * !!!Dan this is the Button Code here!!!
+             * Button code  uncomment for large button in the upper left of the screen
+             * 
+            testButton.Init();
+            this.testButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.button_Click);//addes this method to what gets called when the Click happens
+            testButton.Text = "Sign In";
+            testButton.Width = 200;
+            testButton.Height = 200;
+
+            testButton.Anchor = Anchors.Bottom;
+            testButton.Visible = true;
+            theManager.Add(testButton); 
+            */
+            //adding a lable
             testLable = new Label(theManager);
             theManager.Add(testLable);
             testLable.Text = "HI";
+
             //theManager.Add(txtWindow);
-            //txtWindow.SendMessage();
             //theManager.Add(testButton);
             
             /*
+             * for making a window that you can move around the screen
             window = new Window(theManager);
             window.Init();
             window.Text = "My First Neoforce Window";
@@ -79,7 +97,11 @@ namespace Formations
             theManager.Add(window);
             */
         }
-
+        void button_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            
+            System.Console.Out.WriteLine("Button Clicked");
+        }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
