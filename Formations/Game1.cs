@@ -110,11 +110,13 @@ namespace Formations
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
             font = Content.Load<SpriteFont>("spriteFont");
             gb = new GameBoard();
-            gb.init(GraphicsDevice, font, "<GameNameHere>");
+            gb.init(theManager, GraphicsDevice, font, "<GameNameHere>");
+            // TODO: use this.Content to load your game content here
+            
+
+
 
         }
 
@@ -153,7 +155,7 @@ namespace Formations
         }
         public void mouseDragged(MouseState mouseState)
         {
-
+            gb.mouseDragged(mouseState);
         }
         public void mouseMoved(MouseState mouseState)
         {

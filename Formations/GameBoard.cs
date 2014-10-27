@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
@@ -12,6 +13,7 @@ namespace Formations
     {
         private Player player;
         private Guest guest;
+        private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private SpriteFont font;
@@ -22,7 +24,7 @@ namespace Formations
         private bool attackInProgress = false;
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
-
+        private Label hexInfo;
         private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
@@ -59,6 +61,7 @@ namespace Formations
                }
             }
             unitSideLength = tileSideLength / 2;
+
         }
         private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
         {
@@ -78,12 +81,13 @@ namespace Formations
             }
             return tempArray;
         }
-        public void init(GraphicsDevice graphicsDevice, SpriteFont font, string gameName)
+        public void init(Manager uiManager, GraphicsDevice graphicsDevice, SpriteFont font, string gameName)
         {
             this.font = font;
             this.gameName = gameName;
             player = new Player();
             guest = new Guest();
+            this.uiManager = uiManager;
 
             player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice);
             guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font, graphicsDevice);
@@ -129,6 +133,9 @@ namespace Formations
             attAction = new Hexagon(unitSideLength);
             manipulateAction = new Hexagon(unitSideLength);
             moveAction = new Hexagon(unitSideLength);
+            attUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
+            mulUnit.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
+            defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
             manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
@@ -183,7 +190,7 @@ namespace Formations
                             || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
-                            Console.WriteLine("Attack");
+                            System.Console.WriteLine("Attack");
                             player.selectedTile = tiles[i, j];
                             attackInProgress = true;
                             return;
@@ -192,7 +199,7 @@ namespace Formations
                             || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            Console.WriteLine("Move");
+                            //Console.WriteLine("Move");
                             player.selectedTile = tiles[i, j];
                             moveInProgress = true;
                             return;
@@ -201,7 +208,7 @@ namespace Formations
                             || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            Console.WriteLine("Manipulate");
+                            //Console.WriteLine("Manipulate");
                             player.selectedTile = tiles[i, j];
                             manipulateInProgress = true;
                             return;
@@ -259,6 +266,43 @@ namespace Formations
         }
         public void mouseDragged(MouseState mouseState)
         {
+            if (hexInfo == null)
+            {
+                hexInfo = new Label(uiManager);
+                uiManager.Add(hexInfo);
+                hexInfo.SetSize(100, 25);
+                hexInfo.TextColor = Color.Black;
+            }
+
+            hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+            if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Attack";
+            }
+            else if (moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Move";
+            }
+            else if (manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Manipulate";
+            }
+            else if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Attack Unit";
+            }
+            else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Defense Unit";
+            }
+            else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Manipulate Unit";
+            }
+            else
+            {
+                hexInfo.Text = "";
+            }
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -269,6 +313,44 @@ namespace Formations
         }
         public void mouseMoved(MouseState mouseState)
         {
+            if (hexInfo == null)
+            {
+                hexInfo = new Label(uiManager);
+                uiManager.Add(hexInfo);
+                hexInfo.SetSize(150, 25);
+                hexInfo.TextColor = Color.Black;
+                
+            }
+
+            hexInfo.SetPosition(mouseState.X,mouseState.Y - 15);
+            if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Attack";
+            }
+            else if (moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Move";
+            }
+            else if ( manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Manipulate";
+            }
+            else if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Attack Unit";
+            }
+            else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Defense Unit";
+            }
+            else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                hexInfo.Text = "Set Manipulate Unit";
+            }
+            else
+            {
+                hexInfo.Text = "";
+            }
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -284,11 +366,11 @@ namespace Formations
             {//starts on 1 because 0 is the attacker
                 if (currentSurroundingTiles[i].isPointInTile(mouseState))
                 {
-                    Console.WriteLine("ManipulateUnit");
+                    //Console.WriteLine("ManipulateUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
                     {
                         currentSurroundingTiles[i].getUnit().manipulate(currentSurroundingTiles[0].getUnit());
-                        Console.WriteLine("manipulateUnit Move");
+                        //Console.WriteLine("manipulateUnit Move");
                     }
                 }
             }
@@ -302,12 +384,12 @@ namespace Formations
             {//starts on 1 because 0 is the attacker
                 if (currentSurroundingTiles[i].isPointInTile(mouseState))
                 {
-                    Console.WriteLine("moveUnit");
+                    //Console.WriteLine("moveUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
                     {
                         currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
                         currentSurroundingTiles[0].setUnit(null);
-                        Console.WriteLine("moveUnit Move");
+                        //Console.WriteLine("moveUnit Move");
                     }
                 }
             }
@@ -435,7 +517,7 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
-            
+
             basicEffect.CurrentTechnique.Passes[0].Apply();
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
