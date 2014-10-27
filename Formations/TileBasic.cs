@@ -116,6 +116,10 @@ namespace Formations
                 }
             }
         }
+        public TileBasic[] getSurroundingTiles()
+        {
+            return surroundingTiles;
+        }
         public void updateGuestControl(bool control)
         {
             guestControled = control;
@@ -133,7 +137,6 @@ namespace Formations
             if (guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
             if (!guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.noControlOutsideColor); }
         }
-        
         public bool isPlayerControled()
         {
             return playerControled;

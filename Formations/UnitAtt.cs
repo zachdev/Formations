@@ -24,11 +24,15 @@ namespace Formations
         }
         public override void attack(UnitAbstract unit)
         {
-
+            unit.defend(this);
         }
         public override void defend(UnitAbstract unit)
         {
-
+            life -= (unit.Damage);
+            if (life <= 0)
+            {
+                isDead = true;
+            }
         }
         public override void manipulate(UnitAbstract unit)
         {

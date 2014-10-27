@@ -10,6 +10,7 @@ namespace Formations
 {   
     class Player
     {
+        public TileBasic selectedTile{get; set;}
         private string playerName;
         private Vector2 playerInfoLocation = new Vector2(800,10);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
@@ -108,6 +109,7 @@ namespace Formations
             }
             return null;
         }
+
         public void update(MouseState mouseState)
         {
 

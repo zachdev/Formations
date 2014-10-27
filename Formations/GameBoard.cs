@@ -19,6 +19,8 @@ namespace Formations
         private int movesLeftInPhase = 10;
         private bool isFirstPhase = true;
        //private bool isGamePhase = false;
+        private bool attackInprogress = false;
+        private bool moveInProgress = false;
         private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
@@ -134,15 +136,25 @@ namespace Formations
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
+                    //calculate here maybe
                     if (tiles[i, j].isHovered())
                     {
                         tiles[i, j].mousePressed(mouseState);
+                        if (attackInprogress)
+                        {
+                            unitAttackUnit(mouseState);
+                        }
+                        if(moveInProgress)
+                        {
+                            moveUnit(mouseState);
+                        }
                     }
                 }
             }
         }
         public void mouseReleased(MouseState mouseState)
         {
+            
             if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 newTurn();
@@ -159,15 +171,19 @@ namespace Formations
                         if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
                             || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
+                        { 
                             Console.WriteLine("Attack");
+                            player.selectedTile = tiles[i, j];
+                            attackInprogress = true;
                             return;
                         }
                         if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
                             || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
-                            && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                            && manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             Console.WriteLine("Manipulate");
+                            player.selectedTile = tiles[i, j];
+                            moveInProgress = true;
                             return;
                         }
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -240,6 +256,43 @@ namespace Formations
                     tiles[i, j].mouseMoved(mouseState);
                 }
             }
+        }
+        private void moveUnit(MouseState mouseState)
+        {
+            TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
+            for (int i = 1; i < currentSurroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (currentSurroundingTiles[i].isPointInTile(mouseState))
+                {
+                    Console.WriteLine("moveUnit");
+                    if (!currentSurroundingTiles[i].hasUnit())
+                    {
+                        currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
+                        currentSurroundingTiles[0].setUnit(null);
+                        Console.WriteLine("moveUnit Move");
+                    }
+                }
+            }
+            player.selectedTile = null;
+            moveInProgress = false;
+        }
+        private void unitAttackUnit(MouseState mouseState)
+        {
+            TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
+            for (int i = 1; i < currentSurroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isOwnedByPlayer())
+                {
+                    currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
+                    if (currentSurroundingTiles[i].getUnit().isDead)
+                    {
+                        currentSurroundingTiles[i].setUnit(null);
+                        
+                    }
+                }
+            }
+            player.selectedTile = null;
+            attackInprogress = false;
         }
         private void move()
         {

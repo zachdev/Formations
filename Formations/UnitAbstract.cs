@@ -8,10 +8,11 @@ namespace Formations
 {
     abstract class UnitAbstract : IUpdateDraw
     {
+        public bool isDead = false;
         protected bool isPlayersUnit;
-        protected int life = 4;
-        protected double Damage;
-        protected double Defense;
+        public double life = 4;
+        public double Damage;
+        public double Defense;
 
 
         public abstract void init(bool isOwnedByPlayer);
@@ -26,7 +27,7 @@ namespace Formations
         public abstract void calculateAtt(UnitAbstract unit);
         public abstract void calculateDef(UnitAbstract unit);
         public abstract void calculateMul(UnitAbstract unit);
-        public int getLife()
+        public double getLife()
         {
             return life;
         }
