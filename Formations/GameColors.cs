@@ -36,5 +36,7 @@ namespace Formations
         public static Color turnButtonInsideColorGuest = Color.White;
         public static Color attButton = Color.Red;
         public static Color ManipulateButton = Color.LightPink;
+        public static Color moveButton = Color.Blue;
+
     }
 }

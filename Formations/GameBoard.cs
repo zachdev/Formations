@@ -19,8 +19,10 @@ namespace Formations
         private int movesLeftInPhase = 10;
         private bool isFirstPhase = true;
        //private bool isGamePhase = false;
-        private bool attackInprogress = false;
+        private bool attackInProgress = false;
         private bool moveInProgress = false;
+        private bool manipulateInProgress = false;
+
         private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
@@ -28,6 +30,7 @@ namespace Formations
         private Hexagon mulUnit;
         private Hexagon attAction;
         private Hexagon manipulateAction;
+        private Hexagon moveAction;
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -105,7 +108,6 @@ namespace Formations
                     {
                         tiles[i, j].init(boardOffsetX + xTileOffset + (i * xAdjustment), boardOffsetY + (j * yAdjustment), graphicsDevice);
                     }
-
                 }
             }
             //setting the surrounding tiles for each tile
@@ -123,8 +125,13 @@ namespace Formations
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
             mulUnit = new Hexagon(unitSideLength);
+            
             attAction = new Hexagon(unitSideLength);
             manipulateAction = new Hexagon(unitSideLength);
+            moveAction = new Hexagon(unitSideLength);
+            attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
+            moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
+            manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
             firstPhase.init(400, 50, graphicsDevice, GameColors.turnButtonOutsideColor, GameColors.turnButtonInsideColor);
         }
@@ -140,13 +147,17 @@ namespace Formations
                     if (tiles[i, j].isHovered())
                     {
                         tiles[i, j].mousePressed(mouseState);
-                        if (attackInprogress)
+                        if (attackInProgress)
                         {
                             unitAttackUnit(mouseState);
                         }
                         if(moveInProgress)
                         {
                             moveUnit(mouseState);
+                        }
+                        if(manipulateInProgress)
+                        {
+                            manipulateUnit(mouseState);
                         }
                     }
                 }
@@ -174,7 +185,16 @@ namespace Formations
                         { 
                             Console.WriteLine("Attack");
                             player.selectedTile = tiles[i, j];
-                            attackInprogress = true;
+                            attackInProgress = true;
+                            return;
+                        }
+                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                            && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                        {
+                            Console.WriteLine("Move");
+                            player.selectedTile = tiles[i, j];
+                            moveInProgress = true;
                             return;
                         }
                         if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
@@ -183,7 +203,7 @@ namespace Formations
                         {
                             Console.WriteLine("Manipulate");
                             player.selectedTile = tiles[i, j];
-                            moveInProgress = true;
+                            manipulateInProgress = true;
                             return;
                         }
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -257,6 +277,24 @@ namespace Formations
                 }
             }
         }
+        private void manipulateUnit(MouseState mouseState)
+        {
+            TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
+            for (int i = 1; i < currentSurroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (currentSurroundingTiles[i].isPointInTile(mouseState))
+                {
+                    Console.WriteLine("ManipulateUnit");
+                    if (!currentSurroundingTiles[i].hasUnit())
+                    {
+                        currentSurroundingTiles[i].getUnit().manipulate(currentSurroundingTiles[0].getUnit());
+                        Console.WriteLine("manipulateUnit Move");
+                    }
+                }
+            }
+            player.selectedTile = null;
+            moveInProgress = false;
+        }
         private void moveUnit(MouseState mouseState)
         {
             TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
@@ -292,7 +330,7 @@ namespace Formations
                 }
             }
             player.selectedTile = null;
-            attackInprogress = false;
+            attackInProgress = false;
         }
         private void move()
         {
@@ -444,9 +482,14 @@ namespace Formations
                 if((currentUnit.isOwnedByPlayer() && isPlayersTurn ) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
                 {
                     attAction.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.attButton, GameColors.attButton);
-                    manipulateAction.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                    moveAction.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.moveButton, GameColors.moveButton);
                     attAction.draw(spriteBatch);
-                    manipulateAction.draw(spriteBatch);
+                    moveAction.draw(spriteBatch);
+                    if (currentUnit.GetType() == typeof(UnitManipulate))
+                    {
+                        manipulateAction.init(x, y - tileSideLength, spriteBatch.GraphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                        manipulateAction.draw(spriteBatch);
+                    }
                 }
             }
             else

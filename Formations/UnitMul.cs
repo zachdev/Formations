@@ -24,15 +24,31 @@ namespace Formations
         }
         public override void attack(UnitAbstract unit)
         {
-
+            //can't attack maybe?
+            //unit.defend(this);
         }
         public override void defend(UnitAbstract unit)
         {
-
+            life -= (unit.Damage);
+            if (life <= 0)
+            {
+                isDead = true;
+            }
         }
         public override void manipulate(UnitAbstract unit)
         {
-
+            if (unit.GetType() == typeof(UnitManipulate))
+            {
+                //setting functions here on unit
+            }
+            else if (unit.GetType() == typeof(UnitAtt))
+            {
+                //setting functions here on unit
+            }
+            else if (unit.GetType() == typeof(UnitDef))
+            {
+                //setting functions here on unit
+            }
         }
         public override void calculateAtt(UnitAbstract unit)
         {
