@@ -21,14 +21,37 @@ namespace Formations
         }
         public void init(float x, float y, GraphicsDevice graphicsDevice, Color insideColor, Color outsideColor)
         {
+
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
             basicEffect.Projection = Matrix.CreateOrthographicOffCenter
                (0, graphicsDevice.Viewport.Width,     // left, right
                 graphicsDevice.Viewport.Height, 0,    // bottom, top
                 0, 1);                                // near, far plane
- 
-            vectors= CalculateVertices(tileSideLength, new Vector3(x, y,0));
+
+            moveHex(x, y, insideColor, outsideColor);
+
+        }
+        public static VertexPositionColor[] CalculateVertices(float sideLenght, Vector3 center)
+        {
+            VertexPositionColor[] tempVectors = new VertexPositionColor[6];
+            double angle;
+            VertexPositionColor temp = new VertexPositionColor();
+            for (int i = 0; i < tempVectors.Length; i++)
+            {
+                angle = 2 * Math.PI / 6 * (i + 0.05) -.57;
+                temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
+                temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
+                temp.Position.Z = 0f;
+                tempVectors[i] = temp;
+            }
+            return tempVectors;
+
+        }
+        public void moveHex(float x, float y, Color insideColor, Color outsideColor)
+        {
+
+            vectors = CalculateVertices(tileSideLength, new Vector3(x, y, 0));
             createBorder();
             vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
@@ -51,25 +74,7 @@ namespace Formations
             vertices[15] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
             vertices[16] = new VertexPositionColor(vectors[5].Position, outsideColor);
             vertices[17] = new VertexPositionColor(vectors[0].Position, outsideColor);
-
         }
-        public static VertexPositionColor[] CalculateVertices(float sideLenght, Vector3 center)
-        {
-            VertexPositionColor[] tempVectors = new VertexPositionColor[6];
-            double angle;
-            VertexPositionColor temp = new VertexPositionColor();
-            for (int i = 0; i < tempVectors.Length; i++)
-            {
-                angle = 2 * Math.PI / 6 * (i + 0.05) -.57;
-                temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
-                temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
-                temp.Position.Z = 0f;
-                tempVectors[i] = temp;
-            }
-            return tempVectors;
-
-        }
-
         private void createBorder()
         {
             borders = new VertexPositionColor[12];

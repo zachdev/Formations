@@ -275,6 +275,39 @@ namespace Formations
             }
 
             hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+            setHoverLabel(mouseState);
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    tiles[i, j].mouseDragged(mouseState);
+                }
+            }
+        }
+        public void mouseMoved(MouseState mouseState)
+        {
+            if (hexInfo == null)
+            {
+                hexInfo = new Label(uiManager);
+                uiManager.Add(hexInfo);
+                hexInfo.SetSize(150, 25);
+                hexInfo.TextColor = Color.Black;
+                
+            }
+
+            hexInfo.SetPosition(mouseState.X,mouseState.Y - 15);
+            setHoverLabel(mouseState);
+
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    tiles[i, j].mouseMoved(mouseState);
+                }
+            }
+        }
+        private void setHoverLabel(MouseState mouseState)
+        {
             if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 hexInfo.Text = "Attack";
@@ -302,61 +335,16 @@ namespace Formations
             else
             {
                 hexInfo.Text = "";
-            }
-            for (int i = 0; i < boardWidth; i++)
-            {
-                for (int j = 0; j < boardHeight; j++)
+                foreach (var tile in tiles)
                 {
-                    tiles[i, j].mouseDragged(mouseState);
+                    if (tile.isHovered() && tile.hasUnit())
+                    {
+                        hexInfo.Text = tile.getUnit().getUnitType();
+                    }
+                     
                 }
-            }
-        }
-        public void mouseMoved(MouseState mouseState)
-        {
-            if (hexInfo == null)
-            {
-                hexInfo = new Label(uiManager);
-                uiManager.Add(hexInfo);
-                hexInfo.SetSize(150, 25);
-                hexInfo.TextColor = Color.Black;
-                
-            }
 
-            hexInfo.SetPosition(mouseState.X,mouseState.Y - 15);
-            if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Attack";
-            }
-            else if (moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Move";
-            }
-            else if ( manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Manipulate";
-            }
-            else if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Set Attack Unit";
-            }
-            else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Set Defense Unit";
-            }
-            else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                hexInfo.Text = "Set Manipulate Unit";
-            }
-            else
-            {
-                hexInfo.Text = "";
-            }
-            for (int i = 0; i < boardWidth; i++)
-            {
-                for (int j = 0; j < boardHeight; j++)
-                {
-                    tiles[i, j].mouseMoved(mouseState);
-                }
+                
             }
         }
         private void manipulateUnit(MouseState mouseState)
@@ -517,7 +505,7 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
-
+            resetButtons();
             basicEffect.CurrentTechnique.Passes[0].Apply();
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
@@ -557,34 +545,43 @@ namespace Formations
         {
             float x = currentTile.getX();
             float y = currentTile.getY();
-            
-            if(currentTile.hasUnit())
+
+            if (currentTile.hasUnit())
             {
                 UnitAbstract currentUnit = currentTile.getUnit();
-                if((currentUnit.isOwnedByPlayer() && isPlayersTurn ) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
+                if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
                 {
-                    attAction.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.attButton, GameColors.attButton);
-                    moveAction.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.moveButton, GameColors.moveButton);
+                    attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
+                    moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
                     attAction.draw(spriteBatch);
                     moveAction.draw(spriteBatch);
                     if (currentUnit.GetType() == typeof(UnitManipulate))
                     {
-                        manipulateAction.init(x, y - tileSideLength, spriteBatch.GraphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                        manipulateAction.moveHex(x, y - tileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
                         manipulateAction.draw(spriteBatch);
                     }
                 }
             }
             else
             {
-                attUnit.init(x, y - tileSideLength, spriteBatch.GraphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-                defUnit.init(x + changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                mulUnit.init(x - changeInX, y - changeInY, spriteBatch.GraphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                attUnit.moveHex(x, y - tileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+                defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+                mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
                 attUnit.draw(spriteBatch);
                 defUnit.draw(spriteBatch);
                 mulUnit.draw(spriteBatch);
             }
 
 
+        }
+        private void resetButtons()
+        {
+            attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
+            moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
+            manipulateAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            mulUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)
         {
