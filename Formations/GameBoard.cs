@@ -25,6 +25,7 @@ namespace Formations
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
         private Label hexInfo;
+        private Label gameInfo;
         private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
@@ -99,7 +100,7 @@ namespace Formations
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
             createBoardArea();
-            createButtonArea();
+            //createButtonArea();
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -576,6 +577,7 @@ namespace Formations
         }
         private void resetButtons()
         {
+            createButtonArea();
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
             manipulateAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
@@ -585,13 +587,42 @@ namespace Formations
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)
         {
-            if (currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
+            //if (currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
+            
         }
         private void createButtonArea()
         {
 
             float width = boardOffsetX - 50;
             float height = 600 - boardOffsetY - 10;
+            if (gameInfo == null)
+            {
+                gameInfo = new Label(uiManager);
+                gameInfo.Init();
+                gameInfo.Height = (int)height;
+                gameInfo.Width = (int)width;
+                //gameInfo.DrawBorders = true;
+                gameInfo.MaximumWidth = (int)width;
+                gameInfo.SetPosition(10, boardOffsetY);
+                gameInfo.TextColor = Color.White;
+                //gameInfo.WordWrap = true;
+                uiManager.Add(gameInfo);
+            }
+            gameInfo.Text = "";
+            UnitAbstract tempUnit;
+            foreach (var tile in tiles)
+            {   tempUnit = tile.getUnit();
+                if (tile.isHovered() && tile.hasUnit())
+                {
+                    gameInfo.Text += tempUnit.getUnitType() + "\n";
+                    gameInfo.Text += "Total Life: " + tempUnit.life + "\n";
+                    gameInfo.Text += "Total Damage: " + tempUnit.Damage + "\n";
+                    gameInfo.Text += "Total Defense: " + tempUnit.Defense + "\n";
+                }
+
+            }
+            
+            /*
             buttonsBackground[0] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.MistyRose);
             buttonsBackground[1] = new VertexPositionColor(new Vector3(width, boardOffsetY - 40, 0), Color.MistyRose);
             buttonsBackground[2] = new VertexPositionColor(new Vector3(width, boardOffsetY + height, 0), Color.MistyRose);
@@ -607,7 +638,7 @@ namespace Formations
             buttonsBorderLines[5] = new VertexPositionColor(new Vector3(10, boardOffsetY + height, 0), Color.Blue);
             buttonsBorderLines[6] = new VertexPositionColor(new Vector3(10, boardOffsetY + height, 0), Color.Blue);
             buttonsBorderLines[7] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.Blue);
-
+            */
         }
         private void createBoardArea()
         {

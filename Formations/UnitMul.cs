@@ -20,7 +20,7 @@ namespace Formations
         }
         public override string getUnitType()
         {
-            return "Mulnipulating Unit";
+            return "Manipulate Unit";
         }
         public override void attack(UnitAbstract unit)
         {
