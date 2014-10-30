@@ -24,6 +24,7 @@ namespace Formations
         private bool attackInProgress = false;
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
+        private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
         private Hexagon firstPhase;
@@ -267,6 +268,7 @@ namespace Formations
         }
         public void mouseDragged(MouseState mouseState)
         {
+            currentMouseState = mouseState;
             if (hexInfo == null)
             {
                 hexInfo = new Label(uiManager);
@@ -287,6 +289,7 @@ namespace Formations
         }
         public void mouseMoved(MouseState mouseState)
         {
+            currentMouseState = mouseState;
             if (hexInfo == null)
             {
                 hexInfo = new Label(uiManager);
@@ -518,7 +521,7 @@ namespace Formations
                 for (int j = 0; j < boardHeight; j++)
                 {
                     tiles[i,j].draw(spriteBatch);
-                    if (tiles[i, j].isSelected())
+                    if (tiles[i, j].isHovered())
                     {
                        // Console.WriteLine("selected: " + i + ", " + j);
                         currentTile = tiles[i, j];
@@ -530,11 +533,10 @@ namespace Formations
 
                 }
             }
-            if (currentTile != null)
-            {
+
                 drawUnitButtons(currentTile, spriteBatch);
-                drawUnitInfo(spriteBatch);
-            }
+               // drawUnitInfo(spriteBatch);
+            
 
             spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
             guest.draw(spriteBatch);
@@ -544,33 +546,55 @@ namespace Formations
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
+            if (currentTile == null)
+            {
+                return;
+            }
+            drawUnitInfo(spriteBatch);
             float x = currentTile.getX();
             float y = currentTile.getY();
-
-            if (currentTile.hasUnit())
+            UnitAbstract currentUnit = currentTile.getUnit();
+            if (moveInProgress)
             {
-                UnitAbstract currentUnit = currentTile.getUnit();
-                if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
-                {
-                    attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
-                    moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
-                    attAction.draw(spriteBatch);
-                    moveAction.draw(spriteBatch);
-                    if (currentUnit.GetType() == typeof(UnitManipulate))
-                    {
-                        manipulateAction.moveHex(x, y - tileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
-                        manipulateAction.draw(spriteBatch);
-                    }
-                }
+                moveAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.moveButton, GameColors.moveButton);
+                moveAction.draw(spriteBatch);
+            }
+            else if(attackInProgress)
+            {
+                attAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.attButton, GameColors.attButton);
+                attAction.draw(spriteBatch);
+            }
+            else if(manipulateInProgress)
+            {
+
             }
             else
             {
-                attUnit.moveHex(x, y - tileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-                defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
-                attUnit.draw(spriteBatch);
-                defUnit.draw(spriteBatch);
-                mulUnit.draw(spriteBatch);
+                if (currentTile.hasUnit() && currentTile.isSelected())
+                {
+
+                    if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
+                    {
+                        attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
+                        moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
+                        attAction.draw(spriteBatch);
+                        moveAction.draw(spriteBatch);
+                        if (currentUnit.GetType() == typeof(UnitManipulate))
+                        {
+                            manipulateAction.moveHex(x, y - tileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            manipulateAction.draw(spriteBatch);
+                        }
+                    }
+                }
+                else if(!currentTile.hasUnit() && currentTile.isSelected())
+                {
+                    attUnit.moveHex(x, y - tileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+                    defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+                    mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                    attUnit.draw(spriteBatch);
+                    defUnit.draw(spriteBatch);
+                    mulUnit.draw(spriteBatch);
+                }
             }
 
 
