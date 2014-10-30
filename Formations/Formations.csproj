@@ -72,7 +72,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Tao.Sdl.dll</HintPath>
     </Reference>
-    <Reference Include="TomShane.Neoforce.Controls">
+    <Reference Include="TomShane.Neoforce.Controls, Version=0.7.2407.1915, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>.\TomShane.Neoforce.Controls.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -80,8 +81,6 @@
     <Content Include="Content\Hex_Selected_Green.png" />
     <Content Include="Content\Hex_Unselected.png" />
     <Content Include="Content\Hex_Unselected_Green.png" />
-    <Content Include="Content\neoforce\TomShane.Neoforce.Controls.dll" />
-    <Content Include="Content\neoforce\TomShane.Neoforce.Importers.dll" />
     <Content Include="Icon.ico" />
     <Content Include="Lidgren.Network.dll" />
     <Content Include="OpenTK.dll" />
@@ -91,13 +90,6 @@
     <Content Include="Content\spriteFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Content\neoforce\Skins\Blue.skin" />
-    <None Include="Content\neoforce\Skins\Default.skin" />
-    <None Include="Content\neoforce\Skins\Green.skin" />
-    <None Include="Content\neoforce\Skins\Magenta.skin" />
-    <None Include="Content\neoforce\Skins\Purple.skin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
