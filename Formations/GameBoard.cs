@@ -169,25 +169,29 @@ namespace Formations
 
         public void mousePressed(MouseState mouseState)
         {
-            for (int i = 0; i < boardWidth; i++)
+            if (!chatManager.chatIsVisible()) // Check if the chat window is visible
             {
-                for (int j = 0; j < boardHeight; j++)
+                for (int i = 0; i < boardWidth; i++)
                 {
-                    //calculate here maybe
-                    if (tiles[i, j].isHovered())
+                    for (int j = 0; j < boardHeight; j++)
                     {
-                        tiles[i, j].mousePressed(mouseState);
-                        if (attackInProgress)
+                        //calculate here maybe
+                        if (tiles[i, j].isHovered())
                         {
-                            unitAttackUnit(mouseState);
-                        }
-                        if(moveInProgress)
-                        {
-                            moveUnit(mouseState);
-                        }
-                        if(manipulateInProgress)
-                        {
-                            manipulateUnit(mouseState);
+
+                            tiles[i, j].mousePressed(mouseState);
+                            if (attackInProgress)
+                            {
+                                unitAttackUnit(mouseState);
+                            }
+                            if (moveInProgress)
+                            {
+                                moveUnit(mouseState);
+                            }
+                            if (manipulateInProgress)
+                            {
+                                manipulateUnit(mouseState);
+                            }
                         }
                     }
                 }
@@ -195,7 +199,6 @@ namespace Formations
         }
         public void mouseReleased(MouseState mouseState)
         {
-            
             if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 newTurn();
@@ -311,25 +314,29 @@ namespace Formations
         public void mouseMoved(MouseState mouseState)
         {
             currentMouseState = mouseState;
-            if (hexInfo == null)
-            {
-                hexInfo = new Label(uiManager);
-                uiManager.Add(hexInfo);
-                hexInfo.SetSize(150, 25);
-                hexInfo.TextColor = Color.Black;
-                
-            }
 
-            hexInfo.SetPosition(mouseState.X,mouseState.Y - 15);
-            setHoverLabel(mouseState);
-
-            for (int i = 0; i < boardWidth; i++)
+            if (!chatManager.chatIsVisible())
             {
-                for (int j = 0; j < boardHeight; j++)
+                if (hexInfo == null)
                 {
-                    tiles[i, j].mouseMoved(mouseState);
+                    hexInfo = new Label(uiManager);
+                    uiManager.Add(hexInfo);
+                    hexInfo.SetSize(150, 25);
+                    hexInfo.TextColor = Color.Black;
+
                 }
-            }
+
+                hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+                setHoverLabel(mouseState);
+
+                for (int i = 0; i < boardWidth; i++)
+                {
+                    for (int j = 0; j < boardHeight; j++)
+                    {
+                        tiles[i, j].mouseMoved(mouseState);
+                    }
+                }
+            }  
         }
         private void setHoverLabel(MouseState mouseState)
         {
@@ -365,11 +372,8 @@ namespace Formations
                     if (tile.isHovered() && tile.hasUnit())
                     {
                         hexInfo.Text = tile.getUnit().getUnitType();
-                    }
-                     
+                    }   
                 }
-
-                
             }
         }
         private void manipulateUnit(MouseState mouseState)
