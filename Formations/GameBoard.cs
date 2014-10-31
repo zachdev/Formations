@@ -381,7 +381,7 @@ namespace Formations
             TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
-                if (currentSurroundingTiles[i].isPointInTile(mouseState))
+                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState))
                 {
                     //Console.WriteLine("ManipulateUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
@@ -418,7 +418,7 @@ namespace Formations
             TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
-                if (currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isOwnedByPlayer())
+                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isOwnedByPlayer())
                 {
                     currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
                     if (currentSurroundingTiles[i].getUnit().isDead)
