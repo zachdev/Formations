@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Chat.cs" />
     <Compile Include="GameColors.cs" />
     <Compile Include="Guest.cs" />
     <Compile Include="IKeyboardListener.cs" />

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-//using Microsoft.Xna.Framework.DrawableGameComponent;
 using System;
 using TomShane.Neoforce.Controls;
 
@@ -16,7 +14,7 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoard gb;
-       // MouseState mouseState;
+        //MouseState mouseState;
         MouseListener mouseListener;
 
         private SpriteFont font;
@@ -27,6 +25,7 @@ namespace Formations
         //TextBox txtWindow;
         Label testLable;
         Button testButton;
+
         public Game1()
             : base()
         {
@@ -55,13 +54,13 @@ namespace Formations
             // TODO: Add your initialization logic here
             
             base.Initialize();
-            this.IsMouseVisible = true;
+            //this.IsMouseVisible = true;
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
 
             testButton = new Button(theManager);
-            
+
             //txtWindow = new TextBox(theManager);
             /*
              * !!!Dan this is the Button Code here!!!

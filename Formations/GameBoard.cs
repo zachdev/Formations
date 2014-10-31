@@ -53,6 +53,12 @@ namespace Formations
         private VertexPositionColor[] buttonsBackground = new VertexPositionColor[6];
         private VertexPositionColor[] buttonsBorderLines = new VertexPositionColor[8];
         private BasicEffect basicEffect;
+
+        // Chat class
+        private Chat chatManager;
+        private Button chatButton;
+
+
         public GameBoard()
         {
             for (int i = 0; i < boardWidth; i++)
@@ -143,6 +149,21 @@ namespace Formations
             manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
             firstPhase.init(400, 50, graphicsDevice, GameColors.turnButtonOutsideColor, GameColors.turnButtonInsideColor);
+
+            // Chat stuff
+            chatManager = new Chat();
+            chatManager.init(uiManager);
+            uiManager.SetSkin(new Skin(uiManager, "Blue"));
+            chatButton = new Button(uiManager);
+            chatButton.SetPosition(1150, 10);
+            chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
+            chatButton.Text = "<";
+            
+
+            Label chatLabel = new Label(uiManager);
+            uiManager.Add(chatButton);
+
+            
         }
 
 
@@ -374,7 +395,7 @@ namespace Formations
             TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
-                if (currentSurroundingTiles[i].isPointInTile(mouseState))
+                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState))
                 {
                     //Console.WriteLine("moveUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
@@ -596,8 +617,6 @@ namespace Formations
                     mulUnit.draw(spriteBatch);
                 }
             }
-
-
         }
         private void resetButtons()
         {
