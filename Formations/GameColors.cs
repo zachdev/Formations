@@ -38,5 +38,7 @@ namespace Formations
         public static Color ManipulateButton = Color.LightPink;
         public static Color moveButton = Color.Blue;
 
+        //Background Colors
+        public static Color boardAreaBackground = Color.DarkBlue;
     }
 }

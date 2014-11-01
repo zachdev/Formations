@@ -24,6 +24,7 @@ namespace Formations
         private bool attackInProgress = false;
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
+        private bool isSmallBoard = false;
         private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
@@ -40,7 +41,7 @@ namespace Formations
         private const int boardHeight = 10;
         private const int boardWidth = 19;
         private int tileSideLength = 30;
-        private float boardOffsetX = 150;
+        private float boardOffsetX = 130;
         private float boardOffsetY = 130;
         private float xTileOffset = 27.5F;
         private float xAdjustment = 55;
@@ -198,7 +199,17 @@ namespace Formations
             
             if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
-                newTurn();
+                //newTurn();
+                if(!isSmallBoard){
+                    resizeBoard(2);
+                    isSmallBoard = true;
+                }
+                else
+                {
+                    resizeBoard(1);
+                    isSmallBoard = false;
+                }
+                
                 return;
             }
 
@@ -683,18 +694,58 @@ namespace Formations
             buttonsBorderLines[7] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.Blue);
             */
         }
+        private void resizeTiles(int multiplyer)
+        {
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    if (j % 2 == 0)
+                    {
+                        tiles[i, j].resizeHex(boardOffsetX * multiplyer * multiplyer + (i * xAdjustment / multiplyer), boardOffsetY * multiplyer * multiplyer + (j * yAdjustment / multiplyer), tileSideLength / multiplyer);
+                    }
+                    else
+                    {
+                        tiles[i, j].resizeHex(boardOffsetX * multiplyer * multiplyer + xTileOffset / multiplyer + (i * xAdjustment / multiplyer), boardOffsetY * multiplyer * multiplyer + (j * yAdjustment / multiplyer), tileSideLength / multiplyer);
+                    }
+                }
+            }
+        }
+        private void resizeBoard(int multiplyer)
+        {
+            resizeTiles(multiplyer);
+            float border = 10;
+            float halfHexWidth = (float)Math.Sqrt(tileSideLength * tileSideLength - (tileSideLength / 2) * (tileSideLength / 2))/multiplyer;
+            float widthOfBoard = (halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border + 2 * border);
+            float heightOfBoard = (tileSideLength * (boardHeight * 1.5f) + (boardHeight * 1.5f) - (tileSideLength / 2f) + border)/multiplyer;
+            vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[2] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[3] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[4] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[5] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
+
+            borderLines[0] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
+            borderLines[1] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
+            borderLines[2] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
+            borderLines[3] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
+            borderLines[4] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
+            borderLines[5] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
+            borderLines[6] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
+            borderLines[7] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
+        }
         private void createBoardArea()
         {
             float border = 10;
             float halfHexWidth = (float)Math.Sqrt(tileSideLength * tileSideLength - (tileSideLength / 2) * (tileSideLength / 2));
-            float widthOfBoard = halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border;
+            float widthOfBoard = halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border + 2*border;
             float heightOfBoard = tileSideLength * (boardHeight * 1.5f) + (boardHeight * 1.5f) - (tileSideLength / 2f) + border;
-            vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.MistyRose);
-            vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), Color.MistyRose);
-            vertices[2] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), Color.MistyRose);
-            vertices[3] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), Color.MistyRose);
-            vertices[4] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY + heightOfBoard, 0), Color.MistyRose);
-            vertices[5] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.MistyRose);
+            vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[2] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[3] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[4] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[5] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
 
             borderLines[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.Blue);
             borderLines[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), Color.Blue);

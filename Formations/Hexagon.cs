@@ -14,6 +14,8 @@ namespace Formations
         private VertexPositionColor[] borders;
         private BasicEffect basicEffect;
         private int tileSideLength;
+        private Color insideColor;
+        private Color outsideColor;
        
         public Hexagon(int tileSideLength)
         {
@@ -21,6 +23,8 @@ namespace Formations
         }
         public void init(float x, float y, GraphicsDevice graphicsDevice, Color insideColor, Color outsideColor)
         {
+            this.insideColor = insideColor;
+            this.outsideColor = outsideColor;
 
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
@@ -32,7 +36,12 @@ namespace Formations
             moveHex(x, y, insideColor, outsideColor);
 
         }
-        public static VertexPositionColor[] CalculateVertices(float sideLenght, Vector3 center)
+        public void changeResizeAndLocation(float x, float y, int sideLength)
+        {
+            tileSideLength = sideLength;
+            moveHex(x,y,insideColor,outsideColor);
+        }
+        public static VertexPositionColor[] CalculateVertices(float sideLength, Vector3 center)
         {
             VertexPositionColor[] tempVectors = new VertexPositionColor[6];
             double angle;
@@ -41,8 +50,8 @@ namespace Formations
             for (int i = 0; i < tempVectors.Length; i++)
             {
                 angle = 2 * Math.PI / 6.0 * (i + 0.05) - 10;
-                temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
-                temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
+                temp.Position.X = (float)(center.X + sideLength * Math.Cos(angle));
+                temp.Position.Y = (float)(center.Y + sideLength * Math.Sin(angle));
                 temp.Position.Z = 0f;
                 tempVectors[i] = temp;
             }
@@ -50,6 +59,8 @@ namespace Formations
         }
         public void moveHex(float x, float y, Color insideColor, Color outsideColor)
         {
+            this.insideColor = insideColor;
+            this.outsideColor = outsideColor;
 
             vectors = CalculateVertices(tileSideLength, new Vector3(x, y, 0));
             createBorder();
@@ -105,6 +116,7 @@ namespace Formations
         }
         public void setInsideColor(Color color)
         {
+            insideColor = color;
             for (int i = 0; i < vertices.Length; i++)
             {
                 if (i % 3 == 0) { vertices[i].Color = color; }
@@ -112,6 +124,7 @@ namespace Formations
         }
         public void setOutsideColor(Color color)
         {
+            outsideColor = color;
             for (int i = 0; i < vertices.Length; i++)
             {
                 if (i % 3 != 0) { vertices[i].Color = color; }

@@ -57,6 +57,10 @@ namespace Formations
                 if (i + 1 < boardWidth && j + 1 < boardHeight) surroundingTiles[6] = tiles[i + 1, j + 1];
             }
         }
+        public void resizeHex(float x, float y, int tileSideLength)
+        {
+            tileHex.changeResizeAndLocation(x, y, tileSideLength);
+        }
         public float getX()
         {
             return x;
