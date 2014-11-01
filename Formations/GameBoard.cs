@@ -40,11 +40,11 @@ namespace Formations
         private const int boardHeight = 10;
         private const int boardWidth = 19;
         private int tileSideLength = 30;
-        private int boardOffsetX = 150;
-        private int boardOffsetY = 130;
-        private int xTileOffset = 26;
-        private int xAdjustment = 52;
-        private int yAdjustment = 46;
+        private float boardOffsetX = 150;
+        private float boardOffsetY = 130;
+        private float xTileOffset = 27.5F;
+        private float xAdjustment = 55;
+        private float yAdjustment = 47;
         private float changeInX;
         private float changeInY;
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
@@ -646,7 +646,7 @@ namespace Formations
                 gameInfo.Width = (int)width;
                 //gameInfo.DrawBorders = true;
                 gameInfo.MaximumWidth = (int)width;
-                gameInfo.SetPosition(10, boardOffsetY);
+                gameInfo.SetPosition(10, (int)boardOffsetY);
                 gameInfo.TextColor = Color.White;
                 //gameInfo.WordWrap = true;
                 uiManager.Add(gameInfo);
