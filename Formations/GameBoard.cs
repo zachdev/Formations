@@ -42,8 +42,8 @@ namespace Formations
         private int tileSideLength = 30;
         private int boardOffsetX = 150;
         private int boardOffsetY = 130;
-        private int xTileOffset = 27;
-        private int xAdjustment = 54;
+        private int xTileOffset = 26;
+        private int xAdjustment = 52;
         private int yAdjustment = 46;
         private float changeInX;
         private float changeInY;

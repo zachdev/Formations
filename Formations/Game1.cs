@@ -37,6 +37,7 @@ namespace Formations
             theManager.TargetFrames = 60;
             theManager.LogUnhandledExceptions = false;
             theManager.ShowSoftwareCursor = true;
+            
 
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
@@ -170,13 +171,14 @@ namespace Formations
             GraphicsDevice.Clear(Color.DarkSlateGray);
             
             // TODO: Add your drawing code here
+            
             theManager.BeginDraw(gameTime);
 
-            
-
+            theManager.Draw(gameTime);
+           
             spriteBatch.Begin();
             
-            theManager.Draw(gameTime);
+            
 
             gb.draw(spriteBatch);
 

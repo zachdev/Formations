@@ -37,16 +37,16 @@ namespace Formations
             VertexPositionColor[] tempVectors = new VertexPositionColor[6];
             double angle;
             VertexPositionColor temp = new VertexPositionColor();
+
             for (int i = 0; i < tempVectors.Length; i++)
             {
-                angle = 2 * Math.PI / 6 * (i + 0.05) -.57;
+                angle = 2 * Math.PI / 6.0 * (i + 0.05) - 10;
                 temp.Position.X = (float)(center.X + sideLenght * Math.Cos(angle));
                 temp.Position.Y = (float)(center.Y + sideLenght * Math.Sin(angle));
                 temp.Position.Z = 0f;
                 tempVectors[i] = temp;
             }
             return tempVectors;
-
         }
         public void moveHex(float x, float y, Color insideColor, Color outsideColor)
         {
