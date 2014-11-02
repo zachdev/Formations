@@ -174,7 +174,7 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
 
-            theManager.Draw(gameTime);
+                
            
             spriteBatch.Begin();
             

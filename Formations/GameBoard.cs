@@ -40,9 +40,12 @@ namespace Formations
         private int unitSideLength;
         private const int boardHeight = 10;
         private const int boardWidth = 19;
-        private int tileSideLength = 30;
-        private float boardOffsetX = 130;
-        private float boardOffsetY = 130;
+        private int largeTileSideLength = 30;
+        private int smallTileSideLength = 15;
+        private float largeBoardOffsetX = 130;
+        private float largeBoardOffsetY = 130;
+        private float smallBoardOffsetX = 660;
+        private float smallBoardOffsetY = 357;
         private float xTileOffset = 27.5F;
         private float xAdjustment = 55;
         private float yAdjustment = 47;
@@ -66,10 +69,10 @@ namespace Formations
             {
                 for (int j = 0; j < boardHeight; j++)
                {
-                   tiles[i,j] = new TileBasic(tileSideLength);
+                   tiles[i, j] = new TileBasic(largeTileSideLength);
                }
             }
-            unitSideLength = tileSideLength / 2;
+            unitSideLength = largeTileSideLength / 2;
 
         }
         private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
@@ -115,11 +118,11 @@ namespace Formations
                 {
                     if (j % 2 == 0)
                     {
-                        tiles[i, j].init(boardOffsetX + (i * xAdjustment), boardOffsetY + (j * yAdjustment), graphicsDevice);
+                        tiles[i, j].init(largeBoardOffsetX + (i * xAdjustment), largeBoardOffsetY + (j * yAdjustment), graphicsDevice);
                     }
                     else
                     {
-                        tiles[i, j].init(boardOffsetX + xTileOffset + (i * xAdjustment), boardOffsetY + (j * yAdjustment), graphicsDevice);
+                        tiles[i, j].init(largeBoardOffsetX + xTileOffset + (i * xAdjustment), largeBoardOffsetY + (j * yAdjustment), graphicsDevice);
                     }
                 }
             }
@@ -131,8 +134,8 @@ namespace Formations
                     tiles[i, j].initTileArray(tiles, boardWidth, boardHeight, i, j);
                 }
             }
-            changeInX = (float)Math.Sqrt((float)(tileSideLength * tileSideLength) - (float)(tileSideLength / 2) * (float)(tileSideLength / 2));
-            changeInY = (float)(tileSideLength / 2);
+            changeInX = (float)Math.Sqrt((float)(largeTileSideLength * largeTileSideLength) - (float)(largeTileSideLength / 2) * (float)(largeTileSideLength / 2));
+            changeInY = (float)(largeTileSideLength / 2);
             firstPhase = new Hexagon(20);
             turnButton = new Hexagon(20);
             attUnit = new Hexagon(unitSideLength);
@@ -204,12 +207,12 @@ namespace Formations
             {
                 //newTurn();
                 if(!isSmallBoard){
-                    resizeBoard(2);
+                    resizeBoard();
                     isSmallBoard = true;
                 }
                 else
                 {
-                    resizeBoard(1);
+                    resizeBoard();
                     isSmallBoard = false;
                 }
                 
@@ -606,7 +609,7 @@ namespace Formations
             }
             else
             {
-                if (currentTile.hasUnit() && currentTile.isSelected())
+                if (currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
                 {
 
                     if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
@@ -617,14 +620,14 @@ namespace Formations
                         moveAction.draw(spriteBatch);
                         if (currentUnit.GetType() == typeof(UnitManipulate))
                         {
-                            manipulateAction.moveHex(x, y - tileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            manipulateAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
                             manipulateAction.draw(spriteBatch);
                         }
                     }
                 }
-                else if(!currentTile.hasUnit() && currentTile.isSelected())
+                else if (!currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
                 {
-                    attUnit.moveHex(x, y - tileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+                    attUnit.moveHex(x, y - largeTileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
                     defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
                     mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
                     attUnit.draw(spriteBatch);
@@ -651,8 +654,8 @@ namespace Formations
         private void createButtonArea()
         {
 
-            float width = boardOffsetX - 50;
-            float height = 600 - boardOffsetY - 10;
+            float width = largeBoardOffsetX - 50;
+            float height = 600 - largeBoardOffsetY - 10;
             if (gameInfo == null)
             {
                 gameInfo = new Label(uiManager);
@@ -661,7 +664,7 @@ namespace Formations
                 gameInfo.Width = (int)width;
                 //gameInfo.DrawBorders = true;
                 gameInfo.MaximumWidth = (int)width;
-                gameInfo.SetPosition(10, (int)boardOffsetY);
+                gameInfo.SetPosition(10, (int)largeBoardOffsetY);
                 gameInfo.TextColor = Color.White;
                 //gameInfo.WordWrap = true;
                 uiManager.Add(gameInfo);
@@ -679,86 +682,92 @@ namespace Formations
                 }
 
             }
-            
-            /*
-            buttonsBackground[0] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.MistyRose);
-            buttonsBackground[1] = new VertexPositionColor(new Vector3(width, boardOffsetY - 40, 0), Color.MistyRose);
-            buttonsBackground[2] = new VertexPositionColor(new Vector3(width, boardOffsetY + height, 0), Color.MistyRose);
-            buttonsBackground[3] = new VertexPositionColor(new Vector3(width, boardOffsetY + height, 0), Color.MistyRose);
-            buttonsBackground[4] = new VertexPositionColor(new Vector3(10, boardOffsetY + height, 0), Color.MistyRose);
-            buttonsBackground[5] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.MistyRose);
 
-            buttonsBorderLines[0] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.Blue);
-            buttonsBorderLines[1] = new VertexPositionColor(new Vector3(width, boardOffsetY - 40, 0), Color.Blue);
-            buttonsBorderLines[2] = new VertexPositionColor(new Vector3(width, boardOffsetY - 40, 0), Color.Blue);
-            buttonsBorderLines[3] = new VertexPositionColor(new Vector3(width, boardOffsetY + height, 0), Color.Blue);
-            buttonsBorderLines[4] = new VertexPositionColor(new Vector3(width, boardOffsetY + height, 0), Color.Blue);
-            buttonsBorderLines[5] = new VertexPositionColor(new Vector3(10, boardOffsetY + height, 0), Color.Blue);
-            buttonsBorderLines[6] = new VertexPositionColor(new Vector3(10, boardOffsetY + height, 0), Color.Blue);
-            buttonsBorderLines[7] = new VertexPositionColor(new Vector3(10, boardOffsetY - 40, 0), Color.Blue);
-            */
         }
-        private void resizeTiles(int multiplyer)
+        private void resizeTiles(int multiplyer, float xOffset, float yOffset, int tileLength)
         {
+            float currentBoardOffsetX = xOffset;
+            float currentBoardOffsetY = yOffset;
+            int currentTileSideLength = tileLength;
+
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
                     if (j % 2 == 0)
                     {
-                        tiles[i, j].resizeHex(boardOffsetX * multiplyer * multiplyer + (i * xAdjustment / multiplyer), boardOffsetY * multiplyer * multiplyer + (j * yAdjustment / multiplyer), tileSideLength / multiplyer);
+                        tiles[i, j].resizeHex(currentBoardOffsetX + (i * xAdjustment / multiplyer), currentBoardOffsetY + (j * yAdjustment / multiplyer), currentTileSideLength);
                     }
                     else
                     {
-                        tiles[i, j].resizeHex(boardOffsetX * multiplyer * multiplyer + xTileOffset / multiplyer + (i * xAdjustment / multiplyer), boardOffsetY * multiplyer * multiplyer + (j * yAdjustment / multiplyer), tileSideLength / multiplyer);
+                        tiles[i, j].resizeHex(currentBoardOffsetX + xTileOffset / multiplyer + (i * xAdjustment / multiplyer), currentBoardOffsetY + (j * yAdjustment / multiplyer), currentTileSideLength);
                     }
                 }
             }
         }
-        private void resizeBoard(int multiplyer)
+        private void resizeBoard()
         {
-            resizeTiles(multiplyer);
-            float border = 10;
-            float halfHexWidth = (float)Math.Sqrt(tileSideLength * tileSideLength - (tileSideLength / 2) * (tileSideLength / 2))/multiplyer;
-            float widthOfBoard = (halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border + 2 * border);
-            float heightOfBoard = (tileSideLength * (boardHeight * 1.5f) + (boardHeight * 1.5f) - (tileSideLength / 2f) + border)/multiplyer;
-            vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
-            vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
-            vertices[2] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[3] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[4] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[5] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            
+            float currentBoardOffsetX;
+            float currentBoardOffsetY;
+            int currenttileSideLength;
+            int multiplyer;
+            if (!isSmallBoard)
+            {
+                currentBoardOffsetX = smallBoardOffsetX;
+                currentBoardOffsetY = smallBoardOffsetY;
+                currenttileSideLength = smallTileSideLength;
+                multiplyer = 2;
+            }
+            else
+            {
+                currentBoardOffsetX = largeBoardOffsetX;
+                currentBoardOffsetY = largeBoardOffsetY;
+                currenttileSideLength = largeTileSideLength;
+                multiplyer = 1;
+            }
+            resizeTiles(multiplyer, currentBoardOffsetX, currentBoardOffsetY, currenttileSideLength);
+            float border = 10/multiplyer;
+            float halfHexWidth = (float)Math.Sqrt(currenttileSideLength * currenttileSideLength - (currenttileSideLength / 2) * (currenttileSideLength / 2));
+            float widthOfBoard = (xAdjustment * boardWidth + border)/multiplyer;
+            float heightOfBoard = (yAdjustment * boardHeight - currenttileSideLength + 2 * border) / multiplyer;
+            vertices[0] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY - currenttileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[1] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY - currenttileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[2] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[3] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[4] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[5] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY - currenttileSideLength - border, 0), GameColors.boardAreaBackground);
 
-            borderLines[0] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
-            borderLines[1] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
-            borderLines[2] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
-            borderLines[3] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
-            borderLines[4] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer + widthOfBoard, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
-            borderLines[5] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
-            borderLines[6] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer + heightOfBoard, 0), Color.Blue);
-            borderLines[7] = new VertexPositionColor(new Vector3(boardOffsetX * multiplyer * multiplyer - halfHexWidth - border, boardOffsetY * multiplyer * multiplyer - tileSideLength - border, 0), Color.Blue);
+            borderLines[0] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY - currenttileSideLength - border, 0), Color.Blue);
+            borderLines[1] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY - currenttileSideLength - border, 0), Color.Blue);
+            borderLines[2] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY - currenttileSideLength - border, 0), Color.Blue);
+            borderLines[3] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[4] = new VertexPositionColor(new Vector3(currentBoardOffsetX + widthOfBoard, currentBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[5] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[6] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[7] = new VertexPositionColor(new Vector3(currentBoardOffsetX - halfHexWidth - border, currentBoardOffsetY - currenttileSideLength - border, 0), Color.Blue);
         }
         private void createBoardArea()
         {
             float border = 10;
-            float halfHexWidth = (float)Math.Sqrt(tileSideLength * tileSideLength - (tileSideLength / 2) * (tileSideLength / 2));
-            float widthOfBoard = halfHexWidth * (boardWidth * 2) + boardWidth * 2 + border + 2*border;
-            float heightOfBoard = tileSideLength * (boardHeight * 1.5f) + (boardHeight * 1.5f) - (tileSideLength / 2f) + border;
-            vertices[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
-            vertices[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
-            vertices[2] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[3] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[4] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
-            vertices[5] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), GameColors.boardAreaBackground);
+            float halfHexWidth = (float)Math.Sqrt(largeTileSideLength * largeTileSideLength - (largeTileSideLength / 2) * (largeTileSideLength / 2));
+            float widthOfBoard = (xAdjustment * boardWidth + border);
+            float heightOfBoard = (yAdjustment * boardHeight - largeTileSideLength + 2 * border);
+            vertices[0] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[1] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY - largeTileSideLength - border, 0), GameColors.boardAreaBackground);
+            vertices[2] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[3] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[4] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), GameColors.boardAreaBackground);
+            vertices[5] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), GameColors.boardAreaBackground);
 
-            borderLines[0] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.Blue);
-            borderLines[1] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), Color.Blue);
-            borderLines[2] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY - tileSideLength - border, 0), Color.Blue);
-            borderLines[3] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), Color.Blue);
-            borderLines[4] = new VertexPositionColor(new Vector3(boardOffsetX + widthOfBoard, boardOffsetY + heightOfBoard, 0), Color.Blue);
-            borderLines[5] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY + heightOfBoard, 0), Color.Blue);
-            borderLines[6] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY + heightOfBoard, 0), Color.Blue);
-            borderLines[7] = new VertexPositionColor(new Vector3(boardOffsetX - halfHexWidth - border, boardOffsetY - tileSideLength - border, 0), Color.Blue);
+            borderLines[0] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
+            borderLines[1] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
+            borderLines[2] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
+            borderLines[3] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[4] = new VertexPositionColor(new Vector3(largeBoardOffsetX + widthOfBoard, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[5] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[6] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
+            borderLines[7] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
         }
     }
 }
