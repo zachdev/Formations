@@ -59,7 +59,7 @@ namespace Formations
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
-
+            theManager.SetSkin(new Skin(theManager, "Blue"));
             testButton = new Button(theManager);
 
             //txtWindow = new TextBox(theManager);

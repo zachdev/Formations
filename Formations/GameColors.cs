@@ -31,9 +31,9 @@ namespace Formations
         public static Color normalBorderColor = Color.Black;
 
         //Button Colors
-        public static Color turnButtonInsideColor = Color.Red;
+        public static Color turnButtonInsideColor = Color.Blue;
         public static Color turnButtonOutsideColor = Color.DarkOrange;
-        public static Color turnButtonInsideColorGuest = Color.White;
+        public static Color turnButtonInsideColorGuest = Color.Yellow;
         public static Color attButton = Color.Red;
         public static Color ManipulateButton = Color.LightPink;
         public static Color moveButton = Color.Blue;

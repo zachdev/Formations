@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TomShane.Neoforce.Controls;
 
 namespace Formations
 {   
@@ -13,23 +14,29 @@ namespace Formations
         public TileBasic selectedTile{get; set;}
         private string playerName;
         private Vector2 playerInfoLocation = new Vector2(800,10);
+        private Vector2 attNumberLocation = new Vector2(815, 42);
+        private Vector2 defNumberLocation = new Vector2(815, 57);
+        private Vector2 manipNumberLocation = new Vector2(815, 73);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
         private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
-
+        private Manager uiManager;
+        private Label playersNameLabel;
+        private Label totalAttUnitLabel;
+        private Label totalDefUnitLabel;
+        private Label totalManipUnitLabel;
         private int totalAtt = 0;
         private int totalDef = 0;
         private int totalMul = 0;
         private Hexagon attHex;
         private Hexagon defHex;
         private Hexagon mulHex;
-        private SpriteFont font;
         public Player()
         {
 
         }
 
-        public void init(string nameOfPlayer, UnitAbstract[,] units, SpriteFont font, GraphicsDevice graphicsDevice)
+        public void init(string nameOfPlayer, UnitAbstract[,] units, SpriteFont font, GraphicsDevice graphicsDevice, Manager uiManager)
         {
             playerName = nameOfPlayer;
             for (int i = 0; i < 20; i++)
@@ -60,7 +67,28 @@ namespace Formations
                     totalMul++;
                 }
             }
-            this.font = font;
+            //Label
+            this.uiManager = uiManager;
+            uiManager.SetSkin(new Skin(uiManager, "Blue"));
+            playersNameLabel = new Label(uiManager);
+
+            playersNameLabel.SetPosition((int)playerInfoLocation.X, (int)playerInfoLocation.Y);
+            playersNameLabel.Text = playerName;
+            playersNameLabel.SetSize(150,20);
+            totalAttUnitLabel = new Label(uiManager);
+            totalAttUnitLabel.SetPosition((int)attNumberLocation.X, (int)attNumberLocation.Y);
+            totalAttUnitLabel.Text = totalAtt + "";
+            totalDefUnitLabel = new Label(uiManager);
+            totalDefUnitLabel.SetPosition((int)defNumberLocation.X, (int)defNumberLocation.Y);
+            totalDefUnitLabel.Text = totalDef + "";
+            totalManipUnitLabel = new Label(uiManager);
+            totalManipUnitLabel.SetPosition((int)manipNumberLocation.X, (int)manipNumberLocation.Y);
+            totalManipUnitLabel.Text = totalMul + "";
+            uiManager.Add(playersNameLabel);
+            uiManager.Add(totalAttUnitLabel);
+            uiManager.Add(totalDefUnitLabel);
+            uiManager.Add(totalManipUnitLabel);
+
             attHex = new Hexagon(7);
             defHex = new Hexagon(7);
             mulHex = new Hexagon(7);
@@ -118,10 +146,6 @@ namespace Formations
         public void draw(SpriteBatch spriteBatch)
         {
             
-            spriteBatch.DrawString(font, playerName, playerInfoLocation,Color.Wheat);
-            spriteBatch.DrawString(font, totalAtt + "", new Vector2(815, 40), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
-            spriteBatch.DrawString(font, totalDef + "", new Vector2(815, 55), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
-            spriteBatch.DrawString(font, totalMul + "", new Vector2(815, 70), Color.Wheat, 0, new Vector2(0, 0), .5f, SpriteEffects.None, 1);
             attHex.draw(spriteBatch);
             defHex.draw(spriteBatch);
             mulHex.draw(spriteBatch);

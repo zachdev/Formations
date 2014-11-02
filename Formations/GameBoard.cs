@@ -20,7 +20,6 @@ namespace Formations
         private bool isPlayersTurn = true;
         private int movesLeftInPhase = 10;
         private bool isFirstPhase = true;
-       //private bool isGamePhase = false;
         private bool attackInProgress = false;
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
@@ -28,7 +27,6 @@ namespace Formations
         private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
-        private Hexagon firstPhase;
         private Hexagon turnButton;
         private Hexagon attUnit;
         private Hexagon defUnit;
@@ -54,13 +52,13 @@ namespace Formations
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        private VertexPositionColor[] buttonsBackground = new VertexPositionColor[6];
-        private VertexPositionColor[] buttonsBorderLines = new VertexPositionColor[8];
         private BasicEffect basicEffect;
 
         // Chat class
         private Chat chatManager;
         private Button chatButton;
+        private Button resizeButton;
+        private Button endTurn;
 
 
         public GameBoard()
@@ -73,7 +71,6 @@ namespace Formations
                }
             }
             unitSideLength = largeTileSideLength / 2;
-
         }
         private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
         {
@@ -101,8 +98,8 @@ namespace Formations
             guest = new Guest();
             this.uiManager = uiManager;
 
-            player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice);
-            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font, graphicsDevice);
+            player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice, uiManager);
+            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font, graphicsDevice, uiManager);
 
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
@@ -111,7 +108,6 @@ namespace Formations
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
             createBoardArea();
-            //createButtonArea();
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -136,7 +132,6 @@ namespace Formations
             }
             changeInX = (float)Math.Sqrt((float)(largeTileSideLength * largeTileSideLength) - (float)(largeTileSideLength / 2) * (float)(largeTileSideLength / 2));
             changeInY = (float)(largeTileSideLength / 2);
-            firstPhase = new Hexagon(20);
             turnButton = new Hexagon(20);
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
@@ -152,20 +147,33 @@ namespace Formations
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
             manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
-            firstPhase.init(400, 50, graphicsDevice, GameColors.turnButtonOutsideColor, GameColors.turnButtonInsideColor);
+            
 
+            //Resize Button
+            resizeButton = new Button(uiManager);
+            resizeButton.SetPosition(10, 150);
+            resizeButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.resizeBoard);
+            resizeButton.Text = "Small Map";
+
+            //End Turn Button
+            endTurn = new Button(uiManager);
+            endTurn.SetPosition(10, 100);
+            endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
+            endTurn.Text = "EndTurn";
             // Chat stuff
             chatManager = new Chat();
             chatManager.init(uiManager);
-            uiManager.SetSkin(new Skin(uiManager, "Blue"));
+            
             chatButton = new Button(uiManager);
-            chatButton.SetPosition(1150, 10);
+            chatButton.SetPosition(1125, 10);
             chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
             chatButton.Text = "<";
             
 
             Label chatLabel = new Label(uiManager);
             uiManager.Add(chatButton);
+            uiManager.Add(endTurn);
+            uiManager.Add(resizeButton);
 
             
         }
@@ -203,22 +211,6 @@ namespace Formations
         }
         public void mouseReleased(MouseState mouseState)
         {
-            if(turnButton.IsPointInPolygon(mouseState.X, mouseState.Y))
-            {
-                //newTurn();
-                if(!isSmallBoard){
-                    resizeBoard();
-                    isSmallBoard = true;
-                }
-                else
-                {
-                    resizeBoard();
-                    isSmallBoard = false;
-                }
-                
-                return;
-            }
-
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -450,7 +442,7 @@ namespace Formations
             if (isFirstPhase)
             { 
                 movesLeftInPhase--;
-                newTurn();
+                //new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
             }
         }
         private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
@@ -499,7 +491,7 @@ namespace Formations
             }
             return result;
         }
-        private void newTurn()
+        private void newTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
             if (isPlayersTurn)
             {
@@ -513,10 +505,7 @@ namespace Formations
             }
             if (movesLeftInPhase == 0)
             {
-                firstPhase.setInsideColor(Color.Gray);
-                firstPhase.setOutsideColor(Color.Gray);
                 isFirstPhase = false;
-                //isGamePhase = true;
             }
         }
         private void recalculateControlArea()
@@ -552,8 +541,6 @@ namespace Formations
             basicEffect.CurrentTechnique.Passes[0].Apply();
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
-            spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, buttonsBackground, 0, 2);
-            spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, buttonsBorderLines, 0, 4);
             bool found = false;
             for (int i = 0; i < boardWidth; i++)
             {
@@ -581,7 +568,6 @@ namespace Formations
             guest.draw(spriteBatch);
             player.draw(spriteBatch);
             turnButton.draw(spriteBatch);
-            firstPhase.draw(spriteBatch);
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
@@ -705,7 +691,7 @@ namespace Formations
                 }
             }
         }
-        private void resizeBoard()
+        private void resizeBoard(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
             
             float currentBoardOffsetX;
@@ -718,6 +704,8 @@ namespace Formations
                 currentBoardOffsetY = smallBoardOffsetY;
                 currenttileSideLength = smallTileSideLength;
                 multiplyer = 2;
+                resizeButton.Text = "Large Map";
+                isSmallBoard = true;
             }
             else
             {
@@ -725,6 +713,8 @@ namespace Formations
                 currentBoardOffsetY = largeBoardOffsetY;
                 currenttileSideLength = largeTileSideLength;
                 multiplyer = 1;
+                resizeButton.Text = "Small Map";
+                isSmallBoard = false;
             }
             resizeTiles(multiplyer, currentBoardOffsetX, currentBoardOffsetY, currenttileSideLength);
             float border = 10/multiplyer;
