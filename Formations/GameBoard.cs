@@ -24,6 +24,7 @@ namespace Formations
         private bool moveInProgress = false;
         private bool manipulateInProgress = false;
         private bool isSmallBoard = false;
+        private bool endTurnIsVisible = false;
         private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
@@ -59,7 +60,10 @@ namespace Formations
         private Button chatButton;
         private Button resizeButton;
         private Button endTurn;
-
+        private Window endTurnWindow;
+        private Button endYesButton;
+        private Button endNoButton;
+        private Label endTurnLabel;
 
         public GameBoard()
         {
@@ -149,17 +153,40 @@ namespace Formations
             turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
             
 
+
             //Resize Button
             resizeButton = new Button(uiManager);
             resizeButton.SetPosition(10, 150);
             resizeButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.resizeBoard);
             resizeButton.Text = "Small Map";
 
-            //End Turn Button
+            //End Turn Button/Window
             endTurn = new Button(uiManager);
+            endTurnLabel = new Label(uiManager);
+            endTurn.SetPosition(0, 0);
+            endTurnLabel.Text = "End Turn?";
+            endTurnLabel.Alignment = Alignment.MiddleCenter;
             endTurn.SetPosition(10, 100);
-            endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
+            endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
             endTurn.Text = "EndTurn";
+            endYesButton = new Button(uiManager);
+            endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
+            endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
+            endYesButton.Text = "Yes";
+            endYesButton.SetPosition(0, 25);
+            endNoButton = new Button(uiManager);
+            endNoButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
+            endNoButton.Text = "No";
+            endNoButton.SetPosition(0, 50);
+            endTurnWindow = new Window(uiManager);
+            endTurnWindow.SetSize(87,115);
+            endTurnWindow.SetPosition(500, 250);
+            endTurnWindow.Text = "";
+            endTurnWindow.Add(endTurnLabel);
+            endTurnWindow.Add(endYesButton);
+            endTurnWindow.Add(endNoButton);
+
+
             // Chat stuff
             chatManager = new Chat();
             chatManager.init(uiManager);
@@ -203,6 +230,28 @@ namespace Formations
                         }
                     }
                 }
+            }
+        }
+        public void showEndTurn()
+        {
+            uiManager.Add(endTurnWindow);
+            endTurnIsVisible = true;
+        }
+
+        public void hideEndTurn()
+        {
+            uiManager.Remove(endTurnWindow);
+            endTurnIsVisible = false;
+        }
+        public void toggleEndTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            if (endTurnIsVisible)
+            {
+                hideEndTurn();
+            }
+            else
+            {
+                showEndTurn();
             }
         }
         public void mouseReleased(MouseState mouseState)
