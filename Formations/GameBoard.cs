@@ -98,8 +98,8 @@ namespace Formations
             guest = new Guest();
             this.uiManager = uiManager;
 
-            player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), font, graphicsDevice, uiManager);
-            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), font, graphicsDevice, uiManager);
+            player.init("<PlayerNameHere>", createUnitArray(10, 5, 1), graphicsDevice, uiManager);
+            guest.init("<GuestNameHere>", createUnitArray(10, 3, 2), graphicsDevice, uiManager);
 
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
@@ -174,11 +174,7 @@ namespace Formations
             uiManager.Add(chatButton);
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
-
-            
         }
-
-
         public void mousePressed(MouseState mouseState)
         {
             if (!chatManager.chatIsVisible()) // Check if the chat window is visible
@@ -410,8 +406,12 @@ namespace Formations
                     //Console.WriteLine("moveUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
                     {
-                        currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
-                        currentSurroundingTiles[0].setUnit(null);
+                        if (player.Stamina >= currentSurroundingTiles[0].getUnit().staminaMoveCost)
+                        {
+                            currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
+                            player.useStamina((int)currentSurroundingTiles[0].getUnit().staminaMoveCost);
+                            currentSurroundingTiles[0].setUnit(null);
+                        }
                         //Console.WriteLine("moveUnit Move");
                     }
                 }
@@ -426,7 +426,12 @@ namespace Formations
             {//starts on 1 because 0 is the attacker
                 if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isOwnedByPlayer())
                 {
-                    currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
+                    if(player.Stamina >= currentSurroundingTiles[i].getUnit().staminaAttCost)
+                    {
+                        currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
+                        player.useStamina((int)currentSurroundingTiles[i].getUnit().staminaAttCost);
+                    }
+                        
                     if (currentSurroundingTiles[i].getUnit().isDead)
                     {
                         currentSurroundingTiles[i].setUnit(null);

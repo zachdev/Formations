@@ -12,11 +12,15 @@ namespace Formations
         const double _Damage_Multiplyer = 1;
         const double _Defense = 1;
         const double _Defense_Multiplyer = 1;
+        const double _Stamina_Move_Cost = 1;
+        const double _Stamina_Att_Cost = 1;
         public override void init(bool isPlayerUnit)
         {
             this.isPlayersUnit = isPlayerUnit;
             this.Damage = _Damage;
             this.Defense = _Defense;
+            this.staminaAttCost = _Stamina_Att_Cost;
+            this.staminaMoveCost = _Stamina_Move_Cost;
         }
         public override string getUnitType()
         {

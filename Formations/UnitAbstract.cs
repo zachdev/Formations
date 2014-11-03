@@ -13,6 +13,9 @@ namespace Formations
         public double life = 4;
         public double Damage;
         public double Defense;
+        public double staminaAttCost;
+        public double staminaMoveCost;
+
 
 
         public abstract void init(bool isOwnedByPlayer);

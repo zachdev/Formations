@@ -25,18 +25,21 @@ namespace Formations
         private Label totalAttUnitLabel;
         private Label totalDefUnitLabel;
         private Label totalManipUnitLabel;
+        private Label staminaPointsLeft;
         private int totalAtt = 0;
         private int totalDef = 0;
         private int totalMul = 0;
+        public int _stamina;
+        public int Stamina{ get{ return _stamina;}}
         private Hexagon attHex;
         private Hexagon defHex;
         private Hexagon mulHex;
         public Player()
         {
-
+            _stamina = 5;
         }
 
-        public void init(string nameOfPlayer, UnitAbstract[,] units, SpriteFont font, GraphicsDevice graphicsDevice, Manager uiManager)
+        public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
         {
             playerName = nameOfPlayer;
             for (int i = 0; i < 20; i++)
@@ -71,7 +74,6 @@ namespace Formations
             this.uiManager = uiManager;
             uiManager.SetSkin(new Skin(uiManager, "Blue"));
             playersNameLabel = new Label(uiManager);
-
             playersNameLabel.SetPosition((int)playerInfoLocation.X, (int)playerInfoLocation.Y);
             playersNameLabel.Text = playerName;
             playersNameLabel.SetSize(150,20);
@@ -84,10 +86,14 @@ namespace Formations
             totalManipUnitLabel = new Label(uiManager);
             totalManipUnitLabel.SetPosition((int)manipNumberLocation.X, (int)manipNumberLocation.Y);
             totalManipUnitLabel.Text = totalMul + "";
+            staminaPointsLeft = new Label(uiManager);
+            staminaPointsLeft.SetPosition((int)playerInfoLocation.X + 160, (int)playerInfoLocation.Y);
+            staminaPointsLeft.Text = _stamina + "";
             uiManager.Add(playersNameLabel);
             uiManager.Add(totalAttUnitLabel);
             uiManager.Add(totalDefUnitLabel);
             uiManager.Add(totalManipUnitLabel);
+            uiManager.Add(staminaPointsLeft);
 
             attHex = new Hexagon(7);
             defHex = new Hexagon(7);
@@ -137,7 +143,11 @@ namespace Formations
             }
             return null;
         }
-
+        public void useStamina(int staminaToUse)
+        {
+            _stamina -= staminaToUse;
+            staminaPointsLeft.Text = _stamina + "";
+        }
         public void update(MouseState mouseState)
         {
 
