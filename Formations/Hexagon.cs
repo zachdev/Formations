@@ -23,16 +23,13 @@ namespace Formations
         }
         public void init(float x, float y, GraphicsDevice graphicsDevice, Color insideColor, Color outsideColor)
         {
-            this.insideColor = insideColor;
-            this.outsideColor = outsideColor;
-
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
             basicEffect.Projection = Matrix.CreateOrthographicOffCenter
                (0, graphicsDevice.Viewport.Width,     // left, right
                 graphicsDevice.Viewport.Height, 0,    // bottom, top
                 0, 1);                                // near, far plane
-
+            vertices = new VertexPositionColor[18];
             moveHex(x, y, insideColor, outsideColor);
 
         }
@@ -64,7 +61,6 @@ namespace Formations
 
             vectors = CalculateVertices(tileSideLength, new Vector3(x, y, 0));
             createBorder();
-            vertices = new VertexPositionColor[18];
             vertices[0] = new VertexPositionColor(new Vector3(x, y, 0), insideColor);
             vertices[1] = new VertexPositionColor(vectors[0].Position, outsideColor);
             vertices[2] = new VertexPositionColor(vectors[1].Position, outsideColor);

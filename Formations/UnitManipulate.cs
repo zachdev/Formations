@@ -14,6 +14,7 @@ namespace Formations
         const double _Defense_Multiplyer = 1;
         const double _Stamina_Move_Cost = 1;
         const double _Stamina_Att_Cost = 1;
+        public static int STAMINA_PLACE_COST = 4;
         public override void init(bool isPlayerUnit)
         {
             this.isPlayersUnit = isPlayerUnit;
@@ -21,6 +22,7 @@ namespace Formations
             this.Defense = _Defense;
             this.staminaAttCost = _Stamina_Att_Cost;
             this.staminaMoveCost = _Stamina_Move_Cost;
+
         }
         public override string getUnitType()
         {

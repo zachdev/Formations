@@ -145,6 +145,11 @@ namespace Formations
             }
             return null;
         }
+        public void newTurn()
+        {
+            _stamina += 5;
+            staminaPointsLeft.Text = _stamina + "";
+        }
         public void useStamina(int staminaToUse)
         {
             _stamina -= staminaToUse;

@@ -16,8 +16,6 @@ namespace Formations
         public double staminaAttCost;
         public double staminaMoveCost;
 
-
-
         public abstract void init(bool isOwnedByPlayer);
         public bool isOwnedByPlayer()
         {

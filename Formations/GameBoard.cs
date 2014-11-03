@@ -243,31 +243,34 @@ namespace Formations
                         }
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            
-                            if (isPlayersTurn && playerCanSetUnit(i,j,mouseState))
+                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                             { 
                                 tiles[i, j].setUnit(player.getAttUnit());
+                                player.useStamina(UnitAtt.STAMINA_PLACE_COST);
                                 move();
                                 
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                             {
                                 
                                 tiles[i, j].setUnit(guest.getAttUnit());
+                                guest.useStamina(UnitAtt.STAMINA_PLACE_COST);
                                 move();
                             }
 
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState)) 
+                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitDef.STAMINA_PLACE_COST) 
                             {
                                 tiles[i, j].setUnit(player.getDefUnit());
+                                player.useStamina(UnitDef.STAMINA_PLACE_COST);
                                 move();
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitDef.STAMINA_PLACE_COST)
                             {
                                 tiles[i, j].setUnit(guest.getDefUnit());
+                                guest.useStamina(UnitDef.STAMINA_PLACE_COST);
                                 move();
                             }
                             
@@ -275,14 +278,16 @@ namespace Formations
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
 
-                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState))
+                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
                             { 
                                 tiles[i, j].setUnit(player.getMulUnit());
+                                player.useStamina(UnitManipulate.STAMINA_PLACE_COST);
                                 move();
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState))
+                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
                             {
                                 tiles[i, j].setUnit(guest.getMulUnit());
+                                guest.useStamina(UnitManipulate.STAMINA_PLACE_COST);
                                 move();
                             }
 
@@ -453,6 +458,7 @@ namespace Formations
         private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
         {
             bool result = false;
+
             if (player.getTotalAtt() > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
@@ -471,6 +477,7 @@ namespace Formations
                 else if (tiles[tileX, tileY].isPlayerControled() && !tiles[tileX, tileY].isGuestControled()) { result = true; }
 
             }
+
             return result;
         }
         private bool guestCanSetUnit(int tileX, int tileY, MouseState mouseState)
@@ -501,11 +508,13 @@ namespace Formations
             if (isPlayersTurn)
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColorGuest);
+                player.newTurn();
                 isPlayersTurn = false;
             }
             else
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColor);
+                guest.newTurn();
                 isPlayersTurn = true;
             }
             if (movesLeftInPhase == 0)
@@ -600,7 +609,7 @@ namespace Formations
             }
             else
             {
-                if (currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
+                if (!isFirstPhase && currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
                 {
 
                     if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))

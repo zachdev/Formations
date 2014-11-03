@@ -139,7 +139,7 @@ namespace Formations
             if (guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
             if (!guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.playerControlOutsideColor); }
             if (guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
-            if (!guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.noControlOutsideColor); }
+            if (!guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.noUnitInsideColor); }
         }
         public bool isPlayerControled()
         {
