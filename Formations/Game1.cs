@@ -112,7 +112,7 @@ namespace Formations
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("spriteFont");
             gb = new GameBoard();
-            gb.init(theManager, GraphicsDevice, font, "<GameNameHere>");
+            gb.init(theManager, GraphicsDevice, "<GameNameHere>");
             // TODO: use this.Content to load your game content here
             
 

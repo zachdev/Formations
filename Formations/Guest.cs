@@ -114,6 +114,7 @@ namespace Formations
             if (totalAtt > 0) 
             {
                 totalAtt--;
+                totalAttUnitLabel.Text = totalAtt + "";
                 return attUnitArray[totalAtt]; 
             }
             return null;
@@ -128,6 +129,7 @@ namespace Formations
             if (totalDef > 0) 
             { 
                 totalDef--;
+                totalDefUnitLabel.Text = totalDef + "";
                 return defUnitArray[totalDef];
             }
             return null;
@@ -141,6 +143,7 @@ namespace Formations
             if (totalMul > 0) 
             {
                 totalMul--;
+                totalManipUnitLabel.Text = totalMul + "";
                 return mulUnitArray[totalMul]; 
             }
             return null;

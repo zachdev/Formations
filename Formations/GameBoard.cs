@@ -16,7 +16,6 @@ namespace Formations
         private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        private SpriteFont font;
         private int movesLeftInPhase = 10;
         private bool isPlayersTurn = true;
         private bool isFirstPhase = true;
@@ -28,6 +27,7 @@ namespace Formations
         private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
+        private Label gameNameLabel;
         private Hexagon turnButton;
         private Hexagon attUnit;
         private Hexagon defUnit;
@@ -64,6 +64,10 @@ namespace Formations
         private Button endYesButton;
         private Button endNoButton;
 
+        /// <summary>
+        /// Default Constructor
+        /// creates TilesArray for the Board
+        /// </summary>
         public GameBoard()
         {
             for (int i = 0; i < boardWidth; i++)
@@ -75,27 +79,15 @@ namespace Formations
             }
             unitSideLength = largeTileSideLength / 2;
         }
-        private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberMul)
+        /// <summary>
+        /// Initalizer for this object
+        /// </summary>
+        /// <param name="uiManager"></param>
+        /// <param name="graphicsDevice"></param>
+        /// <param name="font"></param>
+        /// <param name="gameName"></param>
+        public void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName)
         {
-            UnitAbstract[,] tempArray = new UnitAbstract[3,20];
-
-            for (int i = 0; i < numberAtt; i++)
-            {
-                tempArray[0, i] = new UnitAtt();
-            }
-            for (int i = 0; i < numberDef; i++)
-            {
-                tempArray[1, i] = new UnitDef();
-            }
-            for (int i = 0; i < numberMul; i++)
-            {
-                tempArray[2, i] = new UnitManipulate();
-            }
-            return tempArray;
-        }
-        public void init(Manager uiManager, GraphicsDevice graphicsDevice, SpriteFont font, string gameName)
-        {
-            this.font = font;
             this.gameName = gameName;
             player = new Player();
             guest = new Guest();
@@ -183,7 +175,11 @@ namespace Formations
             endTurnWindow.CloseButtonVisible = false;
             endTurnWindow.Add(endYesButton);
             endTurnWindow.Add(endNoButton);
-
+            //Game Name Label
+            gameNameLabel = new Label(uiManager);
+            gameNameLabel.SetPosition(550,10);
+            gameNameLabel.Text = gameName;
+            gameNameLabel.SetSize(200,30);
 
             // Chat stuff
             chatManager = new Chat();
@@ -199,10 +195,36 @@ namespace Formations
             uiManager.Add(chatButton);
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
+            uiManager.Add(gameNameLabel);
+        }
+        /// <summary>
+        /// Creates the UnitAbstract Array with the correct number of attack units defense units and Manipulation units
+        /// </summary>
+        /// <param name="numberAtt">The correct number of Attack units to add to the UnitAbstract array</param> 
+        /// <param name="numberDef">The correct number of Defensive units to add to the UnitAbstract array</param>
+        /// <param name="numberManip">The correct number of Manipulation units to add to the UnitAbstract array</param>
+        /// <returns></returns>
+        private UnitAbstract[,] createUnitArray(int numberAtt, int numberDef, int numberManip)
+        {
+            UnitAbstract[,] tempArray = new UnitAbstract[3, 20];
+
+            for (int i = 0; i < numberAtt; i++)
+            {
+                tempArray[0, i] = new UnitAtt();
+            }
+            for (int i = 0; i < numberDef; i++)
+            {
+                tempArray[1, i] = new UnitDef();
+            }
+            for (int i = 0; i < numberManip; i++)
+            {
+                tempArray[2, i] = new UnitManipulate();
+            }
+            return tempArray;
         }
         public void mousePressed(MouseState mouseState)
         {
-            if (!chatManager.chatIsVisible()) // Check if the chat window is visible
+            if (!chatManager.chatIsVisible())// Check if the chat window is visible
             {
                 for (int i = 0; i < boardWidth; i++)
                 {
@@ -211,7 +233,6 @@ namespace Formations
                         //calculate here maybe
                         if (tiles[i, j].isHovered())
                         {
-
                             tiles[i, j].mousePressed(mouseState);
                             if (attackInProgress)
                             {
@@ -342,6 +363,7 @@ namespace Formations
                     }
                 }
             }
+            
             recalculateControlArea();
         }
         public void mouseDragged(MouseState mouseState)
@@ -391,6 +413,10 @@ namespace Formations
                     }
                 }
             }  
+        }
+        private void updateUnitsLeftToPlace()
+        {
+
         }
         private void setHoverLabel(MouseState mouseState)
         {
@@ -623,9 +649,6 @@ namespace Formations
 
                 drawUnitButtons(currentTile, spriteBatch);
                // drawUnitInfo(spriteBatch);
-            
-
-            spriteBatch.DrawString(font, gameName, gameNameLocation, Color.White);
             guest.draw(spriteBatch);
             player.draw(spriteBatch);
             turnButton.draw(spriteBatch);
