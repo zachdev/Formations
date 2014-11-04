@@ -17,8 +17,8 @@ namespace Formations
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private SpriteFont font;
-        private bool isPlayersTurn = true;
         private int movesLeftInPhase = 10;
+        private bool isPlayersTurn = true;
         private bool isFirstPhase = true;
         private bool attackInProgress = false;
         private bool moveInProgress = false;
@@ -63,7 +63,6 @@ namespace Formations
         private Window endTurnWindow;
         private Button endYesButton;
         private Button endNoButton;
-        private Label endTurnLabel;
 
         public GameBoard()
         {
@@ -162,10 +161,6 @@ namespace Formations
 
             //End Turn Button/Window
             endTurn = new Button(uiManager);
-            endTurnLabel = new Label(uiManager);
-            endTurn.SetPosition(0, 0);
-            endTurnLabel.Text = "End Turn?";
-            endTurnLabel.Alignment = Alignment.MiddleCenter;
             endTurn.SetPosition(10, 100);
             endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
             endTurn.Text = "EndTurn";
@@ -173,16 +168,19 @@ namespace Formations
             endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
             endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
             endYesButton.Text = "Yes";
-            endYesButton.SetPosition(0, 25);
+            endYesButton.SetPosition(0, 0);
+            endYesButton.SetSize(100, 100);
             endNoButton = new Button(uiManager);
             endNoButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
             endNoButton.Text = "No";
-            endNoButton.SetPosition(0, 50);
+            endNoButton.SetPosition(0, 100);
+            endNoButton.SetSize(100, 100);
             endTurnWindow = new Window(uiManager);
-            endTurnWindow.SetSize(87,115);
+            endTurnWindow.SetSize(114,235);
             endTurnWindow.SetPosition(500, 250);
-            endTurnWindow.Text = "";
-            endTurnWindow.Add(endTurnLabel);
+            endTurnWindow.Text = "  End Turn?";
+            endTurnWindow.Shadow = true;
+            endTurnWindow.CloseButtonVisible = false;
             endTurnWindow.Add(endYesButton);
             endTurnWindow.Add(endNoButton);
 
@@ -371,7 +369,7 @@ namespace Formations
         {
             currentMouseState = mouseState;
 
-            if (!chatManager.chatIsVisible())
+            if (!chatManager.chatIsVisible() && !endTurnIsVisible)
             {
                 if (hexInfo == null)
                 {
