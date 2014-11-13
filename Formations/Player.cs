@@ -72,7 +72,7 @@ namespace Formations
             }
             //Label
             this.uiManager = uiManager;
-            uiManager.SetSkin(new Skin(uiManager, "Blue"));
+            uiManager.SetSkin(new Skin(uiManager, "Default"));
             playersNameLabel = new Label(uiManager);
             playersNameLabel.SetPosition((int)playerInfoLocation.X, (int)playerInfoLocation.Y);
             playersNameLabel.Text = playerName;

@@ -179,7 +179,7 @@ namespace Formations
             gameNameLabel = new Label(uiManager);
             gameNameLabel.SetPosition(550,10);
             gameNameLabel.Text = gameName;
-            gameNameLabel.SetSize(200,30);
+            gameNameLabel.SetSize(200,10);
 
             // Chat stuff
             chatManager = new Chat();
@@ -413,10 +413,6 @@ namespace Formations
                     }
                 }
             }  
-        }
-        private void updateUnitsLeftToPlace()
-        {
-
         }
         private void setHoverLabel(MouseState mouseState)
         {
