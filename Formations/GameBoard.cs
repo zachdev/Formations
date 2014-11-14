@@ -188,7 +188,7 @@ namespace Formations
             chatButton = new Button(uiManager);
             chatButton.SetPosition(1125, 10);
             chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
-            chatButton.Text = "<";
+            chatButton.Text = "Chat";
             
 
             Label chatLabel = new Label(uiManager);

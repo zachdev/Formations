@@ -6,11 +6,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TomShane.Neoforce.Controls;
+using System.Timers;
+using System.Threading;
 
 namespace Formations
 {
     class Chat : IUpdateDraw
     {
+        private static readonly int WINDOW_WIDTH = 300;
+        private static readonly int WINDOW_HEIGHT = 430;
+
         private Manager theManager;
 
         private bool isVisible;
@@ -22,9 +27,11 @@ namespace Formations
         private TextBox inputTextBox;
         private Button chatSendButton;
 
-        /**
-         * Constructor. Must pass in Neoforce manager.
-         */
+        private System.Timers.Timer timer;
+
+        private Boolean sliding;
+
+
         public Chat() {}
 
         public void init(Manager manager)
@@ -46,11 +53,11 @@ namespace Formations
             chatSendButton.Init();
 
             // Main chat panel
-            chatPanel.SetSize(300, 430);
-            chatPanel.SetPosition(800, 10);
+            chatPanel.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+            //chatPanel.SetPosition(800, 10);
 
             // Scrollbar
-            chatScrollbar.SetSize(300, 400);
+            chatScrollbar.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
             chatScrollbar.SetPosition(0, 0);
 
             // History text area
@@ -82,14 +89,58 @@ namespace Formations
 
         public void show()
         {
-            theManager.Add(chatPanel);
-            isVisible = true;
+            if (!sliding)
+            {
+                chatPanel.SetPosition(1200, 60);
+                timer = new System.Timers.Timer(50);
+                timer.Elapsed += windowSlideLeft;
+                timer.Start();
+
+            }
         }
 
         public void hide()
         {
-            theManager.Remove(chatPanel);
+            if (!sliding)
+            {
+                timer = new System.Timers.Timer(50);
+                timer.Elapsed += windowSlideRight;
+                timer.Start();
+
+            }
+        }
+
+        private void windowSlideLeft(object sender, ElapsedEventArgs e)
+        {
+            theManager.Add(chatPanel);
+            isVisible = true;
+
+            sliding = true;
+
+            while (chatPanel.Left > 900)
+            {
+                Thread.Sleep(2);
+                chatPanel.Left--;
+            }
+
+            sliding = false;
+            timer.Stop();
+        }
+
+        private void windowSlideRight(object sender, ElapsedEventArgs e)
+        {
+            sliding = true;
+
+            while (chatPanel.Left < 1200)
+            {
+                Thread.Sleep(2);
+                chatPanel.Left++;
+            }
+
+            theManager.Visible = false;
             isVisible = false;
+            sliding = false;
+            timer.Stop();
         }
 
         public void toggle(object sender, TomShane.Neoforce.Controls.EventArgs e)
