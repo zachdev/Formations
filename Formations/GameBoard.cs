@@ -251,28 +251,7 @@ namespace Formations
                 }
             }
         }
-        public void showEndTurn()
-        {
-            uiManager.Add(endTurnWindow);
-            endTurnIsVisible = true;
-        }
 
-        public void hideEndTurn()
-        {
-            uiManager.Remove(endTurnWindow);
-            endTurnIsVisible = false;
-        }
-        public void toggleEndTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
-        {
-            if (endTurnIsVisible)
-            {
-                hideEndTurn();
-            }
-            else
-            {
-                showEndTurn();
-            }
-        }
         public void mouseReleased(MouseState mouseState)
         {
             for (int i = 0; i < boardWidth; i++)
@@ -414,10 +393,7 @@ namespace Formations
                 }
             }  
         }
-        private void updateUnitsLeftToPlace()
-        {
 
-        }
         private void setHoverLabel(MouseState mouseState)
         {
             if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -454,6 +430,28 @@ namespace Formations
                         hexInfo.Text = tile.getUnit().getUnitType();
                     }   
                 }
+            }
+        }
+        public void showEndTurn()
+        {
+            uiManager.Add(endTurnWindow);
+            endTurnIsVisible = true;
+        }
+
+        public void hideEndTurn()
+        {
+            uiManager.Remove(endTurnWindow);
+            endTurnIsVisible = false;
+        }
+        public void toggleEndTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            if (endTurnIsVisible)
+            {
+                hideEndTurn();
+            }
+            else
+            {
+                showEndTurn();
             }
         }
         private void manipulateUnit(MouseState mouseState)
@@ -525,7 +523,6 @@ namespace Formations
             if (isFirstPhase)
             { 
                 movesLeftInPhase--;
-                //new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
             }
         }
         private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
@@ -553,6 +550,13 @@ namespace Formations
 
             return result;
         }
+        /// <summary>
+        /// delete this method when we have two player
+        /// </summary>
+        /// <param name="tileX"></param>
+        /// <param name="tileY"></param>
+        /// <param name="mouseState"></param>
+        /// <returns></returns>
         private bool guestCanSetUnit(int tileX, int tileY, MouseState mouseState)
         {
             bool result = false;
