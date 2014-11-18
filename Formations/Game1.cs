@@ -21,10 +21,6 @@ namespace Formations
 
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
-        
-        //TextBox txtWindow;
-        Label testLable;
-        Button testButton;
 
         public Game1()
             : base()
@@ -60,7 +56,6 @@ namespace Formations
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
             theManager.SetSkin(new Skin(theManager, "Blue"));
-            testButton = new Button(theManager);
 
             //txtWindow = new TextBox(theManager);
             /*
@@ -77,10 +72,6 @@ namespace Formations
             testButton.Visible = true;
             theManager.Add(testButton); 
             */
-            //adding a lable
-            testLable = new Label(theManager);
-            theManager.Add(testLable);
-            testLable.Text = "HI";
 
             //theManager.Add(txtWindow);
             //theManager.Add(testButton);
@@ -96,11 +87,6 @@ namespace Formations
             window.Height = 350;
             theManager.Add(window);
             */
-        }
-        void button_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
-        {
-            
-            System.Console.Out.WriteLine("Button Clicked");
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -174,11 +160,7 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
 
-                
-           
             spriteBatch.Begin();
-            
-            
 
             gb.draw(spriteBatch);
 

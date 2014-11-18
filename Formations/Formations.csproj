@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
+    <Compile Include="SerialClass.cs" />
     <Compile Include="GameColors.cs" />
     <Compile Include="Guest.cs" />
     <Compile Include="IKeyboardListener.cs" />

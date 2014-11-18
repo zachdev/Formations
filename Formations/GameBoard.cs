@@ -17,7 +17,7 @@ namespace Formations
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
         private int movesLeftInPhase = 10;
-        private bool isPlayersTurn = true;
+        private bool isPlayerTurn = true;
         private bool isFirstPhase = true;
         private bool attackInProgress = false;
         private bool moveInProgress = false;
@@ -282,8 +282,8 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
-                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
                             System.Console.WriteLine("Attack");
@@ -291,8 +291,8 @@ namespace Formations
                             attackInProgress = true;
                             return;
                         }
-                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             //Console.WriteLine("Move");
@@ -300,8 +300,8 @@ namespace Formations
                             moveInProgress = true;
                             return;
                         }
-                        if (tiles[i, j].hasUnit() && ((isPlayersTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayersTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
                             && manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             //Console.WriteLine("Manipulate");
@@ -311,14 +311,14 @@ namespace Formations
                         }
                         if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                            if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                             { 
                                 tiles[i, j].setUnit(player.getAttUnit());
                                 player.useStamina(UnitAtt.STAMINA_PLACE_COST);
                                 move();
                                 
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                            if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                             {
                                 
                                 tiles[i, j].setUnit(guest.getAttUnit());
@@ -329,13 +329,13 @@ namespace Formations
                         }
                         else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitDef.STAMINA_PLACE_COST) 
+                            if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitDef.STAMINA_PLACE_COST) 
                             {
                                 tiles[i, j].setUnit(player.getDefUnit());
                                 player.useStamina(UnitDef.STAMINA_PLACE_COST);
                                 move();
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                            if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitDef.STAMINA_PLACE_COST)
                             {
                                 tiles[i, j].setUnit(guest.getDefUnit());
                                 guest.useStamina(UnitDef.STAMINA_PLACE_COST);
@@ -346,13 +346,13 @@ namespace Formations
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
 
-                            if (isPlayersTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
+                            if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
                             { 
                                 tiles[i, j].setUnit(player.getMulUnit());
                                 player.useStamina(UnitManipulate.STAMINA_PLACE_COST);
                                 move();
                             }
-                            if (!isPlayersTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
+                            if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
                             {
                                 tiles[i, j].setUnit(guest.getMulUnit());
                                 guest.useStamina(UnitManipulate.STAMINA_PLACE_COST);
@@ -414,6 +414,8 @@ namespace Formations
                 }
             }  
         }
+
+        //TODO: change or remove
         private void setHoverLabel(MouseState mouseState)
         {
             if (attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -574,17 +576,17 @@ namespace Formations
         }
         private void newTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            if (isPlayersTurn)
+            if (isPlayerTurn)
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColorGuest);
                 player.newTurn();
-                isPlayersTurn = false;
+                isPlayerTurn = false;
             }
             else
             {
                 turnButton.setInsideColor(GameColors.turnButtonInsideColor);
                 guest.newTurn();
-                isPlayersTurn = true;
+                isPlayerTurn = true;
             }
             if (movesLeftInPhase == 0)
             {
@@ -678,7 +680,7 @@ namespace Formations
                 if (!isFirstPhase && currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
                 {
 
-                    if ((currentUnit.isOwnedByPlayer() && isPlayersTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayersTurn))
+                    if ((currentUnit.isOwnedByPlayer() && isPlayerTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayerTurn))
                     {
                         attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
                         moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
