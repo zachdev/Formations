@@ -36,6 +36,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
+    <Compile Include="Lobby.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lobby.Designer.cs">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerialClass.cs" />
     <Compile Include="GameColors.cs" />
     <Compile Include="Guest.cs" />
@@ -69,6 +81,9 @@
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -102,6 +117,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\neoforce\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Lobby.resx">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
