@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
@@ -51,42 +52,10 @@ namespace Formations
             // TODO: Add your initialization logic here
             
             base.Initialize();
-            //this.IsMouseVisible = true;
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
             theManager.SetSkin(new Skin(theManager, "Blue"));
-
-            //txtWindow = new TextBox(theManager);
-            /*
-             * !!!Dan this is the Button Code here!!!
-             * Button code  uncomment for large button in the upper left of the screen
-             * 
-            testButton.Init();
-            this.testButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.button_Click);//addes this method to what gets called when the Click happens
-            testButton.Text = "Sign In";
-            testButton.Width = 200;
-            testButton.Height = 200;
-
-            testButton.Anchor = Anchors.Bottom;
-            testButton.Visible = true;
-            theManager.Add(testButton); 
-            */
-
-            //theManager.Add(txtWindow);
-            //theManager.Add(testButton);
-            
-            /*
-             * for making a window that you can move around the screen
-            window = new Window(theManager);
-            window.Init();
-            window.Text = "My First Neoforce Window";
-            window.Top = 150; // this is in pixels, top-left is the origin
-            window.Left = 250;
-            window.Width = 350;
-            window.Height = 350;
-            theManager.Add(window);
-            */
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -99,11 +68,18 @@ namespace Formations
             font = Content.Load<SpriteFont>("spriteFont");
             gb = new GameBoard();
             gb.init(theManager, GraphicsDevice, "<GameNameHere>");
+
+            // Particle engine stuff
+            List<Texture2D> textures = new List<Texture2D>();
+            textures.Add(Content.Load<Texture2D>("sword"));
+            textures.Add(Content.Load<Texture2D>("sword2"));
+            textures.Add(Content.Load<Texture2D>("sword3"));
+            ParticleEngine attackParticleEngine = new ParticleEngine(textures, new Vector2(400, 240));
+            gb.setAttackParticleEngine(attackParticleEngine);
+
+
+
             // TODO: use this.Content to load your game content here
-            
-
-
-
         }
 
         /// <summary>
@@ -126,6 +102,12 @@ namespace Formations
             gb.update();
             mouseListener.update(mouseState);
             // TODO: Add your update logic here
+
+            
+            {
+
+
+            }
 
             base.Update(gameTime);
 
@@ -159,7 +141,6 @@ namespace Formations
             // TODO: Add your drawing code here
             
             theManager.BeginDraw(gameTime);
-
             spriteBatch.Begin();
 
             gb.draw(spriteBatch);

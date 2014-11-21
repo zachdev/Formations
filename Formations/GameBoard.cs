@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
@@ -16,7 +17,7 @@ namespace Formations
         private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        private int movesLeftInPhase = 10;
+        private int movesLeftInPhase = 2;
         private bool isPlayerTurn = true;
         private bool isFirstPhase = true;
         private bool attackInProgress = false;
@@ -58,11 +59,19 @@ namespace Formations
         // Chat class
         private Chat chatManager;
         private Button chatButton;
+
+        // Particles
+        private ParticleEngine attackParticleEngine;
+
+
+        // Various buttons
         private Button resizeButton;
         private Button endTurn;
         private Window endTurnWindow;
         private Button endYesButton;
         private Button endNoButton;
+
+        
 
         /// <summary>
         /// Default Constructor
@@ -184,13 +193,11 @@ namespace Formations
             // Chat stuff
             chatManager = new Chat();
             chatManager.init(uiManager);
-            
             chatButton = new Button(uiManager);
             chatButton.SetPosition(1125, 10);
             chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
             chatButton.Text = "Chat";
             
-
             Label chatLabel = new Label(uiManager);
             uiManager.Add(chatButton);
             uiManager.Add(endTurn);
@@ -506,6 +513,16 @@ namespace Formations
                     {
                         currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
                         player.useStamina((int)currentSurroundingTiles[i].getUnit().staminaAttCost);
+
+                        
+                        attackParticleEngine.particlesOn = true;
+
+                        attackParticleEngine.EmitterLocation = new Vector2(currentSurroundingTiles[i].getX(), currentSurroundingTiles[i].getY());
+
+                        //Timer timer = new System.Timers.Timer(100);
+                        //timer.Elapsed += attackAnimation;
+                        //timer.Start();
+                       // timer.Stop();
                     }
                         
                     if (currentSurroundingTiles[i].getUnit().isDead)
@@ -518,6 +535,8 @@ namespace Formations
             player.selectedTile = null;
             attackInProgress = false;
         }
+
+
         private void move()
         {
             if (isFirstPhase)
@@ -617,6 +636,9 @@ namespace Formations
         }
         public void update()
         {
+            //attackParticleEngine.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            
+            attackParticleEngine.Update();
 
         }
 
@@ -650,6 +672,9 @@ namespace Formations
             guest.draw(spriteBatch);
             player.draw(spriteBatch);
             turnButton.draw(spriteBatch);
+
+            // Particles
+            attackParticleEngine.Draw(spriteBatch);
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
@@ -840,6 +865,11 @@ namespace Formations
             borderLines[5] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[6] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[7] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
+        }
+
+        internal void setAttackParticleEngine(ParticleEngine attackParticleEngine)
+        {
+            this.attackParticleEngine = attackParticleEngine;
         }
     }
 }

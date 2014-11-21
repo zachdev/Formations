@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
+    <Compile Include="Particle.cs" />
     <Compile Include="Lobby.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -48,6 +49,7 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="ParticleEngine.cs" />
     <Compile Include="SerialClass.cs" />
     <Compile Include="GameColors.cs" />
     <Compile Include="Guest.cs" />
@@ -98,6 +100,15 @@
     <Content Include="Content\Hex_Selected_Green.png" />
     <Content Include="Content\Hex_Unselected.png" />
     <Content Include="Content\Hex_Unselected_Green.png" />
+    <Content Include="Content\sword.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sword2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sword3.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
     <Content Include="Lidgren.Network.dll" />
     <Content Include="OpenTK.dll" />
