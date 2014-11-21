@@ -120,7 +120,7 @@ namespace Formations
             while (chatPanel.Left > 900)
             {
                 Thread.Sleep(2);
-                chatPanel.Left--;
+                chatPanel.Left -= 4;
             }
 
             sliding = false;
@@ -134,7 +134,7 @@ namespace Formations
             while (chatPanel.Left < 1200)
             {
                 Thread.Sleep(2);
-                chatPanel.Left++;
+                chatPanel.Left += 4;
             }
 
             theManager.Visible = false;
