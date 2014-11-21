@@ -71,7 +71,7 @@ namespace Formations
 
             // Particle engine stuff
             List<Texture2D> textures = new List<Texture2D>();
-            textures.Add(Content.Load<Texture2D>("sword"));
+            textures.Add(Content.Load<Texture2D>("axe"));
             textures.Add(Content.Load<Texture2D>("sword2"));
             textures.Add(Content.Load<Texture2D>("sword3"));
             ParticleEngine attackParticleEngine = new ParticleEngine(textures, new Vector2(400, 240));
