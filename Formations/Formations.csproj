@@ -98,7 +98,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Tao.Sdl.dll</HintPath>
     </Reference>
-    <Reference Include="TomShane.Neoforce.Controls, Version=0.7.2407.1915, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="TomShane.Neoforce.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\TomShane.Neoforce.Controls.dll</HintPath>
     </Reference>
