@@ -71,6 +71,12 @@
     <Compile Include="UnitManipulate.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\Lidgren.Network.dll</HintPath>
@@ -83,6 +89,7 @@
       <HintPath>..\..\..\Downloads\Neoforce-Mono-master (2)\Neoforce-Mono-master\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -123,11 +130,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="Content\Skins\Blue.skin" />
     <None Include="Content\Skins\Default.skin" />
     <None Include="Content\Skins\Green.skin" />
     <None Include="Content\Skins\Magenta.skin" />
     <None Include="Content\Skins\Purple.skin" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\neoforce\" />
