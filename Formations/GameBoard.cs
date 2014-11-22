@@ -150,19 +150,19 @@ namespace Formations
             attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
             manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
-            turnButton.init(500,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
-            
+            turnButton.init(600,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
+           
 
 
             //Resize Button
             resizeButton = new Button(uiManager);
-            resizeButton.SetPosition(10, 150);
+            resizeButton.SetPosition(10, 120);
             resizeButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.resizeBoard);
             resizeButton.Text = "Small Map";
 
             //End Turn Button/Window
             endTurn = new Button(uiManager);
-            endTurn.SetPosition(10, 100);
+            endTurn.SetPosition(10, 150);
             endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleEndTurn);
             endTurn.Text = "EndTurn";
             endYesButton = new Button(uiManager);
@@ -194,8 +194,9 @@ namespace Formations
             chatManager = new Chat();
             chatManager.init(uiManager);
             chatButton = new Button(uiManager);
-            chatButton.SetPosition(1125, 10);
+            chatButton.SetPosition(10, 90);
             chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
+            //chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(resizeBoard);
             chatButton.Text = "Chat";
             
             Label chatLabel = new Label(uiManager);
@@ -514,15 +515,9 @@ namespace Formations
                         currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
                         player.useStamina((int)currentSurroundingTiles[i].getUnit().staminaAttCost);
 
-                        
+                        // Start particle effect
                         attackParticleEngine.particlesOn = true;
-
                         attackParticleEngine.EmitterLocation = new Vector2(currentSurroundingTiles[i].getX(), currentSurroundingTiles[i].getY());
-
-                        //Timer timer = new System.Timers.Timer(100);
-                        //timer.Elapsed += attackAnimation;
-                        //timer.Start();
-                       // timer.Stop();
                     }
                         
                     if (currentSurroundingTiles[i].getUnit().isDead)

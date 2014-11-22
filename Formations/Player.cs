@@ -14,9 +14,9 @@ namespace Formations
         public TileBasic selectedTile{get; set;}
         private string playerName;
         private Vector2 playerInfoLocation = new Vector2(800,10);
-        private Vector2 attNumberLocation = new Vector2(815, 42);
-        private Vector2 defNumberLocation = new Vector2(815, 57);
-        private Vector2 manipNumberLocation = new Vector2(815, 73);
+        private Vector2 attNumberLocation = new Vector2(60, 192);
+        private Vector2 defNumberLocation = new Vector2(60, 236);
+        private Vector2 manipNumberLocation = new Vector2(60, 280);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
         private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
@@ -95,12 +95,12 @@ namespace Formations
             uiManager.Add(totalManipUnitLabel);
             uiManager.Add(staminaPointsLeft);
 
-            attHex = new Hexagon(7);
-            defHex = new Hexagon(7);
-            mulHex = new Hexagon(7);
-            attHex.init(800, 50, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-            defHex.init(800, 65, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            mulHex.init(800, 80, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            attHex = new Hexagon(20);
+            defHex = new Hexagon(20);
+            mulHex = new Hexagon(20);
+            attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            mulHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
         }
         public int getTotalAtt()

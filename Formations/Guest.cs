@@ -15,10 +15,10 @@ namespace Formations
     class Guest
     {
         private string playerName;
-        private Vector2 playerInfoLocation = new Vector2(50,10);
-        private Vector2 attNumberLocation = new Vector2(65, 42);
-        private Vector2 defNumberLocation = new Vector2(65, 57);
-        private Vector2 manipNumberLocation = new Vector2(65, 73);
+        private Vector2 playerInfoLocation = new Vector2(200,10);
+        private Vector2 attNumberLocation = new Vector2(265, 38);
+        private Vector2 defNumberLocation = new Vector2(265, 52);
+        private Vector2 manipNumberLocation = new Vector2(265, 68);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
         private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
@@ -100,9 +100,9 @@ namespace Formations
             attHex = new Hexagon(7);
             defHex = new Hexagon(7);
             mulHex = new Hexagon(7);
-            attHex.init(50, 50, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-            defHex.init(50, 65, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            mulHex.init(50, 80, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            attHex.init(250, 45, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defHex.init(250, 60, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            mulHex.init(250, 75, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
         }
         public int getTotalAtt()

@@ -101,13 +101,6 @@ namespace Formations
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             gb.update();
             mouseListener.update(mouseState);
-            // TODO: Add your update logic here
-
-            
-            {
-
-
-            }
 
             base.Update(gameTime);
 
