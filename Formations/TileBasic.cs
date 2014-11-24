@@ -88,20 +88,21 @@ namespace Formations
                     tileHex.setInsideColor(GameColors.attUnitInsideColor);
                     tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
                     unit = newUnit;
+                    unit.ContainingTile = this;
                 }
                 if (newUnit.GetType() == typeof(UnitDef) && unit == null) 
                 {
                     tileHex.setInsideColor(GameColors.defUnitInsideColor);
                     tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
-
                     unit = newUnit;
+                    unit.ContainingTile = this;
                 }
                 if (newUnit.GetType() == typeof(UnitMag) && unit == null) 
                 {
                     tileHex.setInsideColor(GameColors.mulUnitInsideColor);
                     tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
-
                     unit = newUnit;
+                    unit.ContainingTile = this;
                 }
             }
         }

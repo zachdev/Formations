@@ -249,10 +249,6 @@ namespace Formations
                             {
                                 moveUnit(mouseState);
                             }
-                            if (manipulateInProgress)
-                            {
-                                manipulateUnit(mouseState);
-                            }
                         }
                     }
                 }
@@ -355,13 +351,13 @@ namespace Formations
 
                             if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
                             { 
-                                tiles[i, j].setUnit(self.getMulUnit());
+                                tiles[i, j].setUnit(self.getMagUnit());
                                 self.useStamina(UnitMag.STAMINA_PLACE_COST);
                                 move();
                             }
                             if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && opponent.Stamina >= UnitMag.STAMINA_PLACE_COST)
                             {
-                                tiles[i, j].setUnit(opponent.getMulUnit());
+                                tiles[i, j].setUnit(opponent.getMagUnit());
                                 opponent.useStamina(UnitMag.STAMINA_PLACE_COST);
                                 move();
                             }
@@ -460,24 +456,6 @@ namespace Formations
                     }   
                 }
             }
-        }
-        private void manipulateUnit(MouseState mouseState)
-        {
-            TileBasic[] currentSurroundingTiles = self.SelectedTile.getSurroundingTiles();
-            for (int i = 1; i < currentSurroundingTiles.Length; i++)
-            {//starts on 1 because 0 is the attacker
-                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState))
-                {
-                    //Console.WriteLine("ManipulateUnit");
-                    if (!currentSurroundingTiles[i].hasUnit())
-                    {
-                        currentSurroundingTiles[i].getUnit().manipulate(currentSurroundingTiles[0].getUnit());
-                        //Console.WriteLine("manipulateUnit Move");
-                    }
-                }
-            }
-            self.SelectedTile = null;
-            moveInProgress = false;
         }
         private void moveUnit(MouseState mouseState)
         {

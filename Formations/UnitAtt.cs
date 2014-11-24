@@ -42,21 +42,20 @@ namespace Formations
                 isDead = true;
             }
         }
-        public override void manipulate(UnitAbstract unit)
+        public override int calculateAtt()
         {
-
+            int temp = 0;
+            return temp;
         }
-        public override void calculateAtt(UnitAbstract unit)
+        public override int calculateDamage()
         {
-
+            int temp = 0;
+            return temp;
         }
-        public override void calculateDef(UnitAbstract unit)
+        public override int calculateMagic()
         {
-
-        }
-        public override void calculateMul(UnitAbstract unit)
-        {
-
+            int temp = 0;
+            return temp;
         }
         public override void update()
         {

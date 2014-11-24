@@ -17,6 +17,10 @@ namespace Formations
         private int _totalAttNotPlaced = 0;
         private int _totalDefNotPlaced = 0;
         private int _totalMagNotPlaced = 0;
+        private UnitAtt[] _attUnitArray = new UnitAtt[20];
+        private UnitDef[] _defUnitArray = new UnitDef[20];
+        private UnitMag[] _magUnitArray = new UnitMag[20];
+        private string playerName;
         public TileBasic SelectedTile
         {
             get { return _selectedTile; }
@@ -47,11 +51,9 @@ namespace Formations
             get { return _totalMagNotPlaced; }
             private set { _totalMagNotPlaced = value; }
         }
-        private UnitAtt[] attUnitArray = new UnitAtt[20];
-        private UnitDef[] defUnitArray = new UnitDef[20];
-        private UnitMag[] magUnitArray = new UnitMag[20];
-        private string playerName;
-
+        public UnitAtt[] AttUnitArray { get { return _attUnitArray;} }
+        public UnitDef[] DefUnitArray { get { return _defUnitArray;} }
+        public UnitMag[] MagUnitArray { get { return _magUnitArray;} }
 
 
         private Manager uiManager;
@@ -88,8 +90,8 @@ namespace Formations
             {
                 if (units[0, i] != null)
                 {
-                    attUnitArray[i] = (UnitAtt)units[0, i];
-                    attUnitArray[i].init(true);
+                    _attUnitArray[i] = (UnitAtt)units[0, i];
+                    _attUnitArray[i].init(true);
                     AttUnitsNotPlaced++;
                 }
             }
@@ -97,8 +99,8 @@ namespace Formations
             {
                 if (units[1, i] != null)
                 {
-                    defUnitArray[i] = (UnitDef)units[1, i];
-                    defUnitArray[i].init(true);
+                    _defUnitArray[i] = (UnitDef)units[1, i];
+                    _defUnitArray[i].init(true);
                     DefUnitsNotPlaced++;
                 }
             }
@@ -106,8 +108,8 @@ namespace Formations
             {
                 if (units[2, i] != null)
                 {
-                    magUnitArray[i] = (UnitMag)units[2, i];
-                    magUnitArray[i].init(true);
+                    _magUnitArray[i] = (UnitMag)units[2, i];
+                    _magUnitArray[i].init(true);
                     MagUnitsNotPlaced++;
                 }
             }
@@ -145,16 +147,24 @@ namespace Formations
             magHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
         }
+        /// <summary>
+        /// gets the next unplaced Attack Unit
+        /// </summary>
+        /// <returns></returns>
         public UnitAtt getAttUnit()
         {
             if (AttUnitsNotPlaced > 0) 
             {
                 AttUnitsNotPlaced--;
                 totalAttUnitLabel.Text = AttUnitsNotPlaced + "";
-                return attUnitArray[AttUnitsNotPlaced]; 
+                return _attUnitArray[AttUnitsNotPlaced]; 
             }
             return null;
         }
+        /// <summary>
+        /// gets the next unplaced Defense Unit
+        /// </summary>
+        /// <returns></returns>
         public UnitDef getDefUnit()
         {
             
@@ -162,17 +172,21 @@ namespace Formations
             { 
                 DefUnitsNotPlaced--;
                 totalDefUnitLabel.Text = DefUnitsNotPlaced + "";
-                return defUnitArray[DefUnitsNotPlaced];
+                return _defUnitArray[DefUnitsNotPlaced];
             }
             return null;
         }
-        public UnitMag getMulUnit()
+        /// <summary>
+        /// gets the next unplaced Magic Unit
+        /// </summary>
+        /// <returns></returns>
+        public UnitMag getMagUnit()
         { 
             if (MagUnitsNotPlaced > 0) 
             {
                 MagUnitsNotPlaced--;
                 totalMagUnitLabel.Text = MagUnitsNotPlaced + "";
-                return magUnitArray[MagUnitsNotPlaced]; 
+                return _magUnitArray[MagUnitsNotPlaced]; 
             }
             return null;
         }

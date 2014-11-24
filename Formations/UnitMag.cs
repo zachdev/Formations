@@ -32,8 +32,7 @@ namespace Formations
         }
         public override void attack(UnitAbstract unit)
         {
-            //can't attack maybe?
-            //unit.defend(this);
+            unit.defend(this);
         }
         public override void defend(UnitAbstract unit)
         {
@@ -43,32 +42,20 @@ namespace Formations
                 isDead = true;
             }
         }
-        public override void manipulate(UnitAbstract unit)
+        public override int calculateAtt()
         {
-            if (unit.GetType() == typeof(UnitMag))
-            {
-                //setting functions here on unit
-            }
-            else if (unit.GetType() == typeof(UnitAtt))
-            {
-                //setting functions here on unit
-            }
-            else if (unit.GetType() == typeof(UnitDef))
-            {
-                //setting functions here on unit
-            }
+            int temp = 0;
+            return temp;
         }
-        public override void calculateAtt(UnitAbstract unit)
+        public override int calculateDamage()
         {
-
+            int temp = 0;
+            return temp;
         }
-        public override void calculateDef(UnitAbstract unit)
+        public override int calculateMagic()
         {
-
-        }
-        public override void calculateMul(UnitAbstract unit)
-        {
-
+            int temp = 0;
+            return temp;
         }
         public override void update()
         {
