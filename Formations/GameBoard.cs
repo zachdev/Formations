@@ -226,7 +226,7 @@ namespace Formations
             }
             for (int i = 0; i < numberManip; i++)
             {
-                tempArray[2, i] = new UnitManipulate();
+                tempArray[2, i] = new UnitMag();
             }
             return tempArray;
         }
@@ -290,8 +290,8 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
-                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isPlayersUnit)
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isPlayersUnit))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
                             System.Console.WriteLine("Attack");
@@ -299,8 +299,8 @@ namespace Formations
                             attackInProgress = true;
                             return;
                         }
-                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isPlayersUnit)
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isPlayersUnit))
                             && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             //Console.WriteLine("Move");
@@ -308,8 +308,8 @@ namespace Formations
                             moveInProgress = true;
                             return;
                         }
-                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isOwnedByPlayer())
-                            || (!isPlayerTurn && !tiles[i, j].getUnit().isOwnedByPlayer()))
+                        if (tiles[i, j].hasUnit() && ((isPlayerTurn && tiles[i, j].getUnit().isPlayersUnit)
+                            || (!isPlayerTurn && !tiles[i, j].getUnit().isPlayersUnit))
                             && manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
                             //Console.WriteLine("Manipulate");
@@ -354,16 +354,16 @@ namespace Formations
                         else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
 
-                            if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
+                            if (isPlayerTurn && playerCanSetUnit(i, j, mouseState) && player.Stamina >= UnitMag.STAMINA_PLACE_COST)
                             { 
                                 tiles[i, j].setUnit(player.getMulUnit());
-                                player.useStamina(UnitManipulate.STAMINA_PLACE_COST);
+                                player.useStamina(UnitMag.STAMINA_PLACE_COST);
                                 move();
                             }
-                            if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitManipulate.STAMINA_PLACE_COST)
+                            if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && guest.Stamina >= UnitMag.STAMINA_PLACE_COST)
                             {
                                 tiles[i, j].setUnit(guest.getMulUnit());
-                                guest.useStamina(UnitManipulate.STAMINA_PLACE_COST);
+                                guest.useStamina(UnitMag.STAMINA_PLACE_COST);
                                 move();
                             }
 
@@ -490,10 +490,10 @@ namespace Formations
                     //Console.WriteLine("moveUnit");
                     if (!currentSurroundingTiles[i].hasUnit())
                     {
-                        if (player.Stamina >= currentSurroundingTiles[0].getUnit().staminaMoveCost)
+                        if (player.Stamina >= currentSurroundingTiles[0].getUnit().StaminaMoveCost)
                         {
                             currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
-                            player.useStamina((int)currentSurroundingTiles[0].getUnit().staminaMoveCost);
+                            player.useStamina((int)currentSurroundingTiles[0].getUnit().StaminaMoveCost);
                             currentSurroundingTiles[0].setUnit(null);
                         }
                         //Console.WriteLine("moveUnit Move");
@@ -508,12 +508,12 @@ namespace Formations
             TileBasic[] currentSurroundingTiles = player.selectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
-                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isOwnedByPlayer())
+                if (currentSurroundingTiles[i] != null && currentSurroundingTiles[i].isPointInTile(mouseState) && currentSurroundingTiles[i].hasUnit() && !currentSurroundingTiles[i].getUnit().isPlayersUnit)
                 {
-                    if(player.Stamina >= currentSurroundingTiles[i].getUnit().staminaAttCost)
+                    if(player.Stamina >= currentSurroundingTiles[i].getUnit().StaminaAttCost)
                     {
                         currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
-                        player.useStamina((int)currentSurroundingTiles[i].getUnit().staminaAttCost);
+                        player.useStamina((int)currentSurroundingTiles[i].getUnit().StaminaAttCost);
 
                         // Start particle effect
                         attackParticleEngine.particlesOn = true;
@@ -624,8 +624,8 @@ namespace Formations
                 for (int j = 0; j < boardHeight; j++)
                 {
                     if (tiles[i, j].getUnit() == null) { continue; }
-                    if (tiles[i, j].getUnit().isOwnedByPlayer()) { tiles[i, j].updateSurroundingTilesControl(true, true); }
-                    if (!tiles[i, j].getUnit().isOwnedByPlayer()) { tiles[i, j].updateSurroundingTilesControl(true, false); }
+                    if (tiles[i, j].getUnit().isPlayersUnit) { tiles[i, j].updateSurroundingTilesControl(true, true); }
+                    if (!tiles[i, j].getUnit().isPlayersUnit) { tiles[i, j].updateSurroundingTilesControl(true, false); }
                 }
             }
         }
@@ -700,13 +700,13 @@ namespace Formations
                 if (!isFirstPhase && currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
                 {
 
-                    if ((currentUnit.isOwnedByPlayer() && isPlayerTurn) || (!currentUnit.isOwnedByPlayer() && !isPlayerTurn))
+                    if ((currentUnit.isPlayersUnit && isPlayerTurn) || (!currentUnit.isPlayersUnit && !isPlayerTurn))
                     {
                         attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
                         moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
                         attAction.draw(spriteBatch);
                         moveAction.draw(spriteBatch);
-                        if (currentUnit.GetType() == typeof(UnitManipulate))
+                        if (currentUnit.GetType() == typeof(UnitMag))
                         {
                             manipulateAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
                             manipulateAction.draw(spriteBatch);
@@ -764,9 +764,8 @@ namespace Formations
                 if (tile.isHovered() && tile.hasUnit())
                 {
                     gameInfo.Text += tempUnit.getUnitType() + "\n";
-                    gameInfo.Text += "Total Life: " + tempUnit.life + "\n";
-                    gameInfo.Text += "Total Damage: " + tempUnit.Damage + "\n";
-                    gameInfo.Text += "Total Defense: " + tempUnit.Defense + "\n";
+                    gameInfo.Text += "Life: " + tempUnit.Life + "\n";
+                    gameInfo.Text += "Damage: " + tempUnit.Damage + "\n";
                 }
 
             }

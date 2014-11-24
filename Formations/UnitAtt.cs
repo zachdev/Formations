@@ -8,20 +8,23 @@ namespace Formations
 {
     class UnitAtt : UnitAbstract
     {
-        const double _Damage = 2;
-        const double _Damage_Multiplyer = 2;
-        const double _Defense = 1;
-        const double _Defense_Multiplyer = 1;
-        const double _Stamina_Move_Cost = 1;
-        const double _Stamina_Att_Cost = 1;
-        public static int STAMINA_PLACE_COST = 4;
+        public const int DAMAGE = 2;
+        public const int LIFE = 2;
+        public const int MAX_LIFE = 2;
+        public const int RANGE = 1;
+        public const int STAMINA_MOVE_COST = 1;
+        public const int STAMINA_ATT_COST = 1;
+        public const int STAMINA_PLACE_COST = 4;
         public override void init(bool isPlayerUnit)
         {
             this.isPlayersUnit = isPlayerUnit;
-            this.Damage = _Damage;
-            this.Defense = _Defense;
-            this.staminaAttCost = _Stamina_Att_Cost;
-            this.staminaMoveCost = _Stamina_Move_Cost;
+            this.Damage = DAMAGE;
+            this.Life = LIFE;
+            this.MaxLife = MAX_LIFE;
+            this.Range = RANGE;
+            this.StaminaAttCost = STAMINA_ATT_COST;
+            this.StaminaMoveCost = STAMINA_MOVE_COST;
+            this.StaminaPlaceCost = STAMINA_PLACE_COST;
         }
         public override string getUnitType()
         {
@@ -33,8 +36,8 @@ namespace Formations
         }
         public override void defend(UnitAbstract unit)
         {
-            life -= (unit.Damage);
-            if (life <= 0)
+            Life -= (unit.Damage);
+            if (Life <= 0)
             {
                 isDead = true;
             }
