@@ -51,6 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
+    <Compile Include="GameBoardSinglePlayer.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Lobby.cs">
       <SubType>Form</SubType>
