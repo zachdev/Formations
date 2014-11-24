@@ -96,7 +96,7 @@ namespace Formations
 
                     unit = newUnit;
                 }
-                if (newUnit.GetType() == typeof(UnitManipulate) && unit == null) 
+                if (newUnit.GetType() == typeof(UnitMag) && unit == null) 
                 {
                     tileHex.setInsideColor(GameColors.mulUnitInsideColor);
                     tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
@@ -231,7 +231,7 @@ namespace Formations
                 {
                     if (unit != null)
                     {
-                        if (unit.isOwnedByPlayer())
+                        if (unit.isPlayersUnit)
                         {
                             tileHex.setBorderColor(GameColors.playerControlOutsideColor);
                         }

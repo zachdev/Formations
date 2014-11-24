@@ -21,7 +21,7 @@ namespace Formations
         private Vector2 manipNumberLocation = new Vector2(265, 68);
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
-        private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
+        private UnitMag[] mulUnitArray = new UnitMag[20];
         private Manager uiManager;
         private Label playersNameLabel;
         private Label totalAttUnitLabel;
@@ -68,7 +68,7 @@ namespace Formations
             {
                 if (units[2, i] != null)
                 {
-                    mulUnitArray[i] = (UnitManipulate)units[2, i];
+                    mulUnitArray[i] = (UnitMag)units[2, i];
                     mulUnitArray[i].init(false);
                     totalMul++;
                 }
@@ -138,7 +138,7 @@ namespace Formations
         {
             return totalMul;
         }
-        public UnitManipulate getMulUnit()
+        public UnitMag getMulUnit()
         { 
             if (totalMul > 0) 
             {

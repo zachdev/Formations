@@ -11,32 +11,74 @@ namespace Formations
 {   
     class Player
     {
-        public TileBasic selectedTile{get; set;}
-        private string playerName;
-        private Vector2 playerInfoLocation = new Vector2(800,10);
-        private Vector2 attNumberLocation = new Vector2(60, 192);
-        private Vector2 defNumberLocation = new Vector2(60, 236);
-        private Vector2 manipNumberLocation = new Vector2(60, 280);
+        private TileBasic _selectedTile;
+        private int _stamina = 5;
+        private bool _isOpponent;
+        private int _totalAttNotPlaced = 0;
+        private int _totalDefNotPlaced = 0;
+        private int _totalMagNotPlaced = 0;
+        public TileBasic SelectedTile
+        {
+            get { return _selectedTile; }
+            set { _selectedTile = value; }
+        }
+        public int Stamina
+        {
+            get { return _stamina; }
+            private set { _stamina = value; }
+        }
+        public bool IsOpponent
+        {
+            get { return _isOpponent; }
+            private set { _isOpponent = value; }
+        }
+        public int AttUnitsNotPlaced
+        {
+            get { return _totalAttNotPlaced; }
+            private set { _totalAttNotPlaced = value; }
+        }
+        public int DefUnitsNotPlaced
+        {
+            get { return _totalDefNotPlaced; }
+            private set { _totalDefNotPlaced = value; }
+        }
+        public int MagUnitsNotPlaced
+        {
+            get { return _totalMagNotPlaced; }
+            private set { _totalMagNotPlaced = value; }
+        }
         private UnitAtt[] attUnitArray = new UnitAtt[20];
         private UnitDef[] defUnitArray = new UnitDef[20];
-        private UnitManipulate[] mulUnitArray = new UnitManipulate[20];
+        private UnitMag[] magUnitArray = new UnitMag[20];
+        private string playerName;
+
+
+
         private Manager uiManager;
+
         private Label playersNameLabel;
         private Label totalAttUnitLabel;
         private Label totalDefUnitLabel;
-        private Label totalManipUnitLabel;
+        private Label totalMagUnitLabel;
         private Label staminaPointsLeft;
-        private int totalAtt = 0;
-        private int totalDef = 0;
-        private int totalMul = 0;
-        public int _stamina;
-        public int Stamina{ get{ return _stamina;}}
+
+        private Vector2 playerInfoLocation = new Vector2(800,10);
+        private Vector2 playerAttNumberLocation = new Vector2(60, 192);
+        private Vector2 playerDefNumberLocation = new Vector2(60, 236);
+        private Vector2 playerMagNumberLocation = new Vector2(60, 280);
+
+        private Vector2 opponentInfoLocation = new Vector2(200, 10);
+        private Vector2 opponentAttNumberLocation = new Vector2(265, 38);
+        private Vector2 opponentDefNumberLocation = new Vector2(265, 52);
+        private Vector2 opponentMagNumberLocation = new Vector2(265, 68);
+
+
         private Hexagon attHex;
         private Hexagon defHex;
-        private Hexagon mulHex;
-        public Player()
+        private Hexagon magHex;
+        public Player(bool isOpponent)
         {
-            _stamina = 5;
+            this.IsOpponent = isOpponent;
         }
 
         public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
@@ -48,9 +90,8 @@ namespace Formations
                 {
                     attUnitArray[i] = (UnitAtt)units[0, i];
                     attUnitArray[i].init(true);
-                    totalAtt++;
+                    AttUnitsNotPlaced++;
                 }
-
             }
             for (int i = 0; i < 20; i++)
             {
@@ -58,18 +99,19 @@ namespace Formations
                 {
                     defUnitArray[i] = (UnitDef)units[1, i];
                     defUnitArray[i].init(true);
-                    totalDef++;
+                    DefUnitsNotPlaced++;
                 }
             }
             for (int i = 0; i < 20; i++)
             {
                 if (units[2, i] != null)
                 {
-                    mulUnitArray[i] = (UnitManipulate)units[2, i];
-                    mulUnitArray[i].init(true);
-                    totalMul++;
+                    magUnitArray[i] = (UnitMag)units[2, i];
+                    magUnitArray[i].init(true);
+                    MagUnitsNotPlaced++;
                 }
             }
+
             //Label
             this.uiManager = uiManager;
             uiManager.SetSkin(new Skin(uiManager, "Default"));
@@ -78,71 +120,59 @@ namespace Formations
             playersNameLabel.Text = playerName;
             playersNameLabel.SetSize(150,20);
             totalAttUnitLabel = new Label(uiManager);
-            totalAttUnitLabel.SetPosition((int)attNumberLocation.X, (int)attNumberLocation.Y);
-            totalAttUnitLabel.Text = totalAtt + "";
+            totalAttUnitLabel.SetPosition((int)playerAttNumberLocation.X, (int)playerAttNumberLocation.Y);
+            totalAttUnitLabel.Text = AttUnitsNotPlaced + "";
             totalDefUnitLabel = new Label(uiManager);
-            totalDefUnitLabel.SetPosition((int)defNumberLocation.X, (int)defNumberLocation.Y);
-            totalDefUnitLabel.Text = totalDef + "";
-            totalManipUnitLabel = new Label(uiManager);
-            totalManipUnitLabel.SetPosition((int)manipNumberLocation.X, (int)manipNumberLocation.Y);
-            totalManipUnitLabel.Text = totalMul + "";
+            totalDefUnitLabel.SetPosition((int)playerDefNumberLocation.X, (int)playerDefNumberLocation.Y);
+            totalDefUnitLabel.Text = DefUnitsNotPlaced + "";
+            totalMagUnitLabel = new Label(uiManager);
+            totalMagUnitLabel.SetPosition((int)playerMagNumberLocation.X, (int)playerMagNumberLocation.Y);
+            totalMagUnitLabel.Text = MagUnitsNotPlaced + "";
             staminaPointsLeft = new Label(uiManager);
             staminaPointsLeft.SetPosition((int)playerInfoLocation.X + 160, (int)playerInfoLocation.Y);
-            staminaPointsLeft.Text = _stamina + "";
+            staminaPointsLeft.Text = Stamina + "";
             uiManager.Add(playersNameLabel);
             uiManager.Add(totalAttUnitLabel);
             uiManager.Add(totalDefUnitLabel);
-            uiManager.Add(totalManipUnitLabel);
+            uiManager.Add(totalMagUnitLabel);
             uiManager.Add(staminaPointsLeft);
 
             attHex = new Hexagon(20);
             defHex = new Hexagon(20);
-            mulHex = new Hexagon(20);
+            magHex = new Hexagon(20);
             attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            mulHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            magHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
 
-        }
-        public int getTotalAtt()
-        {
-            return totalAtt;
         }
         public UnitAtt getAttUnit()
         {
-            if (totalAtt > 0) 
+            if (AttUnitsNotPlaced > 0) 
             {
-                totalAtt--;
-                totalAttUnitLabel.Text = totalAtt + "";
-                return attUnitArray[totalAtt]; 
+                AttUnitsNotPlaced--;
+                totalAttUnitLabel.Text = AttUnitsNotPlaced + "";
+                return attUnitArray[AttUnitsNotPlaced]; 
             }
             return null;
-        }
-        public int getTotalDef()
-        {
-            return totalDef;
         }
         public UnitDef getDefUnit()
         {
             
-            if (totalDef > 0) 
+            if (DefUnitsNotPlaced > 0) 
             { 
-                totalDef--;
-                totalDefUnitLabel.Text = totalDef + "";
-                return defUnitArray[totalDef];
+                DefUnitsNotPlaced--;
+                totalDefUnitLabel.Text = DefUnitsNotPlaced + "";
+                return defUnitArray[DefUnitsNotPlaced];
             }
             return null;
         }
-        public int getTotalMul()
-        {
-            return totalMul;
-        }
-        public UnitManipulate getMulUnit()
+        public UnitMag getMulUnit()
         { 
-            if (totalMul > 0) 
+            if (MagUnitsNotPlaced > 0) 
             {
-                totalMul--;
-                totalManipUnitLabel.Text = totalMul + "";
-                return mulUnitArray[totalMul]; 
+                MagUnitsNotPlaced--;
+                totalMagUnitLabel.Text = MagUnitsNotPlaced + "";
+                return magUnitArray[MagUnitsNotPlaced]; 
             }
             return null;
         }
@@ -163,10 +193,9 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
-            
             attHex.draw(spriteBatch);
             defHex.draw(spriteBatch);
-            mulHex.draw(spriteBatch);
+            magHex.draw(spriteBatch);
 
         }    
     }
