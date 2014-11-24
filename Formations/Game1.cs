@@ -64,7 +64,7 @@ namespace Formations
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("spriteFont");
             gb = new GameBoard();
@@ -77,9 +77,6 @@ namespace Formations
             textures.Add(Content.Load<Texture2D>("sword3"));
             ParticleEngine attackParticleEngine = new ParticleEngine(textures, new Vector2(400, 240));
             gb.setAttackParticleEngine(attackParticleEngine);
-
-
-
             // TODO: use this.Content to load your game content here
         }
 
