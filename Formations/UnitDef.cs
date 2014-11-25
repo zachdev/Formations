@@ -15,7 +15,8 @@ namespace Formations
         public const int STAMINA_MOVE_COST = 2;
         public const int STAMINA_ATT_COST = 2;
         public const int STAMINA_PLACE_COST = 5;
-        public override void init(bool isPlayerUnit)
+        private int absorbAmount = 1;
+        public override void init(bool isPlayerUnit, Player player)
         {
             this.isPlayersUnit = isPlayerUnit;
             this.Damage = DAMAGE;
@@ -25,6 +26,7 @@ namespace Formations
             this.StaminaAttCost = STAMINA_ATT_COST;
             this.StaminaMoveCost = STAMINA_MOVE_COST;
             this.StaminaPlaceCost = STAMINA_PLACE_COST;
+            this.Player = player;
         }
         public override string getUnitType()
         {
@@ -36,7 +38,7 @@ namespace Formations
         }
         public override void defend(UnitAbstract unit)
         {
-            Life -= (unit.Damage);
+            Life -= (calculateDamage(unit.calculateAtt()));
             if (Life <= 0)
             {
                 isDead = true;
@@ -44,24 +46,62 @@ namespace Formations
         }
         public override int calculateAtt()
         {
-            int temp = 0;
-            return temp;
+            return Damage;
         }
-        public override int calculateDamage()
+        public override int calculateDamage(int attackDamage)
         {
-            int temp = 0;
-            return temp;
+            int result = attackDamage;
+            TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
+            foreach (TileBasic tile in surroundingTiles)
+            {
+                UnitAbstract unit = tile.getUnit();
+                UnitDef defUnit;
+                if (unit == null) { continue; }
+                if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitDef))
+                {
+                    defUnit = (UnitDef)unit;
+                    result = defUnit.absorbDamage(result);
+                }
+            }
+            return result;
         }
-        public override int calculateMagic()
+        public override int calculateRange()
         {
-            int temp = 0;
-            return temp;
+            return Range;
+        }
+        public override TileBasic[] getAttackableTiles()
+        {
+            int calculatedRange = calculateRange();
+            List<TileBasic> attackableTiles = ContainingTile.getSurroundingTiles().ToList<TileBasic>();
+            for (int i = 0; i < calculatedRange - 1; i++)
+            {
+                foreach (TileBasic tile in attackableTiles)
+                {
+                    foreach (TileBasic newTile in tile.getSurroundingTiles())
+                    {
+                        if (!attackableTiles.Contains(newTile))
+                        {
+                            attackableTiles.Add(newTile);
+                        }
+                    }
+                }
+            }
+            return attackableTiles.ToArray<TileBasic>();
         }
         public override void update()
         {
 
         }
-
+        public int absorbDamage(int damage)
+        {
+            Life -= absorbAmount;
+            damage -= absorbAmount;
+            if (Life <= 0)
+            {
+                isDead = true;
+            }
+            return damage;
+        }
         public override void draw(SpriteBatch spriteBatch)
         {
 

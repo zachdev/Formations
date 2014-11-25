@@ -18,6 +18,7 @@ namespace Formations
         private int _staminaMoveCost;
         private int _staminaPlaceCost;
         private TileBasic _containingTile;
+        private Player _player;
         public bool isDead
         { 
             get { return _isDead; } 
@@ -63,13 +64,19 @@ namespace Formations
             get { return _containingTile; }
             set { _containingTile = value; }
         }
-        public abstract void init(bool isOwnedByPlayer);
+        public Player Player
+        {
+            get { return _player; }
+            protected set { _player = value; }
+        }
+        public abstract void init(bool isOwnedByPlayer, Player player);
         public abstract string  getUnitType();
         public abstract void attack(UnitAbstract unit);
         public abstract void defend(UnitAbstract unit);
         public abstract int calculateAtt();
-        public abstract int calculateDamage();
-        public abstract int calculateMagic();
+        public abstract int calculateDamage(int attackDamage);
+        public abstract int calculateRange();
+        public abstract TileBasic[] getAttackableTiles();
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
     }

@@ -91,7 +91,7 @@ namespace Formations
                 if (units[0, i] != null)
                 {
                     _attUnitArray[i] = (UnitAtt)units[0, i];
-                    _attUnitArray[i].init(true);
+                    _attUnitArray[i].init(!IsOpponent, this);
                     AttUnitsNotPlaced++;
                 }
             }
@@ -100,7 +100,7 @@ namespace Formations
                 if (units[1, i] != null)
                 {
                     _defUnitArray[i] = (UnitDef)units[1, i];
-                    _defUnitArray[i].init(true);
+                    _defUnitArray[i].init(!IsOpponent, this);
                     DefUnitsNotPlaced++;
                 }
             }
@@ -109,7 +109,7 @@ namespace Formations
                 if (units[2, i] != null)
                 {
                     _magUnitArray[i] = (UnitMag)units[2, i];
-                    _magUnitArray[i].init(true);
+                    _magUnitArray[i].init(!IsOpponent, this);
                     MagUnitsNotPlaced++;
                 }
             }

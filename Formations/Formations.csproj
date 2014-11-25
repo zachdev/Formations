@@ -68,7 +68,6 @@
     <Compile Include="ParticleEngine.cs" />
     <Compile Include="SerialClass.cs" />
     <Compile Include="GameColors.cs" />
-    <Compile Include="Guest.cs" />
     <Compile Include="IKeyboardListener.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="IUpdateDraw.cs" />

@@ -13,7 +13,7 @@ namespace Formations
     class GameBoard : IMouseListener, IKeyboardListener
     {
         private Player player1;
-        private Guest player2;
+        private Player player2;
         private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
@@ -99,7 +99,7 @@ namespace Formations
         {
             this.gameName = gameName;
             player1 = new Player(false);
-            player2 = new Guest();
+            player2 = new Player(true);
             this.uiManager = uiManager;
 
             player1.init("<PlayerNameHere>", createUnitArray(10, 5, 1), graphicsDevice, uiManager);
@@ -358,7 +358,7 @@ namespace Formations
                             }
                             if (!isPlayerTurn && guestCanSetUnit(i, j, mouseState) && player2.Stamina >= UnitMag.STAMINA_PLACE_COST)
                             {
-                                tiles[i, j].setUnit(player2.getMulUnit());
+                                tiles[i, j].setUnit(player2.getMagUnit());
                                 player2.useStamina(UnitMag.STAMINA_PLACE_COST);
                                 move();
                             }
@@ -528,19 +528,16 @@ namespace Formations
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
                 else if (tiles[tileX, tileY].isPlayerControled()  && !tiles[tileX, tileY].isGuestControled() ) { result = true; }
-                
             }
             else if (player1.DefUnitsNotPlaced > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
                 else if (tiles[tileX, tileY].isPlayerControled() && !tiles[tileX, tileY].isGuestControled()) { result = true; }
-
             }
             else if (player1.MagUnitsNotPlaced > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isGuestControled()) { result = true; }
                 else if (tiles[tileX, tileY].isPlayerControled() && !tiles[tileX, tileY].isGuestControled()) { result = true; }
-
             }
 
             return result;
@@ -548,23 +545,20 @@ namespace Formations
         private bool guestCanSetUnit(int tileX, int tileY, MouseState mouseState)
         {
             bool result = false;
-            if (player2.getTotalAtt() > 0 && !tiles[tileX, tileY].hasUnit())
+            if (player2.AttUnitsNotPlaced > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
                 else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
-
             }
-            else if (player2.getTotalDef() > 0 && !tiles[tileX, tileY].hasUnit())
+            else if (player2.DefUnitsNotPlaced > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
                 else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
-
             }
-            else if (player2.getTotalMul() > 0 && !tiles[tileX, tileY].hasUnit())
+            else if (player2.MagUnitsNotPlaced > 0 && !tiles[tileX, tileY].hasUnit())
             {
                 if (isFirstPhase && !tiles[tileX, tileY].isPlayerControled()) { result = true; }
                 else if (!tiles[tileX, tileY].isPlayerControled() && tiles[tileX, tileY].isGuestControled()) { result = true; }
-
             }
             return result;
         }
