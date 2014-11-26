@@ -37,7 +37,7 @@ namespace Formations
         }
         public override void defend(UnitAbstract unit)
         {
-            Life -= (calculateDamage(unit.calculateAtt()));
+            Life -= calculateDamage(unit.calculateAtt());
             if (Life <= 0)
             {
                 isDead = true;

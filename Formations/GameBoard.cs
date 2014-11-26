@@ -492,12 +492,19 @@ namespace Formations
                 {
                     if(player1.Stamina >= currentSurroundingTiles[i].getUnit().StaminaAttCost)
                     {
+                        int preAttackHealth = currentSurroundingTiles[i].getUnit().Life;
+                        
                         currentSurroundingTiles[0].getUnit().attack(currentSurroundingTiles[i].getUnit());
                         player1.useStamina((int)currentSurroundingTiles[i].getUnit().StaminaAttCost);
+
 
                         // Start particle effect
                         attackParticleEngine.particlesOn = true;
                         attackParticleEngine.EmitterLocation = new Vector2(currentSurroundingTiles[i].getX(), currentSurroundingTiles[i].getY());
+
+                        // Scrolling damage text
+                        int postAttackHealth = preAttackHealth - currentSurroundingTiles[i].getUnit().Life;
+                        displayDamageTaken(postAttackHealth, currentSurroundingTiles[i]);
                     }
                         
                     if (currentSurroundingTiles[i].getUnit().isDead)
@@ -509,6 +516,47 @@ namespace Formations
             }
             player1.SelectedTile = null;
             attackInProgress = false;
+        }
+
+        private void displayDamageTaken(int damage, TileBasic tile)
+        {
+
+            // Displays floating damage text
+            Label damageTakenText = new Label(uiManager);
+            damageTakenText.SetPosition((int)tile.getX(), (int)tile.getY());
+            damageTakenText.Text = String.Format("-{0:g}", damage);
+            damageTakenText.SetSize(10, 10);
+            damageTakenText.TextColor = Color.Cyan;
+            uiManager.Add(damageTakenText);
+
+            Timer timer = new System.Timers.Timer(10);
+            timer.Elapsed += (sender, e) => slideDamageTextUp(sender, e, damageTakenText, timer);
+            timer.Start();
+        }
+
+        // Called by the Timer in a separate thread
+        private void slideDamageTextUp(object sender, ElapsedEventArgs e, Label damageTakenText, Timer timer)
+        {
+            int top = damageTakenText.Top;
+
+            int counter = 0;
+
+            while (counter < 20)
+            {
+                if (counter >= 20)
+                {
+                    break;
+                }
+
+                System.Threading.Thread.Sleep(60);
+                damageTakenText.Top--;
+                damageTakenText.Alpha -= 2;
+                counter++;
+            }
+
+            timer.Stop();
+            uiManager.Remove(damageTakenText);
+            
         }
 
 
