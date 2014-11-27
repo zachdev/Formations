@@ -13,7 +13,7 @@ namespace Formations
     {
         private TileBasic _selectedTile;
         private int _stamina = 5;
-        private bool _isOpponent;
+        private bool _isHost;
         private int _totalAttNotPlaced = 0;
         private int _totalDefNotPlaced = 0;
         private int _totalMagNotPlaced = 0;
@@ -31,10 +31,10 @@ namespace Formations
             get { return _stamina; }
             private set { _stamina = value; }
         }
-        public bool IsOpponent
+        public bool IsHost
         {
-            get { return _isOpponent; }
-            private set { _isOpponent = value; }
+            get { return _isHost; }
+            private set { _isHost = value; }
         }
         public int AttUnitsNotPlaced
         {
@@ -64,23 +64,28 @@ namespace Formations
         private Label totalMagUnitLabel;
         private Label staminaPointsLeft;
 
-        private Vector2 playerInfoLocation = new Vector2(800,10);
-        private Vector2 playerAttNumberLocation = new Vector2(60, 192);
-        private Vector2 playerDefNumberLocation = new Vector2(60, 236);
-        private Vector2 playerMagNumberLocation = new Vector2(60, 280);
+        private Vector2 playerInfoLocation;
+        private Vector2 playerAttNumberLocation;
+        private Vector2 playerDefNumberLocation;
+        private Vector2 playerMagNumberLocation;
 
-        private Vector2 opponentInfoLocation = new Vector2(200, 10);
-        private Vector2 opponentAttNumberLocation = new Vector2(265, 38);
-        private Vector2 opponentDefNumberLocation = new Vector2(265, 52);
-        private Vector2 opponentMagNumberLocation = new Vector2(265, 68);
+        private Vector2 guestInfoLocation = new Vector2(200, 10);
+        private Vector2 guestAttNumberLocation = new Vector2(265, 38);
+        private Vector2 guestDefNumberLocation = new Vector2(265, 52);
+        private Vector2 guestMagNumberLocation = new Vector2(265, 68);
+
+        private Vector2 hostInfoLocation = new Vector2(800, 10);
+        private Vector2 hostAttNumberLocation = new Vector2(60, 192);
+        private Vector2 hostDefNumberLocation = new Vector2(60, 236);
+        private Vector2 hostMagNumberLocation = new Vector2(60, 280);
 
 
         private Hexagon attHex;
         private Hexagon defHex;
         private Hexagon magHex;
-        public Player(bool isOpponent)
+        public Player(bool isHost)
         {
-            this.IsOpponent = isOpponent;
+            this.IsHost = isHost;
         }
 
         public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
@@ -91,7 +96,7 @@ namespace Formations
                 if (units[0, i] != null)
                 {
                     _attUnitArray[i] = (UnitAtt)units[0, i];
-                    _attUnitArray[i].init(!IsOpponent, this);
+                    _attUnitArray[i].init(!IsHost, this);
                     AttUnitsNotPlaced++;
                 }
             }
@@ -100,7 +105,7 @@ namespace Formations
                 if (units[1, i] != null)
                 {
                     _defUnitArray[i] = (UnitDef)units[1, i];
-                    _defUnitArray[i].init(!IsOpponent, this);
+                    _defUnitArray[i].init(!IsHost, this);
                     DefUnitsNotPlaced++;
                 }
             }
@@ -109,11 +114,24 @@ namespace Formations
                 if (units[2, i] != null)
                 {
                     _magUnitArray[i] = (UnitMag)units[2, i];
-                    _magUnitArray[i].init(!IsOpponent, this);
+                    _magUnitArray[i].init(!IsHost, this);
                     MagUnitsNotPlaced++;
                 }
             }
-
+            if (IsHost)
+            {
+                playerInfoLocation = hostInfoLocation;
+                playerAttNumberLocation = hostAttNumberLocation;
+                playerDefNumberLocation = hostDefNumberLocation;
+                playerMagNumberLocation = hostMagNumberLocation;
+            }
+            else
+            {
+                playerInfoLocation = guestInfoLocation;
+                playerAttNumberLocation = guestAttNumberLocation;
+                playerDefNumberLocation = guestDefNumberLocation;
+                playerMagNumberLocation = guestMagNumberLocation;
+            }
             //Label
             this.uiManager = uiManager;
             uiManager.SetSkin(new Skin(uiManager, "Default"));

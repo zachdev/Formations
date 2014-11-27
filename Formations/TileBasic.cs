@@ -14,8 +14,8 @@ namespace Formations
         private UnitAbstract unit = null;
         private Hexagon tileHex;
         private TileBasic[] surroundingTiles;
-        private bool guestControled;
-        private bool playerControled;
+        private bool hostControlled;
+        private bool guestControlled;
         private bool selected = false;
         private bool hovered = false;
         private int tileSideLength;
@@ -106,18 +106,18 @@ namespace Formations
                 }
             }
         }
-        public bool isGuestControled()
+        public bool isHostControlled()
         {
-            return guestControled;
+            return hostControlled;
         }
-        public void updateSurroundingTilesControl(bool control, bool playerControl)
+        public void updateSurroundingTilesControl(bool control, bool hostControl)
         {
             for (int i = 0; i < surroundingTiles.Length; i++)
             {
                 if(surroundingTiles[i] != null)
                 {
-                    if(playerControl ){ surroundingTiles[i].updatePlayerControl(control); }
-                    else { surroundingTiles[i].updateGuestControl(control); }
+                    if(hostControl){ surroundingTiles[i].updateGuestControl(control); }
+                    else { surroundingTiles[i].updateHostControl(control); }
                 }
             }
         }
@@ -125,26 +125,26 @@ namespace Formations
         {
             return surroundingTiles;
         }
-        public void updateGuestControl(bool control)
+        public void updateHostControl(bool control)
         {
-            guestControled = control;
+            hostControlled = control;
             updateControlColor();
         }
-        public void updatePlayerControl(bool control)
+        public void updateGuestControl(bool control)
         {
-            playerControled = control;
+            guestControlled = control;
             updateControlColor();
         }
         private void updateControlColor()
         {
-            if (guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
-            if (!guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.playerControlOutsideColor); }
-            if (guestControled && playerControled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
-            if (!guestControled && !playerControled && unit == null) { setTileInsideColor(GameColors.noUnitInsideColor); }
+            if (hostControlled && !guestControlled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
+            if (!hostControlled && guestControlled && unit == null) { setTileInsideColor(GameColors.playerControlOutsideColor); }
+            if (hostControlled && guestControlled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
+            if (!hostControlled && !guestControlled && unit == null) { setTileInsideColor(GameColors.noUnitInsideColor); }
         }
-        public bool isPlayerControled()
+        public bool isGuestControlled()
         {
-            return playerControled;
+            return guestControlled;
         }
         public bool hasUnit()
         {
@@ -166,6 +166,10 @@ namespace Formations
             {
                 tileHex.setBorderColor(GameColors.hoverBorderColor);
             }
+        }
+        public void setAsAttackArea()
+        {
+            tileHex.setBorderColor(Color.Red);
         }
         public bool isHovered()
         {
@@ -232,7 +236,7 @@ namespace Formations
                 {
                     if (unit != null)
                     {
-                        if (unit.isPlayersUnit)
+                        if (unit.IsHostsUnit)
                         {
                             tileHex.setBorderColor(GameColors.playerControlOutsideColor);
                         }

@@ -15,9 +15,9 @@ namespace Formations
         public const int STAMINA_MOVE_COST = 1;
         public const int STAMINA_ATT_COST = 1;
         public const int STAMINA_PLACE_COST = 4;
-        public override void init(bool isPlayerUnit, Player player)
+        public override void init(bool isHostsUnit, Player player)
         {
-            this.isPlayersUnit = isPlayerUnit;
+            this.IsHostsUnit = isHostsUnit;
             this.Damage = DAMAGE;
             this.Life = LIFE;
             this.MaxLife = MAX_LIFE;
@@ -79,25 +79,7 @@ namespace Formations
         {
             return Range;
         }
-        public override TileBasic[] getAttackableTiles()
-        {
-            int calculatedRange = calculateRange();
-            List<TileBasic> attackableTiles = ContainingTile.getSurroundingTiles().ToList<TileBasic>();
-            for (int i = 0; i < calculatedRange - 1; i++)
-            {
-                foreach (TileBasic tile in attackableTiles)
-                {
-                    foreach (TileBasic newTile in tile.getSurroundingTiles())
-                    {
-                        if (!attackableTiles.Contains(newTile))
-                        {
-                            attackableTiles.Add(newTile);
-                        }
-                    }
-                }
-            }
-            return attackableTiles.ToArray<TileBasic>();
-        }
+
         public override void update()
         {
 

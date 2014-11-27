@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Formations
     abstract class UnitAbstract : IUpdateDraw
     {
         private bool _isDead = false;
-        private bool _isPlayersUnit;
+        private bool _isHostsUnit;
         private int _life;
         protected int MaxLife;
         private int _range;
@@ -34,10 +35,10 @@ namespace Formations
             get { return _damage; }
             protected set { _damage = value; }
         }
-        public bool isPlayersUnit
+        public bool IsHostsUnit
         {
-            get { return _isPlayersUnit; }
-            protected set { _isPlayersUnit = value; }
+            get { return _isHostsUnit; }
+            protected set { _isHostsUnit = value; }
         }
         public int Range 
         {
@@ -76,7 +77,31 @@ namespace Formations
         public abstract int calculateAtt();
         public abstract int calculateDamage(int attackDamage);
         public abstract int calculateRange();
-        public abstract TileBasic[] getAttackableTiles();
+        public TileBasic[] getAttackableTiles()
+        {
+            int calculatedRange = calculateRange() - 1;
+            List<TileBasic> currentAttackableTiles = ContainingTile.getSurroundingTiles().ToList<TileBasic>();
+            List<TileBasic> tempTiles = new List<TileBasic>();
+            for (int i = 0; i < calculatedRange - 1; i++)
+            {
+                foreach (TileBasic tile in currentAttackableTiles)
+                {
+                    foreach (TileBasic newTile in tile.getSurroundingTiles())
+                    {
+                        if (!currentAttackableTiles.Contains(newTile))
+                        {
+                            tempTiles.Add(newTile);
+                        }
+                    }
+                }
+                foreach (TileBasic tile in tempTiles)
+                {
+                    currentAttackableTiles.Add(tile);
+                }
+
+            }
+            return currentAttackableTiles.ToArray<TileBasic>();
+        }
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
     }
