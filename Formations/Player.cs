@@ -62,7 +62,7 @@ namespace Formations
         private Label totalAttUnitLabel;
         private Label totalDefUnitLabel;
         private Label totalMagUnitLabel;
-        private Label staminaPointsLeft;
+        private TextBox staminaPointsLeft;
 
         private Vector2 playerInfoLocation;
         private Vector2 playerAttNumberLocation;
@@ -148,7 +148,7 @@ namespace Formations
             totalMagUnitLabel = new Label(uiManager);
             totalMagUnitLabel.SetPosition((int)playerMagNumberLocation.X, (int)playerMagNumberLocation.Y);
             totalMagUnitLabel.Text = MagUnitsNotPlaced + "";
-            staminaPointsLeft = new Label(uiManager);
+            staminaPointsLeft = new TextBox(uiManager);
             staminaPointsLeft.SetPosition((int)playerInfoLocation.X + 160, (int)playerInfoLocation.Y);
             staminaPointsLeft.Text = Stamina + "";
             uiManager.Add(playersNameLabel);

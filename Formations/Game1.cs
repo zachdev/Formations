@@ -15,7 +15,7 @@ namespace Formations
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameBoardSinglePlayer gb;
+        GameBoard gb;
         //MouseState mouseState;
         MouseListener mouseListener;
 
@@ -67,7 +67,7 @@ namespace Formations
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("spriteFont");
-            gb = new GameBoardSinglePlayer();
+            gb = new GameBoard();
             gb.init(theManager, GraphicsDevice, "<GameNameHere>", true);
 
             // Particle engine stuff
