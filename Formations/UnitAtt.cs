@@ -13,7 +13,7 @@ namespace Formations
         public const int MAX_LIFE = 2;
         public const int RANGE = 1;
         public const int STAMINA_MOVE_COST = 1;
-        public const int STAMINA_ATT_COST = 1;
+        public const int STAMINA_ATT_COST = 2;
         public const int STAMINA_PLACE_COST = 4;
         public override void init(bool isHostsUnit, Player player)
         {
@@ -34,6 +34,7 @@ namespace Formations
         public override void attack(UnitAbstract unit)
         {
             unit.defend(this);
+            incrementAttack();
         }
         public override void defend(UnitAbstract unit)
         {

@@ -34,6 +34,7 @@ namespace Formations
         public override void attack(UnitAbstract unit)
         {
             unit.defend(this);
+            incrementAttack();
         }
         public override void defend(UnitAbstract unit)
         {

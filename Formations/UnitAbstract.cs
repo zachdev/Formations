@@ -20,6 +20,7 @@ namespace Formations
         private int _staminaPlaceCost;
         private TileBasic _containingTile;
         private Player _player;
+        private int _attacksThisRound;
         public bool isDead
         { 
             get { return _isDead; } 
@@ -70,6 +71,11 @@ namespace Formations
             get { return _player; }
             protected set { _player = value; }
         }
+        public int AttacksThisRound
+        {
+            get { return _attacksThisRound; }
+            private set { _attacksThisRound = value; }
+        }
         public abstract void init(bool isOwnedByPlayer, Player player);
         public abstract string  getUnitType();
         public abstract void attack(UnitAbstract unit);
@@ -101,6 +107,18 @@ namespace Formations
 
             }
             return currentAttackableTiles.ToArray<TileBasic>();
+        }
+        protected void incrementAttack()
+        {
+            AttacksThisRound++;
+        }
+        public void resetAttacks()
+        {
+            AttacksThisRound = 0;
+        }
+        public int calculateAttackCost()
+        {
+            return (StaminaAttCost * (AttacksThisRound + 1));
         }
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);

@@ -514,7 +514,7 @@ namespace Formations
                         if (self.Stamina >= currentSurroundingTiles[0].getUnit().StaminaMoveCost)
                         {
                             currentSurroundingTiles[i].setUnit(currentSurroundingTiles[0].getUnit());
-                            self.useStamina((int)currentSurroundingTiles[0].getUnit().StaminaMoveCost);
+                            self.useStamina(currentSurroundingTiles[0].getUnit().StaminaMoveCost);
                             currentSurroundingTiles[0].setUnit(null);
                         }
                         //Console.WriteLine("moveUnit Move");
@@ -543,10 +543,10 @@ namespace Formations
             {//starts on 1 because 0 is the attacker
                 if (currentAttackableTiles[i] != null && currentAttackableTiles[i].isPointInTile(mouseState) && currentAttackableTiles[i].hasUnit() && !(currentAttackableTiles[i].getUnit().Player.Equals(self)))
                 {
-                    if(self.Stamina >= currentAttackableTiles[i].getUnit().StaminaAttCost)
+                    if(self.Stamina >= self.SelectedTile.getUnit().calculateAttackCost())
                     {
+                        self.useStamina(self.SelectedTile.getUnit().calculateAttackCost());
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
-                        self.useStamina((int)currentAttackableTiles[i].getUnit().StaminaAttCost);
 
                         // Start particle effect
                         attackParticleEngine.particlesOn = true;
@@ -609,6 +609,9 @@ namespace Formations
             {
                 self = players[1];
             }
+            //need to reset units to 0 attacks
+
+            self.resetUnits();
             //switching turns here
             if (isHostsTurn)
             {
@@ -789,7 +792,7 @@ namespace Formations
                     gameInfo.Text += "Range: " + tempUnit.calculateRange() + "\n";
                     gameInfo.Text += "__________\n";
                     gameInfo.Text += "Stamina Cost\n";
-                    gameInfo.Text += "Attack $" + tempUnit.StaminaAttCost + "\n";
+                    gameInfo.Text += "Attack $" + tempUnit.calculateAttackCost() + "\n";
                     gameInfo.Text += "Move $" + tempUnit.StaminaMoveCost + "\n";
                     gameInfo.Text += "Place $" + tempUnit.StaminaPlaceCost + "\n";
 

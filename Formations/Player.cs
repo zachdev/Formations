@@ -218,6 +218,24 @@ namespace Formations
             _stamina -= staminaToUse;
             staminaPointsLeft.Text = _stamina + "";
         }
+        public void resetUnits()
+        {
+            foreach (UnitAtt unit in AttUnitArray)
+            {
+                if (unit == null) { continue; }
+                unit.resetAttacks();
+            }
+            foreach (UnitDef unit in DefUnitArray)
+            {
+                if (unit == null) { continue; }
+                unit.resetAttacks();
+            }
+            foreach (UnitMag unit in MagUnitArray)
+            {
+                if (unit == null) { continue; }
+                unit.resetAttacks();
+            }
+        }
         public void update(MouseState mouseState)
         {
 
