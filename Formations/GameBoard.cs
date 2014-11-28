@@ -34,7 +34,7 @@ namespace Formations
         private Hexagon defUnit;
         private Hexagon mulUnit;
         private Hexagon attAction;
-        private Hexagon manipulateAction;
+        private Hexagon magicAction;
         private Hexagon moveAction;
         private TileBasic currentTile;
         private int unitSideLength;
@@ -144,14 +144,14 @@ namespace Formations
             mulUnit = new Hexagon(unitSideLength);
             
             attAction = new Hexagon(unitSideLength);
-            manipulateAction = new Hexagon(unitSideLength);
+            magicAction = new Hexagon(unitSideLength);
             moveAction = new Hexagon(unitSideLength);
             attUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             mulUnit.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
             defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
-            manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
             turnButton.init(600,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
            
 
@@ -423,7 +423,7 @@ namespace Formations
             {
                 hexInfo.Text = "Move";
             }
-            else if (manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            else if (magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 hexInfo.Text = "Manipulate";
             }
@@ -719,8 +719,8 @@ namespace Formations
                         moveAction.draw(spriteBatch);
                         if (currentUnit.GetType() == typeof(UnitMag))
                         {
-                            manipulateAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
-                            manipulateAction.draw(spriteBatch);
+                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            magicAction.draw(spriteBatch);
                         }
                     }
                 }
@@ -740,7 +740,7 @@ namespace Formations
             createButtonArea();
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
-            manipulateAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
             mulUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);

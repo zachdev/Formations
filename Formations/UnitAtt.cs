@@ -45,11 +45,11 @@ namespace Formations
         }
         public override int calculateAtt()
         {
-            int result = 0;
+            int result = Damage;
             TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
-            foreach (TileBasic tile in surroundingTiles)
+            for (int i = 1; i < surroundingTiles.Length; i++ )
             {
-                UnitAbstract unit = tile.getUnit();
+                UnitAbstract unit = surroundingTiles[i].getUnit();
                 if (unit == null) { continue; }
                 if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitAtt))
                 {
@@ -62,9 +62,10 @@ namespace Formations
         {
             int result = attackDamage;
             TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
-            foreach (TileBasic tile in surroundingTiles)
+            for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
             {
-                UnitAbstract unit = tile.getUnit();
+
+                UnitAbstract unit = surroundingTiles[i].getUnit();
                 UnitDef defUnit;
                 if (unit == null) { continue; }
                 if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitDef))
@@ -79,12 +80,10 @@ namespace Formations
         {
             return Range;
         }
-
         public override void update()
         {
 
         }
-
         public override void draw(SpriteBatch spriteBatch)
         {
 

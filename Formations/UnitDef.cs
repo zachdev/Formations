@@ -52,13 +52,15 @@ namespace Formations
         {
             int result = attackDamage;
             TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
-            foreach (TileBasic tile in surroundingTiles)
+            for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
             {
-                UnitAbstract unit = tile.getUnit();
+                
+                UnitAbstract unit = surroundingTiles[i].getUnit();
                 UnitDef defUnit;
                 if (unit == null) { continue; }
                 if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitDef))
                 {
+                    if (result == 0) { return result; }
                     defUnit = (UnitDef)unit;
                     result = defUnit.absorbDamage(result);
                 }

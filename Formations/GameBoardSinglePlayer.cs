@@ -21,19 +21,20 @@ namespace Formations
         private bool isFirstPhase = true;
         private bool attackInProgress = false;
         private bool moveInProgress = false;
-        private bool manipulateInProgress = false;
+        private bool magicInProgress = false;
         private bool isSmallBoard = false;
         private bool endTurnIsVisible = false;
         private MouseState currentMouseState;
         private Label hexInfo;
         private Label gameInfo;
         private Label gameNameLabel;
+        private Label phaseLabel;
         private Hexagon turnSignal;
         private Hexagon attUnit;
         private Hexagon defUnit;
         private Hexagon mulUnit;
         private Hexagon attAction;
-        private Hexagon manipulateAction;
+        private Hexagon magicAction;
         private Hexagon moveAction;
         private TileBasic currentTile;
         private int unitSideLength;
@@ -166,7 +167,7 @@ namespace Formations
             mulUnit = new Hexagon(unitSideLength);
             attAction = new Hexagon(unitSideLength);
             moveAction = new Hexagon(unitSideLength);
-            manipulateAction = new Hexagon(unitSideLength);
+            magicAction = new Hexagon(unitSideLength);
             /*
              * initiallizing the Hexagons
              */ 
@@ -176,7 +177,7 @@ namespace Formations
             defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
-            manipulateAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
             /*
              * Resize Button
              */ 
@@ -218,6 +219,13 @@ namespace Formations
             gameNameLabel.Text = gameName;
             gameNameLabel.SetSize(200,10);
             /*
+             * phase label
+             */
+            phaseLabel = new Label(uiManager);
+            phaseLabel.SetPosition(550, 70);
+            phaseLabel.SetSize(200,20);
+            phaseLabel.Text = "Phase 1 - Land Grab";
+            /*
              * Chat stuff
              */ 
             chatManager = new Chat();
@@ -233,6 +241,7 @@ namespace Formations
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
             uiManager.Add(gameNameLabel);
+            uiManager.Add(phaseLabel);
         }
         /// <summary>
         /// Creates the UnitAbstract Array with the correct number of attack units defense units and Manipulation units
@@ -330,7 +339,7 @@ namespace Formations
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
-                            System.Console.WriteLine("Attack");
+                            //System.Console.WriteLine("Attack");
                             self.SelectedTile = tiles[i, j];
                             attackInProgress = true;
                             TileBasic[] attackableTiles = tiles[i, j].getUnit().getAttackableTiles();
@@ -351,11 +360,11 @@ namespace Formations
                         }
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
-                            && manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                            && magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            //Console.WriteLine("Manipulate");
+                            //Console.WriteLine("Magic");
                             self.SelectedTile = tiles[i, j];
-                            manipulateInProgress = true;
+                            magicInProgress = true;
                             return;
                         }
                         if (self.AttUnitsNotPlaced > 0  && attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
@@ -453,9 +462,9 @@ namespace Formations
             {
                 hexInfo.Text = "Move";
             }
-            else if (manipulateAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+            else if (magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
-                hexInfo.Text = "Manipulate";
+                hexInfo.Text = "Magic";
             }
             else if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
@@ -467,7 +476,7 @@ namespace Formations
             }
             else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
-                hexInfo.Text = "Set Manipulate Unit";
+                hexInfo.Text = "Set Magic Unit";
             }
             else
             {
@@ -575,9 +584,9 @@ namespace Formations
                 self = players[1];
             }
 
-            if (isFirstPhase && ((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
+            if (isFirstPhase && (((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
                 || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == true) && !self.IsHost)
-                || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == false)))
+                || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == false))))
             {
                 result = true; 
             }
@@ -616,6 +625,8 @@ namespace Formations
             if (movesLeftInPhase == 0)
             {
                 isFirstPhase = false;
+                phaseLabel.Text = "Phase 2 - Game Phase";
+
             }
         }
         private void recalculateControlArea()
@@ -669,16 +680,13 @@ namespace Formations
                     else if(!found){
                         currentTile = null;
                     }
-
                 }
             }
-
-                drawUnitButtons(currentTile, spriteBatch);
-               // drawUnitInfo(spriteBatch);
+            drawUnitButtons(currentTile, spriteBatch);
+            // drawUnitInfo(spriteBatch);
             players[0].draw(spriteBatch);
             players[1].draw(spriteBatch);
             turnSignal.draw(spriteBatch);
-
             // Particles
             attackParticleEngine.Draw(spriteBatch);
         }
@@ -702,7 +710,7 @@ namespace Formations
                 attAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.attButton, GameColors.attButton);
                 attAction.draw(spriteBatch);
             }
-            else if(manipulateInProgress)
+            else if(magicInProgress)
             {
 
             }
@@ -719,8 +727,8 @@ namespace Formations
                         moveAction.draw(spriteBatch);
                         if (currentUnit.GetType() == typeof(UnitMag))
                         {
-                            manipulateAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
-                            manipulateAction.draw(spriteBatch);
+                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            magicAction.draw(spriteBatch);
                         }
                     }
                 }
@@ -740,7 +748,7 @@ namespace Formations
             createButtonArea();
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
-            manipulateAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
             mulUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
@@ -774,13 +782,19 @@ namespace Formations
             {   tempUnit = tile.getUnit();
                 if (tile.isHovered() && tile.hasUnit())
                 {
+                    gameInfo.Text += "\n\n\n";
                     gameInfo.Text += tempUnit.getUnitType() + "\n";
                     gameInfo.Text += "Life: " + tempUnit.Life + "\n";
-                    gameInfo.Text += "Damage: " + tempUnit.Damage + "\n";
+                    gameInfo.Text += "Damage: " + tempUnit.calculateAtt() + "\n";
+                    gameInfo.Text += "Range: " + tempUnit.calculateRange() + "\n";
+                    gameInfo.Text += "__________\n";
+                    gameInfo.Text += "Stamina Cost\n";
+                    gameInfo.Text += "Attack $" + tempUnit.StaminaAttCost + "\n";
+                    gameInfo.Text += "Move $" + tempUnit.StaminaMoveCost + "\n";
+                    gameInfo.Text += "Place $" + tempUnit.StaminaPlaceCost + "\n";
+
                 }
-
             }
-
         }
         private void resizeTiles(int multiplyer, float xOffset, float yOffset, int tileLength)
         {
