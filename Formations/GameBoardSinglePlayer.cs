@@ -23,6 +23,9 @@ namespace Formations
         private bool moveInProgress = false;
         private bool magicInProgress = false;
         private bool isSmallBoard = false;
+        private bool attPlacementInProgress = false;
+        private bool defPlacementInProgress = false;
+        private bool magPlacementInProgress = false;
         private bool endTurnIsVisible = false;
         private MouseState currentMouseState;
         private Label hexInfo;
@@ -32,10 +35,14 @@ namespace Formations
         private Hexagon turnSignal;
         private Hexagon attUnit;
         private Hexagon defUnit;
-        private Hexagon mulUnit;
+        private Hexagon magUnit;
+        private Hexagon attHex;
+        private Hexagon defHex;
+        private Hexagon magHex;
         private Hexagon attAction;
         private Hexagon magicAction;
         private Hexagon moveAction;
+
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -106,16 +113,16 @@ namespace Formations
             /*
              * need to pass in the player from the connection here to create it maybe
              */
-            if (isHost)
-            {
-                players[0].init("<PlayerNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+           // if (isHost)
+           // {
+                players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-            }
-            else
-            {
-                players[0].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-                players[1].init("<PlayerNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-            }
+           // }
+           // else
+           // {
+           //     players[0].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+           //     players[1].init("<PlayerNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+           // }
             /*
              * setting up the graphics here
              */ 
@@ -164,7 +171,7 @@ namespace Formations
             turnSignal = new Hexagon(20);
             attUnit = new Hexagon(unitSideLength);
             defUnit = new Hexagon(unitSideLength);
-            mulUnit = new Hexagon(unitSideLength);
+            magUnit = new Hexagon(unitSideLength);
             attAction = new Hexagon(unitSideLength);
             moveAction = new Hexagon(unitSideLength);
             magicAction = new Hexagon(unitSideLength);
@@ -173,11 +180,18 @@ namespace Formations
              */ 
             turnSignal.init(600,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
             attUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            mulUnit.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
+            magUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            attAction.init(0,0,graphicsDevice,GameColors.attButton,GameColors.attButton);
+            attAction.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
             magicAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+
+            attHex = new Hexagon(20);
+            defHex = new Hexagon(20);
+            magHex = new Hexagon(20);
+            attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+            defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+            magHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
             /*
              * Resize Button
              */ 
@@ -270,8 +284,34 @@ namespace Formations
         }
         public void mousePressed(MouseState mouseState)
         {
+            //selecting the correct player  
+            Player self;
+            if (!(isHost && isHostsTurn))
+            {
+                self = players[0];
+            }
+            else
+            {
+                self = players[1];
+            }
+
             if (!chatManager.chatIsVisible())// Check if the chat window is visible
             {
+                if (self.AttUnitsNotPlaced > 0 && attHex.IsPointInPolygon(mouseState.X, mouseState.Y))
+                {
+                    resetBools();
+                    attPlacementInProgress = true;
+                }
+                if (self.DefUnitsNotPlaced > 0 && defHex.IsPointInPolygon(mouseState.X, mouseState.Y))
+                {
+                    resetBools();
+                    defPlacementInProgress = true;
+                }
+                if (self.MagUnitsNotPlaced > 0 && magHex.IsPointInPolygon(mouseState.X, mouseState.Y))
+                {
+                    resetBools();
+                    magPlacementInProgress = true;
+                }
                 for (int i = 0; i < boardWidth; i++)
                 {
                     for (int j = 0; j < boardHeight; j++)
@@ -280,6 +320,36 @@ namespace Formations
                         if (tiles[i, j].isHovered())
                         {
                             tiles[i, j].mousePressed(mouseState);
+                            if (attPlacementInProgress)
+                            {
+                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                                {
+                                    tiles[i, j].setUnit(self.getAttUnit());
+                                    self.useStamina(UnitAtt.STAMINA_PLACE_COST);
+                                    move();
+                                    resetBools();
+                                }
+                            }
+                            if (defPlacementInProgress)
+                            {
+                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                                {
+                                    tiles[i, j].setUnit(self.getDefUnit());
+                                    self.useStamina(UnitDef.STAMINA_PLACE_COST);
+                                    move();
+                                    resetBools();
+                                }
+                            }
+                            if (magPlacementInProgress)
+                            {
+                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
+                                {
+                                    tiles[i, j].setUnit(self.getMagUnit());
+                                    self.useStamina(UnitMag.STAMINA_PLACE_COST);
+                                    move();
+                                    resetBools();
+                                }
+                            }
                             if (attackInProgress)
                             {
                                 unitAttackUnit(mouseState);
@@ -292,6 +362,14 @@ namespace Formations
                     }
                 }
             }
+        }
+        private void resetBools()
+        {
+            attPlacementInProgress = false;
+            defPlacementInProgress = false;
+            magPlacementInProgress = false;
+            moveInProgress = false;
+            attackInProgress = false;
         }
         public void showEndTurn()
         {
@@ -367,35 +445,7 @@ namespace Formations
                             magicInProgress = true;
                             return;
                         }
-                        if (self.AttUnitsNotPlaced > 0  && attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
-                            if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
-                            {
-                                tiles[i, j].setUnit(self.getAttUnit());
-                                self.useStamina(UnitAtt.STAMINA_PLACE_COST);
-                                move();
 
-                            }
-                        }
-                        else if (self.DefUnitsNotPlaced > 0 && defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
-                            if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitDef.STAMINA_PLACE_COST) 
-                            {
-                                tiles[i, j].setUnit(self.getDefUnit());
-                                self.useStamina(UnitDef.STAMINA_PLACE_COST);
-                                move();
-                            }
-                        }
-                        else if (self.MagUnitsNotPlaced > 0 && mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
-
-                            if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
-                            { 
-                                tiles[i, j].setUnit(self.getMagUnit());
-                                self.useStamina(UnitMag.STAMINA_PLACE_COST);
-                                move();
-                            }
-                        }
                     }
                 }
             }
@@ -466,15 +516,15 @@ namespace Formations
             {
                 hexInfo.Text = "Magic";
             }
-            else if (attUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            else if (attHex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 hexInfo.Text = "Set Attack Unit";
             }
-            else if (defUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            else if (defHex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 hexInfo.Text = "Set Defense Unit";
             }
-            else if (mulUnit.IsPointInPolygon(mouseState.X, mouseState.Y))
+            else if (magHex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
                 hexInfo.Text = "Set Magic Unit";
             }
@@ -736,14 +786,20 @@ namespace Formations
                         }
                     }
                 }
-                else if (!currentTile.hasUnit() && currentTile.isSelected() && !isSmallBoard)
+                if (attPlacementInProgress)
                 {
-                    attUnit.moveHex(x, y - largeTileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-                    defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                    mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                    attUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
                     attUnit.draw(spriteBatch);
+                }
+                if (defPlacementInProgress)
+                {
+                    defUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
                     defUnit.draw(spriteBatch);
-                    mulUnit.draw(spriteBatch);
+                }
+                if (magPlacementInProgress)
+                {
+                    magUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                    magUnit.draw(spriteBatch);
                 }
             }
         }
@@ -753,13 +809,14 @@ namespace Formations
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
             magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            mulUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            magUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)
         {
-            //if (currentTile.getUnit() != null) spriteBatch.DrawString(font, currentTile.getUnit().getUnitType(), new Vector2(buttonsBackground[0].Position.X, buttonsBackground[0].Position.Y), Color.Black);
             
         }
         private void createButtonArea()
