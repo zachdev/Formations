@@ -263,6 +263,10 @@ namespace Formations
         }
         public override void draw(SpriteBatch spriteBatch)
         {
+            if (hovered)
+            {
+                tileHex.updateHover();
+            }
             tileHex.draw(spriteBatch);
         }
     }

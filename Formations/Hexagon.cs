@@ -16,6 +16,7 @@ namespace Formations
         private int tileSideLength;
         private Color insideColor;
         private Color outsideColor;
+        private int hoverPosition = 0;
        
         public Hexagon(int tileSideLength)
         {
@@ -125,6 +126,15 @@ namespace Formations
             {
                 if (i % 3 != 0) { vertices[i].Color = color; }
             }
+        }
+        public void updateHover()
+        {
+            hoverPosition = (hoverPosition + 1) % 12;
+            setBorderColor(Color.Red);
+            int positionOne = hoverPosition;
+            int positionTwo = (hoverPosition + 11) % 12;
+            borders[positionOne].Color = Color.Black;
+            borders[positionTwo].Color = Color.Black;
         }
         public bool IsPointInPolygon(int pointX, int pointY)
         {
