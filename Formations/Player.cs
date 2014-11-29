@@ -20,6 +20,7 @@ namespace Formations
         private UnitAtt[] _attUnitArray = new UnitAtt[20];
         private UnitDef[] _defUnitArray = new UnitDef[20];
         private UnitMag[] _magUnitArray = new UnitMag[20];
+        private StaminaComponent bar;
         private string playerName;
         public TileBasic SelectedTile
         {
@@ -29,7 +30,11 @@ namespace Formations
         public int Stamina
         {
             get { return _stamina; }
-            private set { _stamina = value; }
+            private set
+            {
+                _stamina = value;
+                if (_stamina > 30) { _stamina = 30; }
+            }
         }
         public bool IsHost
         {
@@ -69,12 +74,12 @@ namespace Formations
         private Vector2 playerDefNumberLocation;
         private Vector2 playerMagNumberLocation;
 
-        private Vector2 guestInfoLocation = new Vector2(200, 10);
-        private Vector2 guestAttNumberLocation = new Vector2(265, 38);
-        private Vector2 guestDefNumberLocation = new Vector2(265, 52);
-        private Vector2 guestMagNumberLocation = new Vector2(265, 68);
+        private Vector2 guestInfoLocation = new Vector2(200, 35);
+        private Vector2 guestAttNumberLocation = new Vector2(180, 38);
+        private Vector2 guestDefNumberLocation = new Vector2(180, 52);
+        private Vector2 guestMagNumberLocation = new Vector2(180, 68);
 
-        private Vector2 hostInfoLocation = new Vector2(800, 10);
+        private Vector2 hostInfoLocation = new Vector2(800, 35);
         private Vector2 hostAttNumberLocation = new Vector2(60, 192);
         private Vector2 hostDefNumberLocation = new Vector2(60, 236);
         private Vector2 hostMagNumberLocation = new Vector2(60, 280);
@@ -124,6 +129,8 @@ namespace Formations
                 playerAttNumberLocation = hostAttNumberLocation;
                 playerDefNumberLocation = hostDefNumberLocation;
                 playerMagNumberLocation = hostMagNumberLocation;
+                bar = new StaminaComponent(200, 30);
+                bar.init(graphicsDevice);
             }
             else
             {
@@ -131,6 +138,8 @@ namespace Formations
                 playerAttNumberLocation = guestAttNumberLocation;
                 playerDefNumberLocation = guestDefNumberLocation;
                 playerMagNumberLocation = guestMagNumberLocation;
+                bar = new StaminaComponent(800, 30);
+                bar.init(graphicsDevice);
             }
             //Label
             this.uiManager = uiManager;
@@ -246,6 +255,8 @@ namespace Formations
             attHex.draw(spriteBatch);
             defHex.draw(spriteBatch);
             magHex.draw(spriteBatch);
+            bar.updateBar(Stamina);
+            bar.draw(spriteBatch);
 
         }    
     }
