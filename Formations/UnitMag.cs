@@ -15,6 +15,8 @@ namespace Formations
         public const int STAMINA_MOVE_COST = 1;
         public const int STAMINA_ATT_COST = 5;
         public const int STAMINA_PLACE_COST = 5;
+        private int healAmount = 1;
+
         public override void init(bool isHostsUnit, Player player)
         {
             this.IsHostsUnit = isHostsUnit;
@@ -44,9 +46,30 @@ namespace Formations
                 isDead = true;
             }
         }
+        public void heal(UnitAbstract unit)
+        {
+            unit.Life += this.calculateHeal();
+        }
         public override int calculateAtt()
         {
             return Damage;
+        }
+        public int calculateHeal()
+        {
+           
+            int result = healAmount;
+            TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
+            for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
+            {
+
+                UnitAbstract unit = surroundingTiles[i].getUnit();
+                if (unit == null) { continue; }
+                if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitMag))
+                {
+                    result++;
+                }
+            }
+            return result;
         }
         public override int calculateDamage(int attackDamage)
         {

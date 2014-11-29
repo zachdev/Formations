@@ -358,6 +358,10 @@ namespace Formations
                             {
                                 moveUnit(mouseState);
                             }
+                            if (magicInProgress)
+                            {
+                                healUnit(mouseState);
+                            }
                         }
                     }
                 }
@@ -500,7 +504,36 @@ namespace Formations
                 }
             }  
         }
+        private void healUnit(MouseState mouseState)
+        {
+            //selecting the correct player  
+            Player self;
+            if (!(isHost && isHostsTurn))
+            {
+                self = players[0];
+            }
+            else
+            {
+                self = players[1];
+            }
 
+            TileBasic[] surroundingTiles = self.SelectedTile.getUnit().getAttackableTiles();
+            UnitMag currentMag = (UnitMag)self.SelectedTile.getUnit();
+            for (int i = 1; i < surroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (surroundingTiles[i] != null && surroundingTiles[i].isPointInTile(mouseState) && surroundingTiles[i].hasUnit() && (surroundingTiles[i].getUnit().Player.Equals(self)))
+                {
+                    if (self.Stamina >= currentMag.calculateAttackCost())
+                    {
+                        self.useStamina(currentMag.calculateAttackCost());
+                        currentMag.heal(surroundingTiles[i].getUnit());
+
+                        // Start particle effect
+                    }
+                }
+            }
+            magicInProgress = false;
+        }
         //TODO: change or remove
         private void setHoverLabel(MouseState mouseState)
         {
@@ -781,7 +814,8 @@ namespace Formations
             }
             else if(magicInProgress)
             {
-
+                magicAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                magicAction.draw(spriteBatch);
             }
             else
             {

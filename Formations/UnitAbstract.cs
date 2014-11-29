@@ -12,7 +12,7 @@ namespace Formations
         private bool _isDead = false;
         private bool _isHostsUnit;
         private int _life;
-        protected int MaxLife;
+        public int MaxLife;
         private int _range;
         private int _damage;
         private int _staminaAttCost;
@@ -29,7 +29,7 @@ namespace Formations
         public int Life
         {
             get { return _life; }
-            protected set { _life = value; }
+            set { _life = value; }
         }
         public int Damage
         {
