@@ -12,8 +12,8 @@ namespace Formations
 
         //Inside Colors
         public static Color noUnitInsideColor = Color.Green;
-        public static Color attUnitInsideColor = Color.Gray;
-        public static Color defUnitInsideColor = Color.LightGoldenrodYellow;
+        public static Color attUnitInsideColor = Color.Red;
+        public static Color defUnitInsideColor = Color.Gray;
         public static Color mulUnitInsideColor = Color.Purple;
 
         //Outside Colors

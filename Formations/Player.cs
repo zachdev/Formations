@@ -21,6 +21,7 @@ namespace Formations
         private UnitDef[] _defUnitArray = new UnitDef[20];
         private UnitMag[] _magUnitArray = new UnitMag[20];
         private StaminaComponent bar;
+        private UnitsComponent unitsBar;
         private string playerName;
         public TileBasic SelectedTile
         {
@@ -75,14 +76,14 @@ namespace Formations
         private Vector2 playerMagNumberLocation;
 
         private Vector2 guestInfoLocation = new Vector2(200, 35);
-        private Vector2 guestAttNumberLocation = new Vector2(180, 38);
-        private Vector2 guestDefNumberLocation = new Vector2(180, 52);
-        private Vector2 guestMagNumberLocation = new Vector2(180, 68);
+        private Vector2 guestAttNumberLocation = new Vector2(180, 50);
+        private Vector2 guestDefNumberLocation = new Vector2(180, 61);
+        private Vector2 guestMagNumberLocation = new Vector2(180, 72);
 
         private Vector2 hostInfoLocation = new Vector2(800, 35);
-        private Vector2 hostAttNumberLocation = new Vector2(60, 192);
-        private Vector2 hostDefNumberLocation = new Vector2(60, 236);
-        private Vector2 hostMagNumberLocation = new Vector2(60, 280);
+        private Vector2 hostAttNumberLocation = new Vector2(780, 50);
+        private Vector2 hostDefNumberLocation = new Vector2(780, 61);
+        private Vector2 hostMagNumberLocation = new Vector2(780, 72);
 
 
         private Hexagon attHex;
@@ -131,6 +132,8 @@ namespace Formations
                 playerMagNumberLocation = hostMagNumberLocation;
                 bar = new StaminaComponent(200, 30);
                 bar.init(graphicsDevice);
+                unitsBar = new UnitsComponent(200, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
+                unitsBar.init(graphicsDevice);
             }
             else
             {
@@ -140,6 +143,8 @@ namespace Formations
                 playerMagNumberLocation = guestMagNumberLocation;
                 bar = new StaminaComponent(800, 30);
                 bar.init(graphicsDevice);
+                unitsBar = new UnitsComponent(800, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
+                unitsBar.init(graphicsDevice);
             }
             //Label
             this.uiManager = uiManager;
@@ -256,7 +261,9 @@ namespace Formations
             defHex.draw(spriteBatch);
             magHex.draw(spriteBatch);
             bar.updateBar(Stamina);
+            unitsBar.updateUnitHex(AttUnitsNotPlaced, DefUnitsNotPlaced, MagUnitsNotPlaced);
             bar.draw(spriteBatch);
+            unitsBar.draw(spriteBatch);
 
         }    
     }
