@@ -126,10 +126,10 @@ namespace Formations
             }
             if (IsHost)
             {
-                playerInfoLocation = hostInfoLocation;
-                playerAttNumberLocation = hostAttNumberLocation;
-                playerDefNumberLocation = hostDefNumberLocation;
-                playerMagNumberLocation = hostMagNumberLocation;
+                playerInfoLocation = guestInfoLocation;
+                playerAttNumberLocation = guestAttNumberLocation;
+                playerDefNumberLocation = guestDefNumberLocation;
+                playerMagNumberLocation = guestMagNumberLocation;
                 bar = new StaminaComponent(200, 30);
                 bar.init(graphicsDevice);
                 unitsBar = new UnitsComponent(200, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
@@ -137,10 +137,11 @@ namespace Formations
             }
             else
             {
-                playerInfoLocation = guestInfoLocation;
-                playerAttNumberLocation = guestAttNumberLocation;
-                playerDefNumberLocation = guestDefNumberLocation;
-                playerMagNumberLocation = guestMagNumberLocation;
+
+                playerInfoLocation = hostInfoLocation;
+                playerAttNumberLocation = hostAttNumberLocation;
+                playerDefNumberLocation = hostDefNumberLocation;
+                playerMagNumberLocation = hostMagNumberLocation;
                 bar = new StaminaComponent(800, 30);
                 bar.init(graphicsDevice);
                 unitsBar = new UnitsComponent(800, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
