@@ -746,6 +746,21 @@ namespace Formations
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
+            if (attPlacementInProgress)
+            {
+                attUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
+                attUnit.draw(spriteBatch);
+            }
+            if (defPlacementInProgress)
+            {
+                defUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
+                defUnit.draw(spriteBatch);
+            }
+            if (magPlacementInProgress)
+            {
+                magUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                magUnit.draw(spriteBatch);
+            }
             if (currentTile == null)
             {
                 return;
@@ -786,21 +801,7 @@ namespace Formations
                         }
                     }
                 }
-                if (attPlacementInProgress)
-                {
-                    attUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-                    attUnit.draw(spriteBatch);
-                }
-                if (defPlacementInProgress)
-                {
-                    defUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                    defUnit.draw(spriteBatch);
-                }
-                if (magPlacementInProgress)
-                {
-                    magUnit.moveHex(currentMouseState.X + changeInX, currentMouseState.Y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
-                    magUnit.draw(spriteBatch);
-                }
+
             }
         }
         private void resetButtons()
@@ -809,7 +810,6 @@ namespace Formations
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
             magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
-
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
             magUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
