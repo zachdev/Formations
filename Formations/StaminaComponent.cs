@@ -59,8 +59,8 @@ namespace Formations
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
-                    if (staminaAmount > 0) { bar[i, j].setInsideColor(Color.DarkBlue); }
-                    else { bar[i, j].setInsideColor(Color.Red); }
+                    if (staminaAmount > 0) { bar[i, j].setInsideColor(Color.White); }
+                    else { bar[i, j].setInsideColor(Color.Black); }
                     staminaAmount--;
                 }
             }

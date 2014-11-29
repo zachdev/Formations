@@ -567,6 +567,7 @@ namespace Formations
             if (isFirstPhase)
             { 
                 movesLeftInPhase--;
+                showEndTurn();
                 //update phase info here
             }
         }

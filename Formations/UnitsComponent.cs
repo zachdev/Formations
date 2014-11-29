@@ -63,7 +63,7 @@ namespace Formations
                     tempColor = Color.Red;
                     attAmount--;
                 }
-                else { tempColor = Color.FloralWhite; }
+                else { tempColor = Color.Black; }
 
                 attackUnits[i].setInsideColor(tempColor);
             }
@@ -74,7 +74,7 @@ namespace Formations
                     tempColor = Color.Gray;
                     defAmount--;
                 }
-                else { tempColor = Color.FloralWhite; }
+                else { tempColor = Color.Black; }
 
                 defenseUnits[i].setInsideColor(tempColor);
             }
@@ -85,7 +85,7 @@ namespace Formations
                     tempColor = Color.Purple;
                     magAmount--;
                 }
-                else { tempColor = Color.FloralWhite; }
+                else { tempColor = Color.Black; }
 
                 magicUnits[i].setInsideColor(tempColor);
             }

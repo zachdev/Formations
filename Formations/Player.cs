@@ -137,7 +137,6 @@ namespace Formations
             }
             else
             {
-
                 playerInfoLocation = hostInfoLocation;
                 playerAttNumberLocation = hostAttNumberLocation;
                 playerDefNumberLocation = hostDefNumberLocation;
@@ -166,7 +165,6 @@ namespace Formations
             staminaPointsLeft = new TextBox(uiManager);
             staminaPointsLeft.SetPosition((int)playerInfoLocation.X + 160, (int)playerInfoLocation.Y);
             staminaPointsLeft.Text = Stamina + "";
-            uiManager.Add(playersNameLabel);
             uiManager.Add(totalAttUnitLabel);
             uiManager.Add(totalDefUnitLabel);
             uiManager.Add(totalMagUnitLabel);
@@ -225,13 +223,13 @@ namespace Formations
         }
         public void newTurn()
         {
-            _stamina += 5;
-            staminaPointsLeft.Text = _stamina + "";
+            Stamina += 5;
+            staminaPointsLeft.Text = Stamina + "";
         }
         public void useStamina(int staminaToUse)
         {
-            _stamina -= staminaToUse;
-            staminaPointsLeft.Text = _stamina + "";
+            Stamina -= staminaToUse;
+            staminaPointsLeft.Text = Stamina + "";
         }
         public void resetUnits()
         {
@@ -269,3 +267,4 @@ namespace Formations
         }    
     }
 }
+                                                                                                                                                                                         
