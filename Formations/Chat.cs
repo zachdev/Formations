@@ -31,6 +31,7 @@ namespace Formations
 
         private Boolean sliding;
 
+        private ConnectionManger connectionManager;
 
         public Chat() {}
 
@@ -170,7 +171,15 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            chatHistoryTextbox.Text += "\n<You> " + inputTextBox.Text;
+            if (connectionManager == null)
+            {
+                connectionManager = new ConnectionManger(chatHistoryTextbox, inputTextBox.Text);
+            }
+            else
+            {
+                connectionManager.sendMessage(inputTextBox.Text);
+                chatHistoryTextbox.Text += "\n<You> " + inputTextBox.Text;
+            }
             inputTextBox.Text = "";
         }
     }
