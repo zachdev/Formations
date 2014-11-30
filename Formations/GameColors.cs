@@ -18,7 +18,7 @@ namespace Formations
 
         //Outside Colors
         public static Color noControlOutsideColor = Color.DarkGreen;
-        public static Color playerControlOutsideColor = Color.MidnightBlue;
+        public static Color HostControlOutsideColor = Color.MidnightBlue;
         public static Color guestControlOutsideColor = Color.Orange;
         public static Color bothControlOutsideColor = Color.Black;
         public static Color attUnitOutsideColor = attUnitInsideColor;

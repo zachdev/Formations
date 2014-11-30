@@ -293,7 +293,7 @@ namespace Formations
             }
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -408,7 +408,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -515,7 +515,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -584,7 +584,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -618,7 +618,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -651,6 +651,7 @@ namespace Formations
             }
             self.SelectedTile = null;
             attackInProgress = false;
+            checkForWin();
         }
         private void move()
         {
@@ -666,7 +667,7 @@ namespace Formations
             bool result = false;
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -692,7 +693,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if (!(isHost && isHostsTurn))
+            if ((isHost && isHostsTurn))
             {
                 self = players[0];
             }
@@ -748,6 +749,40 @@ namespace Formations
                     if (tiles[i, j].getUnit().IsHostsUnit) { tiles[i, j].updateSurroundingTilesControl(true, true); }
                     if (!tiles[i, j].getUnit().IsHostsUnit) { tiles[i, j].updateSurroundingTilesControl(true, false); }
                 }
+            }
+        }
+        private void checkForWin()
+        {
+            int playerZeroTotal = 0;
+            int playerOneTotal = 0;
+            for (int i = 0; i < boardWidth; i++)
+            {
+                for (int j = 0; j < boardHeight; j++)
+                {
+                    if (tiles[i, j].hasUnit())
+                    {
+                        if (players[0].Equals(tiles[i, j].getUnit().Player))
+                        {
+                            playerZeroTotal++;
+                        }
+                        else
+                        {
+                            playerOneTotal++;
+                        }
+                    }
+                }
+            }
+            if (playerZeroTotal == 0)
+            {
+                //host wins
+                turnSignal.setInsideColor(Color.Red);
+                turnSignal.setOutsideColor(Color.Red);
+            }
+            else if (playerOneTotal == 0)
+            {
+                //guest wins
+                turnSignal.setInsideColor(Color.White);
+                turnSignal.setOutsideColor(Color.White);
             }
         }
         public void update()

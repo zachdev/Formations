@@ -137,8 +137,8 @@ namespace Formations
         }
         private void updateControlColor()
         {
-            if (hostControlled && !guestControlled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
-            if (!hostControlled && guestControlled && unit == null) { setTileInsideColor(GameColors.playerControlOutsideColor); }
+            if (hostControlled && !guestControlled && unit == null) { setTileInsideColor(GameColors.HostControlOutsideColor); }
+            if (!hostControlled && guestControlled && unit == null) { setTileInsideColor(GameColors.guestControlOutsideColor); }
             if (hostControlled && guestControlled && unit == null) { setTileInsideColor(GameColors.bothControlOutsideColor); }
             if (!hostControlled && !guestControlled && unit == null) { setTileInsideColor(GameColors.noUnitInsideColor); }
         }
@@ -238,7 +238,7 @@ namespace Formations
                     {
                         if (unit.IsHostsUnit)
                         {
-                            tileHex.setBorderColor(GameColors.playerControlOutsideColor);
+                            tileHex.setBorderColor(GameColors.HostControlOutsideColor);
                         }
                         else
                         {
