@@ -177,7 +177,7 @@ namespace Formations
             magHex = new Hexagon(20);
             attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            magHex.init(40, 290, graphicsDevice, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
 
         }
         /// <summary>

@@ -177,7 +177,7 @@ namespace Formations
             defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             attAction.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
-            magicAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.init(0, 0, graphicsDevice, GameColors.magicButton, GameColors.magicButton);
             /*
              * Resize Button
              */
@@ -728,7 +728,7 @@ namespace Formations
                         moveAction.draw(spriteBatch);
                         if (currentUnit.GetType() == typeof(UnitMag))
                         {
-                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.magicButton, GameColors.magicButton);
                             magicAction.draw(spriteBatch);
                         }
                     }
@@ -737,7 +737,7 @@ namespace Formations
                 {
                     attUnit.moveHex(x, y - largeTileSideLength, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
                     defUnit.moveHex(x + changeInX, y - changeInY, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                    mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                    mulUnit.moveHex(x - changeInX, y - changeInY, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
                     attUnit.draw(spriteBatch);
                     defUnit.draw(spriteBatch);
                     mulUnit.draw(spriteBatch);
@@ -749,10 +749,10 @@ namespace Formations
             createButtonArea();
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
-            magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.moveHex(-100, -100, GameColors.magicButton, GameColors.magicButton);
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            mulUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            mulUnit.moveHex(-100, -100, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)
         {

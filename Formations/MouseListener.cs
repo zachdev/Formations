@@ -22,6 +22,10 @@ namespace Formations
             {
                 game.mousePressed(newState);
             }
+            else if (oldState.RightButton == ButtonState.Released && newState.RightButton == ButtonState.Pressed)
+            {
+                game.mousePressed(newState);
+            }
             else if (oldState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released)
             {
                 game.mouseReleased(newState);

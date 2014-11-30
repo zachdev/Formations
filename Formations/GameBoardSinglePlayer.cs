@@ -184,14 +184,14 @@ namespace Formations
             defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             attAction.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
             moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
-            magicAction.init(0, 0, graphicsDevice, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.init(0, 0, graphicsDevice, GameColors.magicButton, GameColors.magicButton);
 
             attHex = new Hexagon(20);
             defHex = new Hexagon(20);
             magHex = new Hexagon(20);
             attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magHex.init(40, 290, graphicsDevice, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            magHex.init(40, 290, graphicsDevice, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
             /*
              * Resize Button
              */ 
@@ -284,6 +284,11 @@ namespace Formations
         }
         public void mousePressed(MouseState mouseState)
         {
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Button right");
+                resetBools();
+            }
             //selecting the correct player  
             Player self;
             if (!(isHost && isHostsTurn))
@@ -459,16 +464,16 @@ namespace Formations
         public void mouseDragged(MouseState mouseState)
         {
             currentMouseState = mouseState;
-            if (hexInfo == null)
-            {
-                hexInfo = new Label(uiManager);
-                uiManager.Add(hexInfo);
-                hexInfo.SetSize(100, 25);
-                hexInfo.TextColor = Color.Black;
-            }
+            //if (hexInfo == null)
+            //{
+            //    hexInfo = new Label(uiManager);
+            //    uiManager.Add(hexInfo);
+            //    hexInfo.SetSize(100, 25);
+            //    hexInfo.TextColor = Color.Black;
+           // }
 
-            hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
-            setHoverLabel(mouseState);
+            //hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+            //setHoverLabel(mouseState);
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -483,17 +488,17 @@ namespace Formations
 
             if (!chatManager.chatIsVisible() && !endTurnIsVisible)
             {
-                if (hexInfo == null)
-                {
-                    hexInfo = new Label(uiManager);
-                    uiManager.Add(hexInfo);
-                    hexInfo.SetSize(150, 25);
-                    hexInfo.TextColor = Color.Black;
+               // if (hexInfo == null)
+               // {
+                //    hexInfo = new Label(uiManager);
+                //    uiManager.Add(hexInfo);
+                //    hexInfo.SetSize(150, 25);
+                //    hexInfo.TextColor = Color.Black;
 
-                }
+                //}
 
-                hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
-                setHoverLabel(mouseState);
+                //hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+                //setHoverLabel(mouseState);
 
                 for (int i = 0; i < boardWidth; i++)
                 {
@@ -708,6 +713,7 @@ namespace Formations
                 isHostsTurn = true;
             }
             self.newTurn();
+            resetBools();
             //checking if phase 1 has ended
             if (movesLeftInPhase == 0)
             {
@@ -791,7 +797,7 @@ namespace Formations
             }
             if (magPlacementInProgress)
             {
-                magUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+                magUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
                 magUnit.draw(spriteBatch);
             }
             if (currentTile == null)
@@ -814,7 +820,7 @@ namespace Formations
             }
             else if(magicInProgress)
             {
-                magicAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                magicAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.magicButton, GameColors.magicButton);
                 magicAction.draw(spriteBatch);
             }
             else
@@ -830,7 +836,7 @@ namespace Formations
                         moveAction.draw(spriteBatch);
                         if (currentUnit.GetType() == typeof(UnitMag))
                         {
-                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.ManipulateButton, GameColors.ManipulateButton);
+                            magicAction.moveHex(x, y - largeTileSideLength, GameColors.magicButton, GameColors.magicButton);
                             magicAction.draw(spriteBatch);
                         }
                     }
@@ -843,10 +849,10 @@ namespace Formations
             createButtonArea();
             attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
             moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
-            magicAction.moveHex(-100, -100, GameColors.ManipulateButton, GameColors.ManipulateButton);
+            magicAction.moveHex(-100, -100, GameColors.magicButton, GameColors.magicButton);
             attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
             defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magUnit.moveHex(-100, -100, GameColors.mulUnitInsideColor, GameColors.mulUnitOutsideColor);
+            magUnit.moveHex(-100, -100, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
 
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)

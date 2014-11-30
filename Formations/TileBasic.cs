@@ -99,8 +99,8 @@ namespace Formations
                 }
                 if (newUnit.GetType() == typeof(UnitMag) && unit == null) 
                 {
-                    tileHex.setInsideColor(GameColors.mulUnitInsideColor);
-                    tileHex.setOutsideColor(GameColors.mulUnitOutsideColor);
+                    tileHex.setInsideColor(GameColors.magUnitInsideColor);
+                    tileHex.setOutsideColor(GameColors.magUnitOutsideColor);
                     unit = newUnit;
                     unit.ContainingTile = this;
                 }
