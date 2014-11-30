@@ -40,5 +40,6 @@ namespace Formations
 
         //Background Colors
         public static Color boardAreaBackground = Color.DarkBlue;
+        public static Color playerAreaBackground = Color.Black;
     }
 }

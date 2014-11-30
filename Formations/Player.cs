@@ -14,14 +14,19 @@ namespace Formations
         private TileBasic _selectedTile;
         private int _stamina = 5;
         private bool _isHost;
+        public bool isPlayersTurn = false;
         private int _totalAttNotPlaced = 0;
         private int _totalDefNotPlaced = 0;
         private int _totalMagNotPlaced = 0;
+        private int count = 0;
+        private int borderPosition = 0;
         private UnitAtt[] _attUnitArray = new UnitAtt[20];
         private UnitDef[] _defUnitArray = new UnitDef[20];
         private UnitMag[] _magUnitArray = new UnitMag[20];
         private StaminaComponent bar;
         private UnitsComponent unitsBar;
+        private VertexPositionColor[] vertices = new VertexPositionColor[6];
+        private VertexPositionColor[] borderLines = new VertexPositionColor[8];
         private string playerName;
         public TileBasic SelectedTile
         {
@@ -75,15 +80,15 @@ namespace Formations
         private Vector2 playerDefNumberLocation;
         private Vector2 playerMagNumberLocation;
 
-        private Vector2 guestInfoLocation = new Vector2(200, 35);
-        private Vector2 guestAttNumberLocation = new Vector2(180, 50);
-        private Vector2 guestDefNumberLocation = new Vector2(180, 61);
-        private Vector2 guestMagNumberLocation = new Vector2(180, 72);
+        private Vector2 guestInfoLocation = new Vector2(190, 10);
+        private Vector2 guestAttNumberLocation = new Vector2(280, 41);
+        private Vector2 guestDefNumberLocation = new Vector2(280, 51);
+        private Vector2 guestMagNumberLocation = new Vector2(280, 62);
 
-        private Vector2 hostInfoLocation = new Vector2(800, 35);
-        private Vector2 hostAttNumberLocation = new Vector2(780, 50);
-        private Vector2 hostDefNumberLocation = new Vector2(780, 61);
-        private Vector2 hostMagNumberLocation = new Vector2(780, 72);
+        private Vector2 hostInfoLocation = new Vector2(790, 10);
+        private Vector2 hostAttNumberLocation = new Vector2(880, 41);
+        private Vector2 hostDefNumberLocation = new Vector2(880, 51);
+        private Vector2 hostMagNumberLocation = new Vector2(880, 62);
 
 
         private Hexagon attHex;
@@ -130,10 +135,11 @@ namespace Formations
                 playerAttNumberLocation = guestAttNumberLocation;
                 playerDefNumberLocation = guestDefNumberLocation;
                 playerMagNumberLocation = guestMagNumberLocation;
-                bar = new StaminaComponent(200, 30);
+                bar = new StaminaComponent(300, 35);
                 bar.init(graphicsDevice);
-                unitsBar = new UnitsComponent(200, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
+                unitsBar = new UnitsComponent(300, 50, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
                 unitsBar.init(graphicsDevice);
+                createBoardArea(200, 30);
             }
             else
             {
@@ -141,10 +147,11 @@ namespace Formations
                 playerAttNumberLocation = hostAttNumberLocation;
                 playerDefNumberLocation = hostDefNumberLocation;
                 playerMagNumberLocation = hostMagNumberLocation;
-                bar = new StaminaComponent(800, 30);
+                bar = new StaminaComponent(900, 35);
                 bar.init(graphicsDevice);
-                unitsBar = new UnitsComponent(800, 60, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
+                unitsBar = new UnitsComponent(900, 50, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
                 unitsBar.init(graphicsDevice);
+                createBoardArea(800, 30);
             }
             //Label
             this.uiManager = uiManager;
@@ -152,7 +159,7 @@ namespace Formations
             playersNameLabel = new Label(uiManager);
             playersNameLabel.SetPosition((int)playerInfoLocation.X, (int)playerInfoLocation.Y);
             playersNameLabel.Text = playerName;
-            playersNameLabel.SetSize(150,20);
+            playersNameLabel.SetSize(190,20);
             playersNameLabel.Color = Color.White;
             totalAttUnitLabel = new Label(uiManager);
             totalAttUnitLabel.SetPosition((int)playerAttNumberLocation.X, (int)playerAttNumberLocation.Y);
@@ -233,6 +240,33 @@ namespace Formations
             Stamina -= staminaToUse;
             staminaPointsLeft.Text = Stamina + "";
         }
+        public void setBorderColor(Color color)
+        {
+            for (int i = 0; i < borderLines.Length; i++)
+            {
+                borderLines[i].Color = color;
+            }
+        }
+        public void updateBoader()
+        {
+            if (count % 3 == 0)
+            {
+                borderPosition = (borderPosition + 1) % 8;
+                if (_isHost)
+                {
+                    setBorderColor(Color.Blue);
+                }
+                else
+                {
+                    setBorderColor(Color.Yellow);
+                }
+                int positionOne = borderPosition;
+                int positionTwo = (borderPosition + 7) % 8;
+                borderLines[positionOne].Color = Color.Black;
+                borderLines[positionTwo].Color = Color.Black;
+            }
+            count++;
+        }
         public void resetUnits()
         {
             foreach (UnitAtt unit in AttUnitArray)
@@ -251,6 +285,30 @@ namespace Formations
                 unit.resetAttacks();
             }
         }
+        private void createBoardArea(int x, int y)
+        {
+            int boardX = x - 5;
+            int boardY = y - 18;
+            float border = 10;
+                
+            float widthOfBoard = 250;
+            float heightOfBoard = 72;
+            vertices[0] = new VertexPositionColor(new Vector3(boardX - border, boardY - border, 0), GameColors.playerAreaBackground);
+            vertices[1] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY - border, 0), GameColors.playerAreaBackground);
+            vertices[2] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY + heightOfBoard, 0), GameColors.playerAreaBackground);
+            vertices[3] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY + heightOfBoard, 0), GameColors.playerAreaBackground);
+            vertices[4] = new VertexPositionColor(new Vector3(boardX - border, boardY + heightOfBoard, 0), GameColors.playerAreaBackground);
+            vertices[5] = new VertexPositionColor(new Vector3(boardX - border, boardY - border, 0), GameColors.playerAreaBackground);
+
+            borderLines[0] = new VertexPositionColor(new Vector3(boardX - border, boardY - border, 0), Color.White);
+            borderLines[1] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY - border, 0), Color.White);
+            borderLines[2] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY - border, 0), Color.White);
+            borderLines[3] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY + heightOfBoard, 0), Color.White);
+            borderLines[4] = new VertexPositionColor(new Vector3(boardX + widthOfBoard, boardY + heightOfBoard, 0), Color.White);
+            borderLines[5] = new VertexPositionColor(new Vector3(boardX - border, boardY + heightOfBoard, 0), Color.White);
+            borderLines[6] = new VertexPositionColor(new Vector3(boardX - border, boardY + heightOfBoard, 0), Color.White);
+            borderLines[7] = new VertexPositionColor(new Vector3(boardX - border, boardY - border, 0), Color.White);
+        }
         public void update(MouseState mouseState)
         {
 
@@ -258,6 +316,16 @@ namespace Formations
 
         public void draw(SpriteBatch spriteBatch)
         {
+            if(isPlayersTurn)
+            {
+                updateBoader();
+            }
+            else
+            {
+                setBorderColor(Color.White);
+            }
+            spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
+            spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
             attHex.draw(spriteBatch);
             defHex.draw(spriteBatch);
             magHex.draw(spriteBatch);

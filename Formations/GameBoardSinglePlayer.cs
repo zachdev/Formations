@@ -117,6 +117,8 @@ namespace Formations
            // {
                 players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+                players[0].isPlayersTurn = true;
+                
            // }
            // else
            // {
@@ -706,11 +708,15 @@ namespace Formations
             {
                 turnSignal.setInsideColor(GameColors.turnButtonInsideColorGuest);
                 isHostsTurn = false;
+                players[0].isPlayersTurn = false;
+                players[1].isPlayersTurn = true;
             }
             else
             {
                 turnSignal.setInsideColor(GameColors.turnButtonInsideColor);
                 isHostsTurn = true;
+                players[0].isPlayersTurn = true;
+                players[1].isPlayersTurn = false;
             }
             self.newTurn();
             resetBools();
