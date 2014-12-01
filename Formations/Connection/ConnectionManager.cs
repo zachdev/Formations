@@ -22,6 +22,7 @@ public class ConnectionManger
     TcpClient server;
     TcpClient client;
     NetworkStream ns;
+    NetworkStream nwStream;
 
     public ConnectionManger(TextBox chatHistoryTextbox, String ip)
     {
@@ -29,7 +30,7 @@ public class ConnectionManger
 
         this.chatHistoryTextbox = chatHistoryTextbox;
         this.ip = ip;
-        var t = Task.Factory.StartNew(() => Listener());
+        //var t = Task.Factory.StartNew(() => Listener());
 
         try
         {
@@ -42,6 +43,29 @@ public class ConnectionManger
         }
         ns = server.GetStream();
 
+        chatHistoryTextbox.Text += "\nConnection established...";
+    }
+
+    public ConnectionManger(TextBox chatHistoryTextbox)
+    {
+        // Default, will be the host and will prep for the listening side
+
+        this.chatHistoryTextbox = chatHistoryTextbox;
+        var t = Task.Factory.StartNew(() => Listener());
+
+
+        /*
+        try
+        {
+            server = new TcpClient(ip, PORT);
+        }
+        catch (SocketException)
+        {
+            chatHistoryTextbox.Text += "\nUnable to connect to server";
+            return;
+        }
+        ns = server.GetStream();
+        */
         chatHistoryTextbox.Text += "\nConnection established...";
     }
 
@@ -64,7 +88,7 @@ public class ConnectionManger
     private void listen(TcpListener listener)
     {
         //---get the incoming data through a network stream---
-        NetworkStream nwStream = client.GetStream();
+        nwStream = client.GetStream();
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
         //---read incoming stream---

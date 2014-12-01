@@ -173,7 +173,14 @@ namespace Formations
         {
             if (connectionManager == null)
             {
-                connectionManager = new ConnectionManger(chatHistoryTextbox, inputTextBox.Text);
+                if (string.IsNullOrEmpty(inputTextBox.Text))
+                {
+                    connectionManager = new ConnectionManger(chatHistoryTextbox);
+                }
+                else
+                {
+                    connectionManager = new ConnectionManger(chatHistoryTextbox, inputTextBox.Text);
+                }
             }
             else
             {
