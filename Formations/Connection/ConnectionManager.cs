@@ -22,7 +22,6 @@ public class ConnectionManger
     TcpClient server;
     TcpClient client;
     NetworkStream ns;
-    NetworkStream nwStream;
 
     public ConnectionManger(TextBox chatHistoryTextbox, String ip)
     {
@@ -44,6 +43,10 @@ public class ConnectionManger
         ns = server.GetStream();
 
         chatHistoryTextbox.Text += "\nConnection established...";
+
+        var t = Task.Factory.StartNew(() => Listener());
+
+
     }
 
     public ConnectionManger(TextBox chatHistoryTextbox)
@@ -53,20 +56,7 @@ public class ConnectionManger
         this.chatHistoryTextbox = chatHistoryTextbox;
         var t = Task.Factory.StartNew(() => Listener());
 
-
-        /*
-        try
-        {
-            server = new TcpClient(ip, PORT);
-        }
-        catch (SocketException)
-        {
-            chatHistoryTextbox.Text += "\nUnable to connect to server";
-            return;
-        }
-        ns = server.GetStream();
-        */
-        chatHistoryTextbox.Text += "\nConnection established...";
+        chatHistoryTextbox.Text += "\nListening for connection...";
     }
 
     private void Listener()
@@ -88,11 +78,11 @@ public class ConnectionManger
     private void listen(TcpListener listener)
     {
         //---get the incoming data through a network stream---
-        nwStream = client.GetStream();
+        ns = client.GetStream();
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
         //---read incoming stream---
-        int bytesRead = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
+        int bytesRead = ns.Read(buffer, 0, client.ReceiveBufferSize);
 
         //---convert the data received into a string---
         var dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
@@ -106,7 +96,7 @@ public class ConnectionManger
         if (isConnected)
         {
             ns.Write(Encoding.ASCII.GetBytes(message), 0, message.Length);
-            //ns.Flush();
+            ns.Flush();
 
             //byte[] data = new byte[1024];
             //int recv = ns.Read(data, 0, data.Length);
