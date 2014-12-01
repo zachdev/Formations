@@ -48,7 +48,7 @@ public class ConnectionManger
     private void Listener()
     {
         //---listen at the specified IP and port no.---
-        IPAddress localAdd = IPAddress.Parse(ip);
+        IPAddress localAdd = IPAddress.Any;
         TcpListener listener = new TcpListener(localAdd, PORT);
         listener.Start();
 
