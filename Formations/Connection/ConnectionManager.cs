@@ -75,16 +75,19 @@ public class ConnectionManger
         IPAddress ipa = ep.Address;
         ip = ipa.ToString();
 
-        try
+        if (server == null)
         {
-            server = new TcpClient(ip, PORT);
+            try
+            {
+                server = new TcpClient(ip, PORT);
+            }
+            catch (SocketException)
+            {
+                chatHistoryTextbox.Text += "\nUnable to connect to server";
+                return;
+            }
+            ns = server.GetStream();
         }
-        catch (SocketException)
-        {
-            chatHistoryTextbox.Text += "\nUnable to connect to server";
-            return;
-        }
-        ns = server.GetStream();
 
         chatHistoryTextbox.Text += "\nConnection established...";
 
