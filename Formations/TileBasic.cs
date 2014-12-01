@@ -116,8 +116,8 @@ namespace Formations
             {
                 if(surroundingTiles[i] != null)
                 {
-                    if(hostControl){ surroundingTiles[i].updateGuestControl(control); }
-                    else { surroundingTiles[i].updateHostControl(control); }
+                    if(hostControl){ surroundingTiles[i].updateHostControl(control); }
+                    else { surroundingTiles[i].updateGuestControl(control); }
                 }
             }
         }

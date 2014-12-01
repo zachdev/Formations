@@ -165,7 +165,7 @@ namespace Formations
         {
             if (e.Key == Keys.Enter)
             {
-                this.sendMessage(sender, e);
+                //this.sendMessage(sender, e);
             }
         }
 
