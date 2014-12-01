@@ -12,54 +12,74 @@ using TomShane.Neoforce.Controls;
 
 public class ConnectionManger
 {
-    const int PORT = 15000;
-    string ip;
+    private const int PORT = 15000;
 
     private TextBox chatHistoryTextbox;
 
-    Boolean isConnected = false;
+    private Boolean isConnected = false;
 
-    TcpClient server;
-    TcpClient client;
-    NetworkStream ns;
-    NetworkStream ns2;
+    private TcpClient server;
+    private TcpClient client;
+    private NetworkStream ns;
+    private NetworkStream ns2;
+
+    private Task sendThread;
+    private Task listenThread;
+
+    // Constructors
 
     public ConnectionManger(TextBox chatHistoryTextbox, String ip)
     {
         // Default, will be the host and will prep for the listening side
-
         this.chatHistoryTextbox = chatHistoryTextbox;
-        this.ip = ip;
+        chatHistoryTextbox.Text += "\nAttempt connection...";
 
-        chatHistoryTextbox.Text += "\n Attempt connection...";
-
-        try
-        {
-            server = new TcpClient(ip, PORT);
-        }
-        catch (SocketException)
-        {
-            chatHistoryTextbox.Text += "\nUnable to connect to server";
-            return;
-        }
-        ns = server.GetStream();
-
-        var t = Task.Factory.StartNew(() => Listener());
-
-        chatHistoryTextbox.Text += "\nConnection established...";
-        isConnected = true;
+        // Start up a thread to connect
+        sendThread = Task.Factory.StartNew(() => Sender(ip));
     }
 
     public ConnectionManger(TextBox chatHistoryTextbox)
     {
         // Default, will be the host and will prep for the listening side
-
         this.chatHistoryTextbox = chatHistoryTextbox;
-        var t = Task.Factory.StartNew(() => Listener());
-
         chatHistoryTextbox.Text += "\nListening for connection...";
+
+        // Start up a thread to listen
+        listenThread = Task.Factory.StartNew(() => Listener());
     }
 
+    // -- Public Methods --
+
+    // Method for sending a String, specifially the chat method.
+    public void sendMessage(String message)
+    {
+        if (isConnected)
+        {
+            ConnectionMessage obj = Serialize(message);
+
+            ns.Write(obj.Data, 0, obj.Data.Length);
+            ns.Flush();
+
+            chatHistoryTextbox.Text += "\n<You> " + message;
+        }
+    }
+
+    // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
+    public void closeConnection()
+    {
+        if (isConnected)
+        {
+            ns.Close();
+            ns2.Close();
+            server.Close();
+            client.Close();
+        }
+    }
+
+
+    // -- Private Methods --
+
+    // Listener method will be placed on its own thread, uses the client TcpClient
     private void Listener()
     {
         //---listen at the specified IP and port no.---
@@ -73,22 +93,14 @@ public class ConnectionManger
         //---get the incoming data through a network stream---
         ns2 = client.GetStream();
 
-        IPEndPoint ep = client.Client.RemoteEndPoint as IPEndPoint;
-        IPAddress ipa = ep.Address;
-        ip = ipa.ToString();
-
+        // In the case of the host, needs to have this data done now.
         if (server == null)
         {
-            try
-            {
-                server = new TcpClient(ip, PORT);
-            }
-            catch (SocketException)
-            {
-                chatHistoryTextbox.Text += "\nUnable to connect to server";
-                return;
-            }
-            ns = server.GetStream();
+            // Convert the connection we just recieved into an outgoing connection for two way sending.
+            IPEndPoint ep = client.Client.RemoteEndPoint as IPEndPoint;
+            IPAddress ipa = ep.Address;
+
+            sendThread = Task.Factory.StartNew(() => Sender(ipa.ToString()));
         }
 
         chatHistoryTextbox.Text += "\nConnection established...";
@@ -100,43 +112,45 @@ public class ConnectionManger
         }
     }
 
+    // Build's the sender datastream, uses the server TcpClient
+    private void Sender(String ip)
+    {
+        try
+        {
+            server = new TcpClient(ip, PORT);
+        }
+        catch (SocketException)
+        {
+            chatHistoryTextbox.Text += "\nUnable to connect.";
+            return;
+        }
+        ns = server.GetStream();
+
+        if (client == null)
+        {
+            listenThread = Task.Factory.StartNew(() => Listener());
+        }
+    }
+
+
+    // The constant listening function
     private void listen(TcpListener listener)
     {
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
-        //---read incoming stream---
+        //---read incoming stream--- Will place the data into the buffer
         int bytesRead = ns2.Read(buffer, 0, client.ReceiveBufferSize);
 
         ConnectionMessage message = new ConnectionMessage { Data = buffer };
 
-        object obj = Deserialize( message );
+        // Deserialize then figure out what the object we got was.
+        object obj = Deserialize(message);
         if (obj is String)
         {
             chatHistoryTextbox.Text += "\n<Received> " + (obj as String); //---write back the text to the client---
         }
-        //else if (obj is Player)
-        //    Client.ProcessOtherPlayersStatusUpdates(obj as Player);
-
-    }
-
-    public void sendMessage(String message)
-    {
-        if (isConnected)
-        {
-            ConnectionMessage obj = Serialize(message);
-
-            ns.Write(obj.Data, 0, obj.Data.Length);
-            ns.Flush();
-        }
-    }
-
-    // Close the damn connection
-    public void closeConnection()
-    {
-        ns.Close();
-        ns2.Close();
-        server.Close();
-        client.Close();
+        //else if (obj is SerialClass)
+        //    Class.someMethodToUse(obj as SerialClass);
     }
 
     // Encode message for use

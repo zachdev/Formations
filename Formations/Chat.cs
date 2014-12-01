@@ -187,7 +187,6 @@ namespace Formations
             else
             {
                 connectionManager.sendMessage(inputTextBox.Text);
-                chatHistoryTextbox.Text += "\n<You> " + inputTextBox.Text;
             }
             inputTextBox.Text = "";
         }
