@@ -22,6 +22,7 @@ public class ConnectionManger
     TcpClient server;
     TcpClient client;
     NetworkStream ns;
+    NetworkStream ns2;
 
     public ConnectionManger(TextBox chatHistoryTextbox, String ip)
     {
@@ -69,6 +70,13 @@ public class ConnectionManger
         //---incoming client connected---
         client = listener.AcceptTcpClient();
 
+        //---get the incoming data through a network stream---
+        ns2 = client.GetStream();
+        if (ns == null)
+        {
+            ns = ns2;
+        }
+
         while (true)
         {
             listen(listener);
@@ -77,12 +85,10 @@ public class ConnectionManger
 
     private void listen(TcpListener listener)
     {
-        //---get the incoming data through a network stream---
-        ns = client.GetStream();
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
         //---read incoming stream---
-        int bytesRead = ns.Read(buffer, 0, client.ReceiveBufferSize);
+        int bytesRead = ns2.Read(buffer, 0, client.ReceiveBufferSize);
 
         //---convert the data received into a string---
         var dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
