@@ -68,7 +68,7 @@ public class ConnectionManger
 
         //---incoming client connected---
         client = listener.AcceptTcpClient();
-
+        ns = client.GetStream();
         while (true)
         {
             listen(listener);
@@ -78,7 +78,7 @@ public class ConnectionManger
     private void listen(TcpListener listener)
     {
         //---get the incoming data through a network stream---
-        ns = client.GetStream();
+        
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
         //---read incoming stream---
