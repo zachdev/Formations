@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TomShane.Neoforce.Controls;
+using System.Data.Entity;
+
 
 namespace Formations
 {   
@@ -27,7 +29,9 @@ namespace Formations
         private UnitsComponent unitsBar;
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        private string playerName;
+        public string playerName { get; set; }
+
+
         public TileBasic SelectedTile
         {
             get { return _selectedTile; }
@@ -97,6 +101,11 @@ namespace Formations
         public Player(bool isHost)
         {
             this.IsHost = isHost;
+        }
+
+        public Player()
+        {
+            // TODO: Complete member initialization
         }
 
         public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
