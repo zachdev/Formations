@@ -23,8 +23,7 @@ public class ConnectionManger
     private NetworkStream ns;
     private NetworkStream ns2;
 
-    private Task sendThread;
-    private Task listenThread;
+    private Task task;
 
     // Constructors
 
@@ -35,7 +34,7 @@ public class ConnectionManger
         chatHistoryTextbox.Text += "\nAttempt connection...";
 
         // Start up a thread to connect
-        sendThread = Task.Factory.StartNew(() => Sender(ip));
+        task = Task.Factory.StartNew(() => Sender(ip));
     }
 
     public ConnectionManger(TextBox chatHistoryTextbox)
@@ -45,7 +44,7 @@ public class ConnectionManger
         chatHistoryTextbox.Text += "\nListening for connection...";
 
         // Start up a thread to listen
-        listenThread = Task.Factory.StartNew(() => Listener());
+        task = Task.Factory.StartNew(() => Listener());
     }
 
     // -- Public Methods --
@@ -100,7 +99,7 @@ public class ConnectionManger
             IPEndPoint ep = client.Client.RemoteEndPoint as IPEndPoint;
             IPAddress ipa = ep.Address;
 
-            sendThread = Task.Factory.StartNew(() => Sender(ipa.ToString()));
+            Sender(ipa.ToString());
         }
 
         chatHistoryTextbox.Text += "\nConnection established...";
@@ -128,7 +127,7 @@ public class ConnectionManger
 
         if (client == null)
         {
-            listenThread = Task.Factory.StartNew(() => Listener());
+            Listener();
         }
     }
 
