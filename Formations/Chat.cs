@@ -173,13 +173,15 @@ namespace Formations
         {
             if (connectionManager == null)
             {
-                if (string.IsNullOrEmpty(inputTextBox.Text))
+                if (inputTextBox.Text.Contains("/host"))
                 {
                     connectionManager = new ConnectionManger(chatHistoryTextbox);
                 }
-                else
+                else if (inputTextBox.Text.Contains("/join"))
                 {
-                    connectionManager = new ConnectionManger(chatHistoryTextbox, inputTextBox.Text);
+                    string[] words = inputTextBox.Text.Split(' ');
+
+                    connectionManager = new ConnectionManger(chatHistoryTextbox, words[1]);
                 }
             }
             else

@@ -30,7 +30,8 @@ public class ConnectionManger
 
         this.chatHistoryTextbox = chatHistoryTextbox;
         this.ip = ip;
-        //var t = Task.Factory.StartNew(() => Listener());
+
+        chatHistoryTextbox.Text += "\n Attempt connection...";
 
         try
         {
@@ -111,9 +112,7 @@ public class ConnectionManger
         object obj = Deserialize( message );
         if (obj is String)
         {
-            //---convert the data received into a string---
-            var dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            chatHistoryTextbox.Text += "\n<Received> " + dataReceived; //---write back the text to the client---
+            chatHistoryTextbox.Text += "\n<Received> " + (obj as String); //---write back the text to the client---
         }
         //else if (obj is Player)
         //    Client.ProcessOtherPlayersStatusUpdates(obj as Player);
@@ -135,6 +134,7 @@ public class ConnectionManger
     public void closeConnection()
     {
         ns.Close();
+        ns2.Close();
         server.Close();
         client.Close();
     }
