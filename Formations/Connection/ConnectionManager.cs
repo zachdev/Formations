@@ -1,4 +1,5 @@
 ﻿using Formations;
+using Formations.Connection;
 using System;
 using System.IO;
 using System.Net;
@@ -16,8 +17,7 @@ public class ConnectionManger
 
     private TextBox chatHistoryTextbox;
 
-    Boolean isHost = true;
-    Boolean isConnected = true;
+    Boolean isConnected = false;
 
     TcpClient server;
     TcpClient client;
@@ -46,6 +46,7 @@ public class ConnectionManger
         var t = Task.Factory.StartNew(() => Listener());
 
         chatHistoryTextbox.Text += "\nConnection established...";
+        isConnected = true;
     }
 
     public ConnectionManger(TextBox chatHistoryTextbox)
@@ -90,6 +91,7 @@ public class ConnectionManger
         }
 
         chatHistoryTextbox.Text += "\nConnection established...";
+        isConnected = true;
 
         while (true)
         {
@@ -104,24 +106,28 @@ public class ConnectionManger
         //---read incoming stream---
         int bytesRead = ns2.Read(buffer, 0, client.ReceiveBufferSize);
 
-        //---convert the data received into a string---
-        var dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        ConnectionMessage message = new ConnectionMessage { Data = buffer };
 
-        //---write back the text to the client---
-        chatHistoryTextbox.Text += "\n<Received> " + dataReceived;
+        object obj = Deserialize( message );
+        if (obj is String)
+        {
+            //---convert the data received into a string---
+            var dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            chatHistoryTextbox.Text += "\n<Received> " + dataReceived; //---write back the text to the client---
+        }
+        //else if (obj is Player)
+        //    Client.ProcessOtherPlayersStatusUpdates(obj as Player);
+
     }
 
     public void sendMessage(String message)
     {
         if (isConnected)
         {
-            ns.Write(Encoding.ASCII.GetBytes(message), 0, message.Length);
-            ns.Flush();
+            ConnectionMessage obj = Serialize(message);
 
-            //byte[] data = new byte[1024];
-            //int recv = ns.Read(data, 0, data.Length);
-            //string stringData = Encoding.ASCII.GetString(data, 0, recv);
-            //chatHistoryTextbox.Text += "\n" + stringData;
+            ns.Write(obj.Data, 0, obj.Data.Length);
+            ns.Flush();
         }
     }
 
@@ -134,23 +140,22 @@ public class ConnectionManger
     }
 
     // Encode message for use
-    /*
-    private Message Serialize(object someObject)
+    private ConnectionMessage Serialize(object someObject)
     {
         using (var memoryStream = new MemoryStream())
         {
             (new BinaryFormatter()).Serialize(memoryStream, someObject);
-            return new Message { Data = memoryStream.ToArray() };
+            return new ConnectionMessage { Data = memoryStream.ToArray() };
         }
     }
 
     // Decode object for use
-    private object Deserialize(Message message)
+    private object Deserialize(ConnectionMessage message)
     {
         using (var memoryStream = new MemoryStream(message.Data))
         {
             return (new BinaryFormatter()).Deserialize(memoryStream);
         }
     }
-     */
+
 }

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Chat.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
+    <Compile Include="Connection\ConnectionMessage.cs" />
     <Compile Include="StaminaComponent.cs" />
     <Compile Include="GameBoardSinglePlayer.cs" />
     <Compile Include="Particle.cs" />
