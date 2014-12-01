@@ -43,11 +43,9 @@ public class ConnectionManger
         }
         ns = server.GetStream();
 
-        chatHistoryTextbox.Text += "\nConnection established...";
-
         var t = Task.Factory.StartNew(() => Listener());
 
-
+        chatHistoryTextbox.Text += "\nConnection established...";
     }
 
     public ConnectionManger(TextBox chatHistoryTextbox)
@@ -72,10 +70,23 @@ public class ConnectionManger
 
         //---get the incoming data through a network stream---
         ns2 = client.GetStream();
-        if (ns == null)
+
+        IPEndPoint ep = client.Client.RemoteEndPoint as IPEndPoint;
+        IPAddress ipa = ep.Address;
+        ip = ipa.ToString();
+
+        try
         {
-            ns = ns2;
+            server = new TcpClient(ip, PORT);
         }
+        catch (SocketException)
+        {
+            chatHistoryTextbox.Text += "\nUnable to connect to server";
+            return;
+        }
+        ns = server.GetStream();
+
+        chatHistoryTextbox.Text += "\nConnection established...";
 
         while (true)
         {
