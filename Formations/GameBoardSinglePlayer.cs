@@ -545,7 +545,7 @@ namespace Formations
                         currentMag.heal(surroundingTiles[i].getUnit());
                         foreach (AnimationLightening strike in lightening)
                         {
-                            strike.createLightening(Color.SeaShell, attackerPosition, defendersPosition);
+                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
 
                         }
                         // Start particle effect
