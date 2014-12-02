@@ -16,7 +16,7 @@ public class ConnectionManger
 
     private TextBox chatHistoryTextbox;
 
-    private Boolean isConnected = false;
+    public Boolean isConnected = false;
 
     private TcpClient server;
     private TcpClient client;

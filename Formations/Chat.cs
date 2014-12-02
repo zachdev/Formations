@@ -171,7 +171,7 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            if (connectionManager == null || !connectionManager.connected())
+            if (connectionManager == null || !connectionManager.isConnected)
             {
                 if (inputTextBox.Text.Contains("/host"))
                 {
