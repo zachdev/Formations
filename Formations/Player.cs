@@ -29,6 +29,7 @@ namespace Formations
         private UnitsComponent unitsBar;
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
+        private Color borderColor;
         public string playerName { get; set; }
 
 
@@ -149,6 +150,7 @@ namespace Formations
                 unitsBar = new UnitsComponent(300, 50, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
                 unitsBar.init(graphicsDevice);
                 createBoardArea(200, 30);
+                borderColor = GameColors.HostControlOutsideColor;
             }
             else
             {
@@ -161,6 +163,7 @@ namespace Formations
                 unitsBar = new UnitsComponent(900, 50, _totalAttNotPlaced, _totalDefNotPlaced, _totalMagNotPlaced);
                 unitsBar.init(graphicsDevice);
                 createBoardArea(800, 30);
+                borderColor = GameColors.guestControlOutsideColor;
             }
             //Label
             this.uiManager = uiManager;
@@ -261,14 +264,7 @@ namespace Formations
             if (count % 3 == 0)
             {
                 borderPosition = (borderPosition + 1) % 8;
-                if (_isHost)
-                {
-                    setBorderColor(Color.Blue);
-                }
-                else
-                {
-                    setBorderColor(Color.Yellow);
-                }
+                setBorderColor(borderColor);
                 int positionOne = borderPosition;
                 int positionTwo = (borderPosition + 7) % 8;
                 borderLines[positionOne].Color = Color.Black;

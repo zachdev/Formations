@@ -538,9 +538,16 @@ namespace Formations
                 {
                     if (self.Stamina >= currentMag.calculateAttackCost())
                     {
+                        Point attackerPosition = new Point((int)surroundingTiles[0].getX(), (int)surroundingTiles[0].getY());
+                        Point defendersPosition = new Point((int)surroundingTiles[i].getX(), (int)surroundingTiles[i].getY());
+
                         self.useStamina(currentMag.calculateAttackCost());
                         currentMag.heal(surroundingTiles[i].getUnit());
+                        foreach (AnimationLightening strike in lightening)
+                        {
+                            strike.createLightening(Color.SeaShell, attackerPosition, defendersPosition);
 
+                        }
                         // Start particle effect
                     }
                 }
@@ -650,7 +657,7 @@ namespace Formations
                         {
                             foreach (AnimationLightening strike in lightening)
                             {
-                                strike.createLightening(Color.Aquamarine, attackerPosition, defendersPosition);
+                                strike.createLightening(Color.Silver, attackerPosition, defendersPosition);
 
                             }
                         }
