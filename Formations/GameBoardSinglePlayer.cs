@@ -43,6 +43,7 @@ namespace Formations
         private Hexagon magicAction;
         private Hexagon moveAction;
 
+        private List<AnimationLightening> lightening = new List<AnimationLightening>();
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -134,6 +135,11 @@ namespace Formations
                (0, graphicsDevice.Viewport.Width,       // left, right
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
+            for (int i = 0; i < 5; i++)
+            {
+                lightening.Add(new AnimationLightening());    
+            }
+            
             /*
              *setting up the board area
              */ 
@@ -434,7 +440,7 @@ namespace Formations
                             TileBasic[] attackableTiles = tiles[i, j].getUnit().getAttackableTiles();
                             foreach (TileBasic tile in attackableTiles)
                             {
-                                tile.setAsAttackArea();
+                                if (tile != null) { tile.setAsAttackArea(); }
                             }
                             return;
                         }
@@ -635,12 +641,26 @@ namespace Formations
                 {
                     if(self.Stamina >= self.SelectedTile.getUnit().calculateAttackCost())
                     {
+                        Point attackerPosition = new Point((int)currentAttackableTiles[0].getX(), (int)currentAttackableTiles[0].getY());
+                        Point defendersPosition = new Point((int)currentAttackableTiles[i].getX(), (int)currentAttackableTiles[i].getY());
+
                         self.useStamina(self.SelectedTile.getUnit().calculateAttackCost());
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
+                        if (self.SelectedTile.getUnit().GetType() == typeof(UnitMag))
+                        {
+                            foreach (AnimationLightening strike in lightening)
+                            {
+                                strike.createLightening(Color.Aquamarine, attackerPosition, defendersPosition);
 
-                        // Start particle effect
-                        attackParticleEngine.particlesOn = true;
-                        attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
+                            }
+                        }
+                        else
+                        {
+                            // Start particle effect
+                            attackParticleEngine.particlesOn = true;
+                            attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
+                        }
+
                     }   
                     if (currentAttackableTiles[i].getUnit().isDead)
                     {
@@ -788,7 +808,10 @@ namespace Formations
         public void update()
         {
             //attackParticleEngine.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.update(); 
+            }
             attackParticleEngine.Update();
 
         }
@@ -821,6 +844,11 @@ namespace Formations
             players[0].draw(spriteBatch);
             players[1].draw(spriteBatch);
             turnSignal.draw(spriteBatch);
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.draw(spriteBatch);
+            }
+
             // Particles
             attackParticleEngine.Draw(spriteBatch);
         }
