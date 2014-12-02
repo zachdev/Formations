@@ -85,18 +85,21 @@ namespace Formations
         public abstract int calculateRange();
         public TileBasic[] getAttackableTiles()
         {
-            int calculatedRange = calculateRange() - 1;
+            int calculatedRange = calculateRange();
             List<TileBasic> currentAttackableTiles = ContainingTile.getSurroundingTiles().ToList<TileBasic>();
             List<TileBasic> tempTiles = new List<TileBasic>();
             for (int i = 0; i < calculatedRange - 1; i++)
             {
                 foreach (TileBasic tile in currentAttackableTiles)
                 {
-                    foreach (TileBasic newTile in tile.getSurroundingTiles())
+                    if (tile != null)
                     {
-                        if (!currentAttackableTiles.Contains(newTile))
+                        foreach (TileBasic newTile in tile.getSurroundingTiles())
                         {
-                            tempTiles.Add(newTile);
+                            if (!currentAttackableTiles.Contains(newTile))
+                            {
+                                tempTiles.Add(newTile);
+                            }
                         }
                     }
                 }

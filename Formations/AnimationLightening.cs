@@ -11,10 +11,10 @@ namespace Formations
     {
         private Color lighteningColor;
         private VertexPositionColor[] lightening;
-        private List<Point> points = new List<Point>(100);
+        private List<Point> points = new List<Point>();
         private static Random rand = new Random();
         private bool isAnimating = false;
-        private const int DEPTH = 4;
+        private const int DEPTH = 3;
         private const int CHANGE = 20;
         private int depth;
         private int change;
@@ -84,6 +84,8 @@ namespace Formations
                 if (count == 60)
                 {
                     isAnimating = false;
+                    lightening = new VertexPositionColor[1];
+                    points.Clear();
                 }
                 count++;
             }            
@@ -96,7 +98,7 @@ namespace Formations
                 int random = rand.Next(15) + 1;
                 if (count % random == 0)
                 {
-                    spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, lightening, 0, 8);
+                    spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, lightening, 0, 4);
                     
                 }
             }

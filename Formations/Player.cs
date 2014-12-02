@@ -241,7 +241,7 @@ namespace Formations
         }
         public void newTurn()
         {
-            Stamina += 5;
+            Stamina += 30;
             staminaPointsLeft.Text = Stamina + "";
         }
         public void useStamina(int staminaToUse)

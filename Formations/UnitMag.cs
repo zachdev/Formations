@@ -93,15 +93,20 @@ namespace Formations
         {
             int calculatedRange = Range;
             TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
+
             for (int i = 1; i < surroundingTiles.Length; i++)
             {
-                UnitAbstract unit = surroundingTiles[i].getUnit();
-                if (unit == null) { continue; }
-                if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitMag))
+                if (surroundingTiles[i] != null)
                 {
-                    calculatedRange++;
+                    UnitAbstract unit = surroundingTiles[i].getUnit();
+                    if (unit == null) { continue; }
+                    if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitMag))
+                    {
+                        calculatedRange++;
+                    }
                 }
             }
+
             return calculatedRange;
         }
 
