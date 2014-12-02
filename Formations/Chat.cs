@@ -70,8 +70,6 @@ namespace Formations
             chatHistoryTextbox.CaretVisible = false;
             chatHistoryTextbox.TextColor = Color.Azure;
 
-            chatHistoryTextbox.Text = "Type \"/join *.*.*.*\" to join a game.\nType \"/host\" to host a game.\n";
-
             // Input box
             inputTextBox.SetSize(370, 30);
             inputTextBox.SetPosition(0, 400);
