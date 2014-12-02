@@ -167,13 +167,13 @@ namespace Formations
         {
             if (e.Key == Keys.Enter)
             {
-                //this.sendMessage(sender, e);
+                this.sendMessage(sender, e);
             }
         }
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            if (connectionManager == null)
+            if (connectionManager == null || !connectionManager.connected())
             {
                 if (inputTextBox.Text.Contains("/host"))
                 {
