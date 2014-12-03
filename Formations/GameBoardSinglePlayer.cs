@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
@@ -43,7 +44,7 @@ namespace Formations
         private Hexagon magicAction;
         private Hexagon moveAction;
 
-
+        private List<AnimationLightening> lightening = new List<AnimationLightening>();
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -68,7 +69,15 @@ namespace Formations
         private Chat chatManager;
         private Button chatButton;
 
+        // Particles
+        private ParticleEngine attackParticleEngine;
 
+        // Damage text
+        private SpriteFont damageTextFont;
+        private Vector2 damageTextVector;
+        private int damageGiven;
+        private float damageTextAlpha = 1.0f;
+        private Timer damageTextTimer;
 
 
         // Various buttons
@@ -113,9 +122,18 @@ namespace Formations
             /*
              * need to pass in the player from the connection here to create it maybe
              */
+           // if (isHost)
+           // {
                 players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[0].isPlayersTurn = true;
+                
+           // }
+           // else
+           // {
+           //     players[0].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+           //     players[1].init("<PlayerNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+           // }
             /*
              * setting up the graphics here
              */ 
@@ -125,7 +143,11 @@ namespace Formations
                (0, graphicsDevice.Viewport.Width,       // left, right
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
-
+            for (int i = 0; i < 5; i++)
+            {
+                lightening.Add(new AnimationLightening());    
+            }
+            
             /*
              *setting up the board area
              */ 
@@ -285,14 +307,7 @@ namespace Formations
             }
             //selecting the correct player  
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
 
             if (!chatManager.chatIsVisible())// Check if the chat window is visible
             {
@@ -321,50 +336,64 @@ namespace Formations
                             tiles[i, j].mousePressed(mouseState);
                             if (attPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getAttUnit());
                                     self.useStamina(UnitAtt.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (defPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getDefUnit());
                                     self.useStamina(UnitDef.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (magPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getMagUnit());
                                     self.useStamina(UnitMag.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (attackInProgress)
                             {
-                                unitAttackUnit(mouseState);
+                                unitAttackUnit(mouseState, self);
                             }
                             if (moveInProgress)
                             {
-                                moveUnit(mouseState);
+                                moveUnit(mouseState, self);
                             }
                             if (magicInProgress)
                             {
-                                healUnit(mouseState);
+                                healUnit(mouseState, self);
                             }
                         }
                     }
                 }
             }
+        }
+
+        private Player selectPlayer()
+        {
+            Player self;
+            if ((isHost && isHostsTurn))
+            {
+                self = players[0];
+            }
+            else
+            {
+                self = players[1];
+            }
+            return self;
         }
         private void resetBools()
         {
@@ -400,14 +429,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
             //checking board for where the mouse was released
             for (int i = 0; i < boardWidth; i++)
             {
@@ -416,11 +438,11 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
+                        //Attack happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
-                            //System.Console.WriteLine("Attack");
                             self.SelectedTile = tiles[i, j];
                             attackInProgress = true;
                             TileBasic[] attackableTiles = tiles[i, j].getUnit().getAttackableTiles();
@@ -430,20 +452,20 @@ namespace Formations
                             }
                             return;
                         }
+                        //Move happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            //Console.WriteLine("Move");
                             self.SelectedTile = tiles[i, j];
                             moveInProgress = true;
                             return;
                         }
+                        //Magic happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            //Console.WriteLine("Magic");
                             self.SelectedTile = tiles[i, j];
                             magicInProgress = true;
                             return;
@@ -503,37 +525,7 @@ namespace Formations
                 }
             }  
         }
-        private void healUnit(MouseState mouseState)
-        {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-
-            TileBasic[] surroundingTiles = self.SelectedTile.getUnit().getAttackableTiles();
-            UnitMag currentMag = (UnitMag)self.SelectedTile.getUnit();
-            for (int i = 1; i < surroundingTiles.Length; i++)
-            {//starts on 1 because 0 is the attacker
-                if (surroundingTiles[i] != null && surroundingTiles[i].isPointInTile(mouseState) && surroundingTiles[i].hasUnit() && (surroundingTiles[i].getUnit().Player.Equals(self)))
-                {
-                    if (self.Stamina >= currentMag.calculateAttackCost())
-                    {
-
-                        self.useStamina(currentMag.calculateAttackCost());
-                        currentMag.heal(surroundingTiles[i].getUnit());
-
-                        // Start particle effect
-                    }
-                }
-            }
-            magicInProgress = false;
-        }
+        
         //TODO: change or remove
         private void setHoverLabel(MouseState mouseState)
         {
@@ -573,19 +565,36 @@ namespace Formations
                 }
             }
         }
-        private void moveUnit(MouseState mouseState)
+        private void healUnit(MouseState mouseState, Player player)
+        { 
+            Player self = player;
+            TileBasic[] surroundingTiles = self.SelectedTile.getUnit().getAttackableTiles();
+            UnitMag currentMag = (UnitMag)self.SelectedTile.getUnit();
+            for (int i = 1; i < surroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (surroundingTiles[i] != null && surroundingTiles[i].isPointInTile(mouseState) && surroundingTiles[i].hasUnit() && (surroundingTiles[i].getUnit().Player.Equals(self)))
+                {
+                    if (self.Stamina >= currentMag.calculateAttackCost())
+                    {
+                        Point attackerPosition = new Point((int)surroundingTiles[0].getX(), (int)surroundingTiles[0].getY());
+                        Point defendersPosition = new Point((int)surroundingTiles[i].getX(), (int)surroundingTiles[i].getY());
+
+                        self.useStamina(currentMag.calculateAttackCost());
+                        currentMag.heal(surroundingTiles[i].getUnit());
+                        foreach (AnimationLightening strike in lightening)
+                        {
+                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
+
+                        }
+                        // Start particle effect
+                    }
+                }
+            }
+            magicInProgress = false;
+        }
+        private void moveUnit(MouseState mouseState, Player player)
         {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-            //
+            Player self = player;
             TileBasic[] currentSurroundingTiles = self.SelectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
@@ -607,21 +616,10 @@ namespace Formations
             self.SelectedTile = null;
             moveInProgress = false;
         }
-        private void unitAttackUnit(MouseState mouseState)
-        {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-
+        private void unitAttackUnit(MouseState mouseState, Player player)
+        {  
+            Player self = player;
             TileBasic[] currentAttackableTiles = self.SelectedTile.getUnit().getAttackableTiles();
-
             for (int i = 1; i < currentAttackableTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
                 if (currentAttackableTiles[i] != null && currentAttackableTiles[i].isPointInTile(mouseState) && currentAttackableTiles[i].hasUnit() && !(currentAttackableTiles[i].getUnit().Player.Equals(self)))
@@ -631,8 +629,28 @@ namespace Formations
                         Point attackerPosition = new Point((int)currentAttackableTiles[0].getX(), (int)currentAttackableTiles[0].getY());
                         Point defendersPosition = new Point((int)currentAttackableTiles[i].getX(), (int)currentAttackableTiles[i].getY());
 
+                        int preAttackHealth = currentAttackableTiles[i].getUnit().Life;
+
                         self.useStamina(self.SelectedTile.getUnit().calculateAttackCost());
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
+                        if (self.SelectedTile.getUnit().GetType() == typeof(UnitMag))
+                        {
+                            foreach (AnimationLightening strike in lightening)
+                            {
+                                strike.createLightening(Color.Silver, attackerPosition, defendersPosition);
+
+                            }
+                        }
+                        else
+                        {
+                            // Start particle effect
+                            attackParticleEngine.particlesOn = true;
+                            attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
+
+                            // Scrolling damage text
+                            int postAttackHealth = preAttackHealth - currentAttackableTiles[i].getUnit().Life;
+                            displayDamageTaken(postAttackHealth, currentAttackableTiles[i]);
+                        }
 
                     }   
                     if (currentAttackableTiles[i].getUnit().isDead)
@@ -646,7 +664,7 @@ namespace Formations
             attackInProgress = false;
             checkForWin();
         }
-        private void move()
+        private void makeMove()
         {
             if (isFirstPhase)
             { 
@@ -655,19 +673,62 @@ namespace Formations
                 //update phase info here
             }
         }
-        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
+
+        public void setDamageFont(SpriteFont font)
         {
-            bool result = false;
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
+            this.damageTextFont = font;
+        }
+
+        private void displayDamageTaken(int damage, TileBasic tile)
+        {
+            System.Console.WriteLine("displaying damage taken");
+
+            this.damageGiven = damage;
+            this.damageTextVector = new Vector2(tile.getX()-20, tile.getY());
+
+            // Displays floating damage text
+            Label damageTakenText = new Label(uiManager);
+            damageTakenText.SetPosition((int)tile.getX(), (int)tile.getY());
+            damageTakenText.Text = String.Format("-{0:g}", damage);
+            damageTakenText.SetSize(10, 10);
+            damageTakenText.TextColor = Color.Cyan;
+           // uiManager.Add(damageTakenText);
+
+            damageTextTimer = new System.Timers.Timer(10);
+            damageTextTimer.Elapsed += (sender, e) => slideDamageTextUp(sender, e, damageTakenText, damageTextTimer);
+            damageTextTimer.Start();
+            //damageTextTimer.Stop();
+        }
+
+        // Called by the Timer in a separate thread
+        private void slideDamageTextUp(object sender, ElapsedEventArgs e, Label damageTakenText, System.Timers.Timer timer)
+        {
+            int top = damageTakenText.Top;
+
+            int counter = 0;
+
+            while (counter < 25)
             {
-                self = players[0];
+                System.Threading.Thread.Sleep(60);
+
+                this.damageTextVector.Y--;
+                if (counter % 20 == 0)
+                {
+                    //this.damageTextAlpha -= .1f;
+                }
+
+                System.Console.WriteLine(this.damageTextAlpha);
+                
+                counter++;
             }
-            else
-            {
-                self = players[1];
-            }
+
+            timer.Stop();
+        }
+
+        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState, Player player)
+        {
+            bool result = false; 
+            Player self = player;
 
             if (isFirstPhase && (((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
                 || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == true) && !self.IsHost)
@@ -684,16 +745,9 @@ namespace Formations
         }
         private void newTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            //selecting the correct player  
+ 
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
             //need to reset units to 0 attacks
 
             self.resetUnits();
@@ -781,10 +835,11 @@ namespace Formations
         public void update()
         {
             //attackParticleEngine.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            foreach (Player player in players)
+            foreach (AnimationLightening strike in lightening)
             {
-                player.update();
+                strike.update(); 
             }
+            attackParticleEngine.Update();
 
         }
 
@@ -813,11 +868,25 @@ namespace Formations
             }
             drawUnitButtons(currentTile, spriteBatch);
             // drawUnitInfo(spriteBatch);
-            foreach (Player player in players)
-            {
-                player.draw(spriteBatch);
-            }
+            players[0].draw(spriteBatch);
+            players[1].draw(spriteBatch);
             turnSignal.draw(spriteBatch);
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.draw(spriteBatch);
+            }
+
+            // Particles
+            attackParticleEngine.Draw(spriteBatch);
+
+            // Damage text
+
+            if (damageTextTimer != null && damageTextTimer.Enabled)
+            {
+                String damageText = String.Format("-{0}", this.damageGiven);
+                spriteBatch.DrawString(this.damageTextFont, damageText, this.damageTextVector, new Color(255, 0, 0, this.damageTextAlpha));
+            }
+            
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
@@ -877,6 +946,7 @@ namespace Formations
                         }
                     }
                 }
+
             }
         }
         private void resetButtons()
@@ -1020,6 +1090,11 @@ namespace Formations
             borderLines[5] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[6] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[7] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
+        }
+
+        internal void setAttackParticleEngine(ParticleEngine attackParticleEngine)
+        {
+            this.attackParticleEngine = attackParticleEngine;
         }
     }
 }

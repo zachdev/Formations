@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
@@ -545,12 +546,18 @@ namespace Formations
                 {
                     if (self.Stamina >= currentAttackableTiles[i].getUnit().StaminaAttCost)
                     {
+                        int preAttackHealth = currentAttackableTiles[i].getUnit().Life;
+
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
                         self.useStamina((int)currentAttackableTiles[i].getUnit().StaminaAttCost);
 
                         // Start particle effect
                         attackParticleEngine.particlesOn = true;
                         attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
+
+                        // Scrolling damage text
+                        int postAttackHealth = preAttackHealth - currentAttackableTiles[i].getUnit().Life;
+                        displayDamageTaken(postAttackHealth, currentAttackableTiles[i]);
                     }
                     if (currentAttackableTiles[i].getUnit().isDead)
                     {
@@ -570,6 +577,49 @@ namespace Formations
                 //update phase info here
             }
         }
+
+        private void displayDamageTaken(int damage, TileBasic tile)
+        {
+            System.Console.WriteLine("displaying damage taken");
+            // Displays floating damage text
+            Label damageTakenText = new Label(uiManager);
+            damageTakenText.SetPosition((int)tile.getX(), (int)tile.getY());
+            damageTakenText.Text = String.Format("-{0:g}", damage);
+            damageTakenText.SetSize(10, 10);
+            damageTakenText.TextColor = Color.Cyan;
+            uiManager.Add(damageTakenText);
+
+            System.Timers.Timer timer = new System.Timers.Timer(10);
+            timer.Elapsed += (sender, e) => slideDamageTextUp(sender, e, damageTakenText, timer);
+            timer.Start();
+        }
+
+        // Called by the Timer in a separate thread
+        private void slideDamageTextUp(object sender, ElapsedEventArgs e, Label damageTakenText, System.Timers.Timer timer)
+        {
+            int top = damageTakenText.Top;
+
+            int counter = 0;
+
+            while (counter < 20)
+            {
+                if (counter >= 20)
+                {
+                    break;
+                }
+
+                System.Threading.Thread.Sleep(60);
+                damageTakenText.Top--;
+                damageTakenText.Alpha -= 2;
+                counter++;
+            }
+
+            timer.Stop();
+            uiManager.Remove(damageTakenText);
+
+        }
+
+
         private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
         {
             bool result = false;

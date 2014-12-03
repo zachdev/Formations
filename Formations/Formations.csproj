@@ -154,6 +154,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\DamageFont.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Skins\Blue.skin" />
     <None Include="Content\Skins\Default.skin" />
     <None Include="Content\Skins\Green.skin" />
