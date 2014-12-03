@@ -307,14 +307,7 @@ namespace Formations
             }
             //selecting the correct player  
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
 
             if (!chatManager.chatIsVisible())// Check if the chat window is visible
             {
@@ -343,50 +336,64 @@ namespace Formations
                             tiles[i, j].mousePressed(mouseState);
                             if (attPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getAttUnit());
                                     self.useStamina(UnitAtt.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (defPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getDefUnit());
                                     self.useStamina(UnitDef.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (magPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
                                 {
                                     tiles[i, j].setUnit(self.getMagUnit());
                                     self.useStamina(UnitMag.STAMINA_PLACE_COST);
-                                    move();
+                                    makeMove();
                                     resetBools();
                                 }
                             }
                             if (attackInProgress)
                             {
-                                unitAttackUnit(mouseState);
+                                unitAttackUnit(mouseState, self);
                             }
                             if (moveInProgress)
                             {
-                                moveUnit(mouseState);
+                                moveUnit(mouseState, self);
                             }
                             if (magicInProgress)
                             {
-                                healUnit(mouseState);
+                                healUnit(mouseState, self);
                             }
                         }
                     }
                 }
             }
+        }
+
+        private Player selectPlayer()
+        {
+            Player self;
+            if ((isHost && isHostsTurn))
+            {
+                self = players[0];
+            }
+            else
+            {
+                self = players[1];
+            }
+            return self;
         }
         private void resetBools()
         {
@@ -422,14 +429,7 @@ namespace Formations
         {
             //selecting the correct player  
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
             //checking board for where the mouse was released
             for (int i = 0; i < boardWidth; i++)
             {
@@ -438,11 +438,11 @@ namespace Formations
                     if (tiles[i, j].isSelected())
                     {
                         tiles[i, j].mouseReleased(mouseState);
+                        //Attack happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         { 
-                            //System.Console.WriteLine("Attack");
                             self.SelectedTile = tiles[i, j];
                             attackInProgress = true;
                             TileBasic[] attackableTiles = tiles[i, j].getUnit().getAttackableTiles();
@@ -452,20 +452,20 @@ namespace Formations
                             }
                             return;
                         }
+                        //Move happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            //Console.WriteLine("Move");
                             self.SelectedTile = tiles[i, j];
                             moveInProgress = true;
                             return;
                         }
+                        //Magic happens here
                         if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
                             || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
                             && magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
                         {
-                            //Console.WriteLine("Magic");
                             self.SelectedTile = tiles[i, j];
                             magicInProgress = true;
                             return;
@@ -525,43 +525,7 @@ namespace Formations
                 }
             }  
         }
-        private void healUnit(MouseState mouseState)
-        {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-
-            TileBasic[] surroundingTiles = self.SelectedTile.getUnit().getAttackableTiles();
-            UnitMag currentMag = (UnitMag)self.SelectedTile.getUnit();
-            for (int i = 1; i < surroundingTiles.Length; i++)
-            {//starts on 1 because 0 is the attacker
-                if (surroundingTiles[i] != null && surroundingTiles[i].isPointInTile(mouseState) && surroundingTiles[i].hasUnit() && (surroundingTiles[i].getUnit().Player.Equals(self)))
-                {
-                    if (self.Stamina >= currentMag.calculateAttackCost())
-                    {
-                        Point attackerPosition = new Point((int)surroundingTiles[0].getX(), (int)surroundingTiles[0].getY());
-                        Point defendersPosition = new Point((int)surroundingTiles[i].getX(), (int)surroundingTiles[i].getY());
-
-                        self.useStamina(currentMag.calculateAttackCost());
-                        currentMag.heal(surroundingTiles[i].getUnit());
-                        foreach (AnimationLightening strike in lightening)
-                        {
-                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
-
-                        }
-                        // Start particle effect
-                    }
-                }
-            }
-            magicInProgress = false;
-        }
+        
         //TODO: change or remove
         private void setHoverLabel(MouseState mouseState)
         {
@@ -601,19 +565,36 @@ namespace Formations
                 }
             }
         }
-        private void moveUnit(MouseState mouseState)
+        private void healUnit(MouseState mouseState, Player player)
+        { 
+            Player self = player;
+            TileBasic[] surroundingTiles = self.SelectedTile.getUnit().getAttackableTiles();
+            UnitMag currentMag = (UnitMag)self.SelectedTile.getUnit();
+            for (int i = 1; i < surroundingTiles.Length; i++)
+            {//starts on 1 because 0 is the attacker
+                if (surroundingTiles[i] != null && surroundingTiles[i].isPointInTile(mouseState) && surroundingTiles[i].hasUnit() && (surroundingTiles[i].getUnit().Player.Equals(self)))
+                {
+                    if (self.Stamina >= currentMag.calculateAttackCost())
+                    {
+                        Point attackerPosition = new Point((int)surroundingTiles[0].getX(), (int)surroundingTiles[0].getY());
+                        Point defendersPosition = new Point((int)surroundingTiles[i].getX(), (int)surroundingTiles[i].getY());
+
+                        self.useStamina(currentMag.calculateAttackCost());
+                        currentMag.heal(surroundingTiles[i].getUnit());
+                        foreach (AnimationLightening strike in lightening)
+                        {
+                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
+
+                        }
+                        // Start particle effect
+                    }
+                }
+            }
+            magicInProgress = false;
+        }
+        private void moveUnit(MouseState mouseState, Player player)
         {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-            //
+            Player self = player;
             TileBasic[] currentSurroundingTiles = self.SelectedTile.getSurroundingTiles();
             for (int i = 1; i < currentSurroundingTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
@@ -635,22 +616,10 @@ namespace Formations
             self.SelectedTile = null;
             moveInProgress = false;
         }
-        private void unitAttackUnit(MouseState mouseState)
-        {
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-
+        private void unitAttackUnit(MouseState mouseState, Player player)
+        {  
+            Player self = player;
             TileBasic[] currentAttackableTiles = self.SelectedTile.getUnit().getAttackableTiles();
-
-
             for (int i = 1; i < currentAttackableTiles.Length; i++)
             {//starts on 1 because 0 is the attacker
                 if (currentAttackableTiles[i] != null && currentAttackableTiles[i].isPointInTile(mouseState) && currentAttackableTiles[i].hasUnit() && !(currentAttackableTiles[i].getUnit().Player.Equals(self)))
@@ -695,7 +664,7 @@ namespace Formations
             attackInProgress = false;
             checkForWin();
         }
-        private void move()
+        private void makeMove()
         {
             if (isFirstPhase)
             { 
@@ -756,19 +725,10 @@ namespace Formations
             timer.Stop();
         }
 
-        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState)
+        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState, Player player)
         {
-            bool result = false;
-            //selecting the correct player  
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            bool result = false; 
+            Player self = player;
 
             if (isFirstPhase && (((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
                 || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == true) && !self.IsHost)
@@ -785,16 +745,9 @@ namespace Formations
         }
         private void newTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            //selecting the correct player  
+ 
             Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
+            self = selectPlayer();
             //need to reset units to 0 attacks
 
             self.resetUnits();

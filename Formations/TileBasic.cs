@@ -36,7 +36,6 @@ namespace Formations
         }
         public void initTileArray(TileBasic[,] tiles, int boardWidth, int boardHeight, int i, int j)
         {
-
             surroundingTiles[0] = tiles[i, j];
             if (i + 1 < boardWidth) surroundingTiles[1] = tiles[i + 1, j];
             if (i - 1 >= 0) surroundingTiles[4] = tiles[i - 1, j];
@@ -211,46 +210,62 @@ namespace Formations
         }
         public override void mouseDragged(MouseState mouseState)
         {
-
+            if (tileHex.IsPointInPolygon(mouseState.X, mouseState.Y))
+            {
+                mouseEntered();
+            }
+            else
+            {
+                mouseLeave();
+            }
         }
         public override void mouseMoved(MouseState mouseState)
         {
             if (tileHex.IsPointInPolygon(mouseState.X, mouseState.Y))
             {
-                if (!hovered)
-                {
-                    hovered = true;   
-                }
-                if (!selected)
-                {
-                    tileHex.setBorderColor(GameColors.hoverBorderColor);
-                }
+                mouseEntered();
             }
             else
             {
-                if (hovered)
+                mouseLeave();
+            }
+        }
+
+        private void mouseLeave()
+        {
+            if (hovered)
+            {
+                hovered = false;
+            }
+            if (!selected)
+            {
+                if (unit != null)
                 {
-                    hovered = false;
-                }
-                if (!selected)
-                {
-                    if (unit != null)
+                    if (unit.IsHostsUnit)
                     {
-                        if (unit.IsHostsUnit)
-                        {
-                            tileHex.setBorderColor(GameColors.HostControlOutsideColor);
-                        }
-                        else
-                        {
-                            tileHex.setBorderColor(GameColors.guestControlOutsideColor);
-                        }
+                        tileHex.setBorderColor(GameColors.HostControlOutsideColor);
                     }
                     else
                     {
-                        tileHex.setBorderColor(GameColors.normalBorderColor);
+                        tileHex.setBorderColor(GameColors.guestControlOutsideColor);
                     }
-                    
                 }
+                else
+                {
+                    tileHex.setBorderColor(GameColors.normalBorderColor);
+                }
+            }
+        }
+
+        private void mouseEntered()
+        {
+            if (!hovered)
+            {
+                hovered = true;
+            }
+            if (!selected)
+            {
+                tileHex.setBorderColor(GameColors.hoverBorderColor);
             }
         }
         public override void update()
