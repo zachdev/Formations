@@ -43,7 +43,7 @@ namespace Formations
         private Hexagon magicAction;
         private Hexagon moveAction;
 
-        private List<AnimationLightening> lightening = new List<AnimationLightening>();
+
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -68,8 +68,7 @@ namespace Formations
         private Chat chatManager;
         private Button chatButton;
 
-        // Particles
-        private ParticleEngine attackParticleEngine;
+
 
 
         // Various buttons
@@ -114,18 +113,9 @@ namespace Formations
             /*
              * need to pass in the player from the connection here to create it maybe
              */
-           // if (isHost)
-           // {
                 players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
                 players[0].isPlayersTurn = true;
-                
-           // }
-           // else
-           // {
-           //     players[0].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-           //     players[1].init("<PlayerNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-           // }
             /*
              * setting up the graphics here
              */ 
@@ -135,11 +125,7 @@ namespace Formations
                (0, graphicsDevice.Viewport.Width,       // left, right
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
-            for (int i = 0; i < 5; i++)
-            {
-                lightening.Add(new AnimationLightening());    
-            }
-            
+
             /*
              *setting up the board area
              */ 
@@ -538,16 +524,10 @@ namespace Formations
                 {
                     if (self.Stamina >= currentMag.calculateAttackCost())
                     {
-                        Point attackerPosition = new Point((int)surroundingTiles[0].getX(), (int)surroundingTiles[0].getY());
-                        Point defendersPosition = new Point((int)surroundingTiles[i].getX(), (int)surroundingTiles[i].getY());
 
                         self.useStamina(currentMag.calculateAttackCost());
                         currentMag.heal(surroundingTiles[i].getUnit());
-                        foreach (AnimationLightening strike in lightening)
-                        {
-                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
 
-                        }
                         // Start particle effect
                     }
                 }
@@ -653,20 +633,6 @@ namespace Formations
 
                         self.useStamina(self.SelectedTile.getUnit().calculateAttackCost());
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
-                        if (self.SelectedTile.getUnit().GetType() == typeof(UnitMag))
-                        {
-                            foreach (AnimationLightening strike in lightening)
-                            {
-                                strike.createLightening(Color.Silver, attackerPosition, defendersPosition);
-
-                            }
-                        }
-                        else
-                        {
-                            // Start particle effect
-                            attackParticleEngine.particlesOn = true;
-                            attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
-                        }
 
                     }   
                     if (currentAttackableTiles[i].getUnit().isDead)
@@ -815,11 +781,10 @@ namespace Formations
         public void update()
         {
             //attackParticleEngine.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            foreach (AnimationLightening strike in lightening)
+            foreach (Player player in players)
             {
-                strike.update(); 
+                player.update();
             }
-            attackParticleEngine.Update();
 
         }
 
@@ -848,16 +813,11 @@ namespace Formations
             }
             drawUnitButtons(currentTile, spriteBatch);
             // drawUnitInfo(spriteBatch);
-            players[0].draw(spriteBatch);
-            players[1].draw(spriteBatch);
-            turnSignal.draw(spriteBatch);
-            foreach (AnimationLightening strike in lightening)
+            foreach (Player player in players)
             {
-                strike.draw(spriteBatch);
+                player.draw(spriteBatch);
             }
-
-            // Particles
-            attackParticleEngine.Draw(spriteBatch);
+            turnSignal.draw(spriteBatch);
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
@@ -917,7 +877,6 @@ namespace Formations
                         }
                     }
                 }
-
             }
         }
         private void resetButtons()
@@ -1061,11 +1020,6 @@ namespace Formations
             borderLines[5] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[6] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY + heightOfBoard, 0), Color.Blue);
             borderLines[7] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
-        }
-
-        internal void setAttackParticleEngine(ParticleEngine attackParticleEngine)
-        {
-            this.attackParticleEngine = attackParticleEngine;
         }
     }
 }

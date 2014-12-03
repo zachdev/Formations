@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace Formations
         public const int STAMINA_ATT_COST = 5;
         public const int STAMINA_PLACE_COST = 5;
         private int healAmount = 1;
+        private List<AnimationLightening> lightening = new List<AnimationLightening>();
+        // Particles
+        private ParticleEngine bloodParticles;
+        private ParticleEngine healingParticles;
 
         public override void init(bool isHostsUnit, Player player)
         {
@@ -28,6 +33,13 @@ namespace Formations
             this.StaminaMoveCost = STAMINA_MOVE_COST;
             this.StaminaPlaceCost = STAMINA_PLACE_COST;
             this.Player = player;
+
+            for (int i = 0; i < 5; i++)
+            {
+                lightening.Add(new AnimationLightening());
+            }
+            bloodParticles = new ParticleEngine(Game1.bloodTextures, new Vector2(400, 240));
+            healingParticles = new ParticleEngine(Game1.healingTextures, new Vector2(400, 240));
         }
         public override string getUnitType()
         {
@@ -35,11 +47,20 @@ namespace Formations
         }
         public override void attack(UnitAbstract unit)
         {
+            Point attackerPosition = new Point((int)ContainingTile.getX(), (int)ContainingTile.getY());
+            Point defendersPosition = new Point((int)unit.ContainingTile.getX(), (int)unit.ContainingTile.getY());
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.createLightening(Color.Silver, attackerPosition, defendersPosition);
+
+            }
             unit.defend(this);
             incrementAttack();
         }
         public override void defend(UnitAbstract unit)
         {
+            bloodParticles.particlesOn = true;
+            bloodParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
             Life -= (calculateDamage(unit.calculateAtt()));
             if (Life <= 0)
             {
@@ -48,6 +69,15 @@ namespace Formations
         }
         public void heal(UnitAbstract unit)
         {
+            Point attackerPosition = new Point((int)unit.ContainingTile.getX(), (int)unit.ContainingTile.getY());
+            Point defendersPosition = new Point((int)unit.ContainingTile.getX(), (int)unit.ContainingTile.getY());
+
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
+
+            }
+            
             unit.Life += this.calculateHeal();
         }
         public override int calculateAtt()
@@ -71,23 +101,10 @@ namespace Formations
             }
             return result;
         }
-        public override int calculateDamage(int attackDamage)
+        public override void getHealed()
         {
-            int result = attackDamage;
-            TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
-            for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
-            {
-
-                UnitAbstract unit = surroundingTiles[i].getUnit();
-                UnitDef defUnit;
-                if (unit == null) { continue; }
-                if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitDef))
-                {
-                    defUnit = (UnitDef)unit;
-                    result = defUnit.absorbDamage(result);
-                }
-            }
-            return result;
+            healingParticles.particlesOn = true;
+            healingParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
         }
         public override int calculateRange()
         {
@@ -112,12 +129,22 @@ namespace Formations
 
         public override void update()
         {
-
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.update();
+            }
+            bloodParticles.Update();
         }
 
         public override void draw(SpriteBatch spriteBatch)
         {
+            foreach (AnimationLightening strike in lightening)
+            {
+                strike.draw(spriteBatch);
+            }
 
+            // Particles
+            bloodParticles.Draw(spriteBatch);
         }
     }
 }

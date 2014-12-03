@@ -63,7 +63,6 @@ public class ConnectionManger
             chatHistoryTextbox.Text += "\n<You> " + message;
         }
     }
-
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {

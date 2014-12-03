@@ -314,13 +314,36 @@ namespace Formations
             borderLines[6] = new VertexPositionColor(new Vector3(boardX - border, boardY + heightOfBoard, 0), Color.White);
             borderLines[7] = new VertexPositionColor(new Vector3(boardX - border, boardY - border, 0), Color.White);
         }
-        public void update(MouseState mouseState)
+        public void update()
         {
-
+            foreach (UnitAbstract unit in _attUnitArray)
+            {
+                if (unit != null) { unit.update(); }
+            }
+            foreach (UnitAbstract unit in _defUnitArray)
+            {
+                if (unit != null) { unit.update(); }
+            }
+            foreach (UnitAbstract unit in _magUnitArray)
+            {
+                if (unit != null) { unit.update(); }
+            }
         }
 
         public void draw(SpriteBatch spriteBatch)
         {
+            foreach (UnitAbstract unit in _attUnitArray)
+            {
+                if (unit != null) { unit.draw(spriteBatch); }
+            }
+            foreach (UnitAbstract unit in _defUnitArray)
+            {
+                if (unit != null) { unit.draw(spriteBatch);}
+            }
+            foreach (UnitAbstract unit in _magUnitArray)
+            {
+                if (unit != null) { unit.draw(spriteBatch); }
+            }
             if(isPlayersTurn)
             {
                 updateBoader();

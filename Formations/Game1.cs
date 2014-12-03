@@ -16,6 +16,9 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoardSinglePlayer gb;
+        public static List<Texture2D> attackTextures;
+        public static List<Texture2D> bloodTextures;
+        public static List<Texture2D> healingTextures;
         //MouseState mouseState;
         MouseListener mouseListener;
 
@@ -64,19 +67,29 @@ namespace Formations
         /// </summary>
         protected override void LoadContent()
         {
+
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("spriteFont");
-            gb = new GameBoardSinglePlayer();
-            gb.init(theManager, GraphicsDevice, "<GameNameHere>", true);
 
-            // Particle engine stuff
-            List<Texture2D> textures = new List<Texture2D>();
-            textures.Add(Content.Load<Texture2D>("axe"));
-            textures.Add(Content.Load<Texture2D>("sword2"));
-            textures.Add(Content.Load<Texture2D>("sword3"));
-            ParticleEngine attackParticleEngine = new ParticleEngine(textures, new Vector2(400, 240));
-            gb.setAttackParticleEngine(attackParticleEngine);
+            attackTextures = new List<Texture2D>();
+            attackTextures.Add(Content.Load<Texture2D>("axe"));
+            attackTextures.Add(Content.Load<Texture2D>("sword2"));
+            attackTextures.Add(Content.Load<Texture2D>("sword3"));
+
+            bloodTextures = new List<Texture2D>();
+            bloodTextures.Add(Content.Load<Texture2D>("axe"));
+            bloodTextures.Add(Content.Load<Texture2D>("sword2"));
+            bloodTextures.Add(Content.Load<Texture2D>("sword3"));
+
+            healingTextures = new List<Texture2D>();
+            healingTextures.Add(Content.Load<Texture2D>("axe"));
+            healingTextures.Add(Content.Load<Texture2D>("sword2"));
+            healingTextures.Add(Content.Load<Texture2D>("sword3"));
+
+
+            gb = new GameBoardSinglePlayer();
+            gb.init(theManager, GraphicsDevice, "Formations", true); 
             // TODO: use this.Content to load your game content here
         }
 

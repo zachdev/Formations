@@ -81,8 +81,26 @@ namespace Formations
         public abstract void attack(UnitAbstract unit);
         public abstract void defend(UnitAbstract unit);
         public abstract int calculateAtt();
-        public abstract int calculateDamage(int attackDamage);
+        public int calculateDamage(int attackDamage)
+        {
+            int result = attackDamage;
+            TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
+            for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
+            {
+                if (surroundingTiles[i] == null) { continue; }
+                UnitAbstract unit = surroundingTiles[i].getUnit();
+                UnitDef defUnit;
+                if (unit == null) { continue; }
+                if (unit.Player.Equals(Player) && unit.GetType() == typeof(UnitDef))
+                {
+                    defUnit = (UnitDef)unit;
+                    result = defUnit.absorbDamage(result);
+                }
+            }
+            return result;
+        }
         public abstract int calculateRange();
+        public abstract void getHealed();
         public TileBasic[] getAttackableTiles()
         {
             int calculatedRange = calculateRange();
