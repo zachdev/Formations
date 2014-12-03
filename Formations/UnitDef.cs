@@ -55,7 +55,10 @@ namespace Formations
             TileBasic[] surroundingTiles = ContainingTile.getSurroundingTiles();
             for (int i = 1; i < surroundingTiles.Length; i++)//starts on 1 because 0 is its self
             {
-                
+                if (surroundingTiles[i] == null)
+                {
+                    continue;
+                }
                 UnitAbstract unit = surroundingTiles[i].getUnit();
                 UnitDef defUnit;
                 if (unit == null) { continue; }

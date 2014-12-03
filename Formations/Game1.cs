@@ -20,6 +20,7 @@ namespace Formations
         MouseListener mouseListener;
 
         private SpriteFont font;
+        private SpriteFont damageFont;
 
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
@@ -78,6 +79,10 @@ namespace Formations
             ParticleEngine attackParticleEngine = new ParticleEngine(textures, new Vector2(400, 240));
             gb.setAttackParticleEngine(attackParticleEngine);
             // TODO: use this.Content to load your game content here
+
+            // Add damage font to gameboard
+            damageFont = Content.Load<SpriteFont>("DamageFont");
+            gb.setDamageFont(damageFont);
         }
 
         /// <summary>
