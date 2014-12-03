@@ -69,15 +69,6 @@ namespace Formations
         private Chat chatManager;
         private Button chatButton;
 
-
-        // Damage text
-        private SpriteFont damageTextFont;
-        private Vector2 damageTextVector;
-        private int damageGiven;
-        private float damageTextAlpha = 1.0f;
-        private Timer damageTextTimer;
-
-
         // Various buttons
         private Button resizeButton;
         private Button endTurn;
@@ -622,7 +613,7 @@ namespace Formations
             {//starts on 1 because 0 is the attacker
                 if (currentAttackableTiles[i] != null && currentAttackableTiles[i].isPointInTile(mouseState) && currentAttackableTiles[i].hasUnit() && !(currentAttackableTiles[i].getUnit().Player.Equals(self)))
                 {
-                    if(self.Stamina >= self.SelectedTile.getUnit().calculateAttackCost())
+                    if (self.Stamina >= self.SelectedTile.getUnit().calculateAttackCost())
                     {
                         Point attackerPosition = new Point((int)currentAttackableTiles[0].getX(), (int)currentAttackableTiles[0].getY());
                         Point defendersPosition = new Point((int)currentAttackableTiles[i].getX(), (int)currentAttackableTiles[i].getY());
@@ -631,26 +622,12 @@ namespace Formations
 
                         self.useStamina(self.SelectedTile.getUnit().calculateAttackCost());
                         currentAttackableTiles[0].getUnit().attack(currentAttackableTiles[i].getUnit());
-                        if (self.SelectedTile.getUnit().GetType() == typeof(UnitMag))
-                        {
-                            foreach (AnimationLightening strike in lightening)
-                            {
-                                strike.createLightening(Color.Silver, attackerPosition, defendersPosition);
 
-                            }
-                        }
-                        else
+                        if (currentAttackableTiles[i].getUnit().isDead)
                         {
-                            // Scrolling damage text
-                            int postAttackHealth = preAttackHealth - currentAttackableTiles[i].getUnit().Life;
-                            displayDamageTaken(postAttackHealth, currentAttackableTiles[i]);
+                            currentAttackableTiles[i].setUnit(null);
+                            //maybe some death effects here i.e blood and gore
                         }
-
-                    }   
-                    if (currentAttackableTiles[i].getUnit().isDead)
-                    {
-                        currentAttackableTiles[i].setUnit(null);
-                        //maybe some death effects here i.e blood and gore
                     }
                 }
             }
@@ -668,56 +645,8 @@ namespace Formations
             }
         }
 
-        public void setDamageFont(SpriteFont font)
-        {
-            this.damageTextFont = font;
-        }
 
-        private void displayDamageTaken(int damage, TileBasic tile)
-        {
-            System.Console.WriteLine("displaying damage taken");
 
-            this.damageGiven = damage;
-            this.damageTextVector = new Vector2(tile.getX()-20, tile.getY());
-
-            // Displays floating damage text
-            Label damageTakenText = new Label(uiManager);
-            damageTakenText.SetPosition((int)tile.getX(), (int)tile.getY());
-            damageTakenText.Text = String.Format("-{0:g}", damage);
-            damageTakenText.SetSize(10, 10);
-            damageTakenText.TextColor = Color.Cyan;
-           // uiManager.Add(damageTakenText);
-
-            damageTextTimer = new System.Timers.Timer(10);
-            damageTextTimer.Elapsed += (sender, e) => slideDamageTextUp(sender, e, damageTakenText, damageTextTimer);
-            damageTextTimer.Start();
-            //damageTextTimer.Stop();
-        }
-
-        // Called by the Timer in a separate thread
-        private void slideDamageTextUp(object sender, ElapsedEventArgs e, Label damageTakenText, System.Timers.Timer timer)
-        {
-            int top = damageTakenText.Top;
-
-            int counter = 0;
-
-            while (counter < 25)
-            {
-                System.Threading.Thread.Sleep(60);
-
-                this.damageTextVector.Y--;
-                if (counter % 20 == 0)
-                {
-                    //this.damageTextAlpha -= .1f;
-                }
-
-                System.Console.WriteLine(this.damageTextAlpha);
-                
-                counter++;
-            }
-
-            timer.Stop();
-        }
 
         private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState, Player player)
         {
@@ -867,13 +796,7 @@ namespace Formations
 
             turnSignal.draw(spriteBatch);
 
-            // Damage text
 
-            if (damageTextTimer != null && damageTextTimer.Enabled)
-            {
-                String damageText = String.Format("-{0}", this.damageGiven);
-                spriteBatch.DrawString(this.damageTextFont, damageText, this.damageTextVector, new Color(255, 0, 0, this.damageTextAlpha));
-            }
             
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)

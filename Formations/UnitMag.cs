@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
@@ -18,9 +19,7 @@ namespace Formations
         public const int STAMINA_PLACE_COST = 5;
         private int healAmount = 1;
         private List<AnimationLightening> lightening = new List<AnimationLightening>();
-        // Particles
-        private ParticleEngine bloodParticles;
-        private ParticleEngine healingParticles;
+
 
         public override void init(bool isHostsUnit, Player player)
         {
@@ -40,6 +39,8 @@ namespace Formations
             }
             bloodParticles = new ParticleEngine(Game1.bloodTextures, new Vector2(400, 240));
             healingParticles = new ParticleEngine(Game1.healingTextures, new Vector2(400, 240));
+            damageTakenText = new Label(Player.UiManager);
+            this.damageTextFont = Game1.damageFont;
         }
         public override string getUnitType()
         {
@@ -61,7 +62,10 @@ namespace Formations
         {
             bloodParticles.particlesOn = true;
             bloodParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
-            Life -= (calculateDamage(unit.calculateAtt()));
+            // Scrolling damage text
+            int damage = calculateDamage(unit.calculateAtt());
+            displayDamageTaken(damage);
+            Life -= (damage);
             if (Life <= 0)
             {
                 isDead = true;
@@ -145,6 +149,13 @@ namespace Formations
 
             // Particles
             bloodParticles.Draw(spriteBatch);
+            // Damage text
+
+            if (damageTextTimer != null && damageTextTimer.Enabled)
+            {
+                String damageText = String.Format("-{0}", this.damageGiven);
+                spriteBatch.DrawString(this.damageTextFont, damageText, this.damageTextVector, new Color(255, 0, 0, this.damageTextAlpha));
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Formations
         MouseListener mouseListener;
 
         private SpriteFont font;
-        private SpriteFont damageFont;
+        public static SpriteFont damageFont;
 
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
@@ -72,6 +72,7 @@ namespace Formations
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("spriteFont");
+            damageFont = Content.Load<SpriteFont>("DamageFont");
 
             attackTextures = new List<Texture2D>();
             attackTextures.Add(Content.Load<Texture2D>("axe"));
@@ -92,10 +93,7 @@ namespace Formations
             gb = new GameBoardSinglePlayer();
             gb.init(theManager, GraphicsDevice, "Formations", true); 
             // TODO: use this.Content to load your game content here
-
-            // Add damage font to gameboard
-            damageFont = Content.Load<SpriteFont>("DamageFont");
-            gb.setDamageFont(damageFont);
+            
         }
 
         /// <summary>

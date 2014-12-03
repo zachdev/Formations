@@ -131,9 +131,6 @@
     <Content Include="Content\axe.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Hex_Selected_Green.png" />
-    <Content Include="Content\Hex_Unselected.png" />
-    <Content Include="Content\Hex_Unselected_Green.png" />
     <Content Include="Content\sword.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

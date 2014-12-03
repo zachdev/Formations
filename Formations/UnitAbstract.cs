@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
+using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
@@ -18,9 +20,19 @@ namespace Formations
         private int _staminaAttCost;
         private int _staminaMoveCost;
         private int _staminaPlaceCost;
+        private int _attacksThisRound;
         private TileBasic _containingTile;
         private Player _player;
-        private int _attacksThisRound;
+        protected ParticleEngine attackParticles;
+        protected ParticleEngine bloodParticles;
+        protected ParticleEngine healingParticles;
+        // Damage text
+        protected SpriteFont damageTextFont;
+        protected Vector2 damageTextVector;
+        protected int damageGiven;
+        protected float damageTextAlpha = 1.0f;
+        protected Timer damageTextTimer;
+        protected Label damageTakenText;
         public bool isDead
         { 
             get { return _isDead; } 
@@ -141,6 +153,51 @@ namespace Formations
         {
             return (StaminaAttCost * (AttacksThisRound + 1));
         }
+
+        protected void displayDamageTaken(int damage)
+        {
+            this.damageGiven = damage;
+            this.damageTextVector = new Vector2(ContainingTile.getX() - 20, ContainingTile.getY());
+
+            // Displays floating damage text
+
+            damageTakenText.SetPosition((int)ContainingTile.getX(), (int)ContainingTile.getY());
+            damageTakenText.Text = String.Format("-{0:g}", damage);
+            damageTakenText.SetSize(10, 10);
+            damageTakenText.TextColor = Color.Cyan;
+            // uiManager.Add(damageTakenText);
+
+            damageTextTimer = new System.Timers.Timer(10);
+            damageTextTimer.Elapsed += (sender, e) => slideDamageTextUp(sender, e, damageTakenText, damageTextTimer);
+            damageTextTimer.Start();
+            //damageTextTimer.Stop();
+        }
+        // Called by the Timer in a separate thread
+        protected void slideDamageTextUp(object sender, ElapsedEventArgs e, Label damageTakenText, System.Timers.Timer timer)
+        {
+            int top = damageTakenText.Top;
+
+            int counter = 0;
+            float changeInX = .1f;
+            while (counter < 25)
+            {
+                System.Threading.Thread.Sleep(60);
+
+                this.damageTextVector.Y--;
+                this.damageTextVector.X += changeInX;
+                if (counter % 20 == 0)
+                {
+                    this.damageTextAlpha -= .1f;
+                }
+
+                //System.Console.WriteLine(this.damageTextAlpha);
+                changeInX *= 1.1f;
+                counter++;
+            }
+
+            timer.Stop();
+        }
+
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
     }

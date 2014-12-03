@@ -30,6 +30,7 @@ namespace Formations
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
         private Color borderColor;
+        private Manager uiManager;
         public string playerName { get; set; }
 
 
@@ -67,12 +68,13 @@ namespace Formations
             get { return _totalMagNotPlaced; }
             private set { _totalMagNotPlaced = value; }
         }
+        public Manager UiManager { get { return uiManager; } private set { uiManager = value; } }
         public UnitAtt[] AttUnitArray { get { return _attUnitArray;} }
         public UnitDef[] DefUnitArray { get { return _defUnitArray;} }
         public UnitMag[] MagUnitArray { get { return _magUnitArray;} }
 
 
-        private Manager uiManager;
+        
 
         private Label playersNameLabel;
         private Label totalAttUnitLabel;
@@ -112,6 +114,8 @@ namespace Formations
         public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
         {
             playerName = nameOfPlayer;
+            this.uiManager = uiManager;
+            uiManager.SetSkin(new Skin(uiManager, "Default"));
             for (int i = 0; i < 20; i++)
             {
                 if (units[0, i] != null)
@@ -166,8 +170,7 @@ namespace Formations
                 borderColor = GameColors.guestControlOutsideColor;
             }
             //Label
-            this.uiManager = uiManager;
-            uiManager.SetSkin(new Skin(uiManager, "Default"));
+
             playersNameLabel = new Label(uiManager);
             playersNameLabel.SetPosition((int)playerInfoLocation.X, (int)playerInfoLocation.Y);
             playersNameLabel.Text = playerName;
