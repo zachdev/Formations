@@ -54,6 +54,7 @@
     <Compile Include="Chat.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
     <Compile Include="Connection\ConnectionMessage.cs" />
+    <Compile Include="FloatingText.cs" />
     <Compile Include="PlayerContext.cs" />
     <Compile Include="ScoreCard.cs" />
     <Compile Include="StaminaComponent.cs" />

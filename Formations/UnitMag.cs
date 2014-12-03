@@ -39,8 +39,7 @@ namespace Formations
             }
             bloodParticles = new ParticleEngine(Game1.bloodTextures, new Vector2(400, 240));
             healingParticles = new ParticleEngine(Game1.healingTextures, new Vector2(400, 240));
-            damageTakenText = new Label(Player.UiManager);
-            this.damageTextFont = Game1.damageFont;
+            floatingText = new FloatingText(this);
         }
         public override string getUnitType()
         {
@@ -64,7 +63,7 @@ namespace Formations
             bloodParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
             // Scrolling damage text
             int damage = calculateDamage(unit.calculateAtt());
-            displayDamageTaken(damage);
+            floatingText.displayDamageTaken(damage, true);
             Life -= (damage);
             if (Life <= 0)
             {
@@ -150,12 +149,7 @@ namespace Formations
             // Particles
             bloodParticles.Draw(spriteBatch);
             // Damage text
-
-            if (damageTextTimer != null && damageTextTimer.Enabled)
-            {
-                String damageText = String.Format("-{0}", this.damageGiven);
-                spriteBatch.DrawString(this.damageTextFont, damageText, this.damageTextVector, new Color(255, 0, 0, this.damageTextAlpha));
-            }
+            floatingText.draw(spriteBatch);
         }
     }
 }
