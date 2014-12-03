@@ -69,8 +69,6 @@ namespace Formations
         private Chat chatManager;
         private Button chatButton;
 
-        // Particles
-        private ParticleEngine attackParticleEngine;
 
         // Damage text
         private SpriteFont damageTextFont;
@@ -643,10 +641,6 @@ namespace Formations
                         }
                         else
                         {
-                            // Start particle effect
-                            attackParticleEngine.particlesOn = true;
-                            attackParticleEngine.EmitterLocation = new Vector2(currentAttackableTiles[i].getX(), currentAttackableTiles[i].getY());
-
                             // Scrolling damage text
                             int postAttackHealth = preAttackHealth - currentAttackableTiles[i].getUnit().Life;
                             displayDamageTaken(postAttackHealth, currentAttackableTiles[i]);
@@ -834,12 +828,10 @@ namespace Formations
         }
         public void update()
         {
-            //attackParticleEngine.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            foreach (AnimationLightening strike in lightening)
+            foreach (Player player in players)
             {
-                strike.update(); 
+                player.update();
             }
-            attackParticleEngine.Update();
 
         }
 
@@ -868,16 +860,12 @@ namespace Formations
             }
             drawUnitButtons(currentTile, spriteBatch);
             // drawUnitInfo(spriteBatch);
-            players[0].draw(spriteBatch);
-            players[1].draw(spriteBatch);
-            turnSignal.draw(spriteBatch);
-            foreach (AnimationLightening strike in lightening)
+            foreach (Player player in players)
             {
-                strike.draw(spriteBatch);
+                player.draw(spriteBatch);
             }
 
-            // Particles
-            attackParticleEngine.Draw(spriteBatch);
+            turnSignal.draw(spriteBatch);
 
             // Damage text
 
@@ -1092,9 +1080,5 @@ namespace Formations
             borderLines[7] = new VertexPositionColor(new Vector3(largeBoardOffsetX - halfHexWidth - border, largeBoardOffsetY - largeTileSideLength - border, 0), Color.Blue);
         }
 
-        internal void setAttackParticleEngine(ParticleEngine attackParticleEngine)
-        {
-            this.attackParticleEngine = attackParticleEngine;
-        }
     }
 }
