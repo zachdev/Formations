@@ -64,11 +64,6 @@ namespace Formations
                 isDead = true;
             }
         }
-        public override void getHealed()
-        {
-            healingParticles.particlesOn = true;
-            healingParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
-        }
         public override int calculateAtt()
         {
             return Damage;

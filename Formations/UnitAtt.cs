@@ -75,11 +75,6 @@ namespace Formations
             }
             return result;
         }
-        public override void getHealed()
-        {
-            healingParticles.particlesOn = true;
-            healingParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
-        }
         public override int calculateRange()
         {
             return Range;

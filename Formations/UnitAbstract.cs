@@ -106,7 +106,13 @@ namespace Formations
             return result;
         }
         public abstract int calculateRange();
-        public abstract void getHealed();
+        public void getHealed(int healingAmount)
+        {
+            healingParticles.particlesOn = true;
+            healingParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
+            floatingText.displayDamageTaken(healingAmount, false);
+            Life += healingAmount;
+        }
         public TileBasic[] getAttackableTiles()
         {
             int calculatedRange = calculateRange();

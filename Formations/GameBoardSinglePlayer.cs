@@ -44,7 +44,6 @@ namespace Formations
         private Hexagon magicAction;
         private Hexagon moveAction;
 
-        private List<AnimationLightening> lightening = new List<AnimationLightening>();
         private TileBasic currentTile;
         private int unitSideLength;
         private const int boardHeight = 10;
@@ -132,10 +131,6 @@ namespace Formations
                (0, graphicsDevice.Viewport.Width,       // left, right
                 graphicsDevice.Viewport.Height, 0,      // bottom, top
                 0, 1);                                  // near, far plane
-            for (int i = 0; i < 5; i++)
-            {
-                lightening.Add(new AnimationLightening());    
-            }
             
             /*
              *setting up the board area
@@ -570,12 +565,6 @@ namespace Formations
 
                         self.useStamina(currentMag.calculateAttackCost());
                         currentMag.heal(surroundingTiles[i].getUnit());
-                        foreach (AnimationLightening strike in lightening)
-                        {
-                            strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
-
-                        }
-                        // Start particle effect
                     }
                 }
             }

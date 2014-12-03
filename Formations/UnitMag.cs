@@ -74,14 +74,15 @@ namespace Formations
         {
             Point attackerPosition = new Point((int)unit.ContainingTile.getX(), (int)unit.ContainingTile.getY());
             Point defendersPosition = new Point((int)unit.ContainingTile.getX(), (int)unit.ContainingTile.getY());
-
+            int healingAmount = this.calculateHeal();
+            unit.getHealed(healingAmount);
             foreach (AnimationLightening strike in lightening)
             {
                 strike.createLightening(Color.LawnGreen, attackerPosition, defendersPosition);
 
             }
             
-            unit.Life += this.calculateHeal();
+             
         }
         public override int calculateAtt()
         {
@@ -103,11 +104,6 @@ namespace Formations
                 }
             }
             return result;
-        }
-        public override void getHealed()
-        {
-            healingParticles.particlesOn = true;
-            healingParticles.EmitterLocation = new Vector2(ContainingTile.getX(), ContainingTile.getY());
         }
         public override int calculateRange()
         {
