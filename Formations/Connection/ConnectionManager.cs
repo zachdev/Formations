@@ -10,8 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using TomShane.Neoforce.Controls;
 
-public class ConnectionManger
+public class ConnectionManager
 {
+    private static ConnectionManager cm = new ConnectionManager();
     private const int PORT = 15000;
 
     private TextBox chatHistoryTextbox;
@@ -28,17 +29,23 @@ public class ConnectionManger
 
     // Constructors
 
-    public ConnectionManger(TextBox chatHistoryTextbox, String ip)
-    {
-        // Default, will be the host and will prep for the listening side
-        this.chatHistoryTextbox = chatHistoryTextbox;
-        chatHistoryTextbox.Text += "\nAttempt connection...";
 
+    private ConnectionManager()
+    {
         // Start up a thread to connect
-        sendThread = Task.Factory.StartNew(() => Sender(ip));
+        sendThread = Task.Factory.StartNew(() => Sender("146.57.195.125"));
     }
 
-    public ConnectionManger(TextBox chatHistoryTextbox)
+    public static ConnectionManager getInstance()
+    {
+        if (cm == null)
+        {
+            cm = new ConnectionManager();
+        }
+        return cm;
+    }
+
+    public ConnectionManager(TextBox chatHistoryTextbox)
     {
         // Default, will be the host and will prep for the listening side
         this.chatHistoryTextbox = chatHistoryTextbox;
@@ -46,6 +53,13 @@ public class ConnectionManger
 
         // Start up a thread to listen
         listenThread = Task.Factory.StartNew(() => Listener());
+    }
+
+    public void setUpChat(TextBox chatHistoryTextbox)
+    {
+        this.chatHistoryTextbox = chatHistoryTextbox;
+        // Default, will be the host and will prep for the listening side
+        chatHistoryTextbox.Text += "\nAttempt connection...";
     }
 
     // -- Public Methods --

@@ -13,6 +13,8 @@ namespace Formations
 {
     class Chat
     {
+        public ConnectionManager connectionManager;
+
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
 
@@ -31,9 +33,7 @@ namespace Formations
 
         private Boolean sliding;
 
-        private ConnectionManger connectionManager;
-
-        public Chat() {}
+        public Chat() { }
 
         public void init(Manager manager)
         {
@@ -86,6 +86,9 @@ namespace Formations
             chatPanel.Add(chatScrollbar);
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
+
+            connectionManager = ConnectionManager.getInstance();
+            connectionManager.setUpChat(chatHistoryTextbox);
         }
 
         public void toggle(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -173,16 +176,7 @@ namespace Formations
         {
             if (connectionManager == null || !connectionManager.isConnected)
             {
-                if (inputTextBox.Text.Contains("/host"))
-                {
-                    connectionManager = new ConnectionManger(chatHistoryTextbox);
-                }
-                else if (inputTextBox.Text.Contains("/join"))
-                {
-                    string[] words = inputTextBox.Text.Split(' ');
 
-                    connectionManager = new ConnectionManger(chatHistoryTextbox, words[1]);
-                }
             }
             else
             {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Windows.Forms;
 #endregion
 
 namespace Formations
@@ -16,12 +17,13 @@ namespace Formations
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
         [STAThread]
         static void Main()
         {
             using (var game = new Formations())
             //using (var db = new PlayerContext()) 
-            //{
+            {
                 game.Run();
                 Console.Write("New Player Database has been created.");
                 //var player1 = new Player { playerName = "missmagdalene" };
@@ -31,7 +33,7 @@ namespace Formations
                 Console.Write("Player 1 has been added to the database.");
 
                 
-            //}          
+            }          
         }
     }
 #endif
