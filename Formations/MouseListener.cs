@@ -9,8 +9,8 @@ namespace Formations
     class MouseListener
     {
         private MouseState oldState;
-        private Game1 game;
-        public MouseListener(MouseState mouseState, Game1 game)
+        private Formations game;
+        public MouseListener(MouseState mouseState, Formations game)
         {
             oldState = mouseState;
             this.game = game;

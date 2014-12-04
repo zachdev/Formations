@@ -86,7 +86,7 @@
     <Compile Include="TileBasic.cs" />
     <Compile Include="TileAbstract.cs" />
     <Compile Include="UnitAbstract.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Formations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitDef.cs" />

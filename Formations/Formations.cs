@@ -11,7 +11,7 @@ namespace Formations
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game, IMouseListener, IKeyboardListener
+    public class Formations : Game, IMouseListener, IKeyboardListener
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -28,7 +28,7 @@ namespace Formations
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
 
-        public Game1()
+        public Formations()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
