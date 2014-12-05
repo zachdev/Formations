@@ -118,9 +118,9 @@ namespace Formations
             createLobby();
             //newGame();
         }
-        private void challengePerson()
+       public void challengePerson()
         {
-
+            newGame();
         }
         private void createLobby(){
             gameLobby = GameLobby.getInstance();

@@ -126,7 +126,7 @@ namespace Formations
             {
                 passwordText.Focused = true;
             }
-            if (e.Key == Keys.Tab && sender.Equals(passwordText))
+            else if (e.Key == Keys.Tab && sender.Equals(passwordText))
             {
                 nameText.Focused = true;
             }
