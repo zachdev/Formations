@@ -310,19 +310,17 @@ namespace Formations
                     resetBools();
                     magPlacementInProgress = true;
                 }
-                for (int i = 0; i < boardWidth; i++)
-                {
-                    for (int j = 0; j < boardHeight; j++)
-                    {
-                        //calculate here maybe
-                        if (tiles[i, j].isHovered())
+                foreach (TileBasic tile in tiles)
+	            {
+		 
+                        if (tile.isHovered())
                         {
-                            tiles[i, j].mousePressed(mouseState);
+                            tile.mousePressed(mouseState);
                             if (attPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                                 {
-                                    tiles[i, j].setUnit(self.getAttUnit());
+                                    tile.setUnit(self.getAttUnit());
                                     self.useStamina(UnitAtt.STAMINA_PLACE_COST);
                                     makeMove();
                                     resetBools();
@@ -330,9 +328,9 @@ namespace Formations
                             }
                             if (defPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
                                 {
-                                    tiles[i, j].setUnit(self.getDefUnit());
+                                    tile.setUnit(self.getDefUnit());
                                     self.useStamina(UnitDef.STAMINA_PLACE_COST);
                                     makeMove();
                                     resetBools();
@@ -340,9 +338,9 @@ namespace Formations
                             }
                             if (magPlacementInProgress)
                             {
-                                if (playerCanSetUnit(i, j, mouseState, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
+                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
                                 {
-                                    tiles[i, j].setUnit(self.getMagUnit());
+                                    tile.setUnit(self.getMagUnit());
                                     self.useStamina(UnitMag.STAMINA_PLACE_COST);
                                     makeMove();
                                     resetBools();
@@ -361,7 +359,6 @@ namespace Formations
                                 healUnit(mouseState, self);
                             }
                         }
-                    }
                 }
             }
         }
@@ -415,48 +412,46 @@ namespace Formations
             Player self;
             self = selectPlayer();
             //checking board for where the mouse was released
-            for (int i = 0; i < boardWidth; i++)
-            {
-                for (int j = 0; j < boardHeight; j++)
-                {
-                    if (tiles[i, j].isSelected())
-                    {
-                        tiles[i, j].mouseReleased(mouseState);
-                        //Attack happens here
-                        if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
-                            || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
-                            && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        { 
-                            self.SelectedTile = tiles[i, j];
-                            attackInProgress = true;
-                            TileBasic[] attackableTiles = tiles[i, j].getUnit().getAttackableTiles();
-                            foreach (TileBasic tile in attackableTiles)
-                            {
-                                if (tile != null) { tile.setAsAttackArea(); }
-                            }
-                            return;
-                        }
-                        //Move happens here
-                        if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
-                            || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
-                            && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
-                            self.SelectedTile = tiles[i, j];
-                            moveInProgress = true;
-                            return;
-                        }
-                        //Magic happens here
-                        if (tiles[i, j].hasUnit() && ((isHostsTurn && tiles[i, j].getUnit().IsHostsUnit)
-                            || (!isHostsTurn && !tiles[i, j].getUnit().IsHostsUnit))
-                            && magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
-                        {
-                            self.SelectedTile = tiles[i, j];
-                            magicInProgress = true;
-                            return;
-                        }
 
+            foreach (TileBasic tile in tiles)
+            {
+                if (tile.isSelected())
+                {
+                    tile.mouseReleased(mouseState);
+                    //Attack happens here
+                    if (tile.hasUnit() && ((isHostsTurn && tile.getUnit().IsHostsUnit)
+                        || (!isHostsTurn && !tile.getUnit().IsHostsUnit))
+                        && attAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                    {
+                        self.SelectedTile = tile;
+                        attackInProgress = true;
+                        TileBasic[] attackableTiles = tile.getUnit().getAttackableTiles();
+                        foreach (TileBasic currentTile in attackableTiles)
+                        {
+                            if (currentTile != null) { currentTile.setAsAttackArea(); }
+                        }
+                        return;
+                    }
+                    //Move happens here
+                    if (tile.hasUnit() && ((isHostsTurn && tile.getUnit().IsHostsUnit)
+                        || (!isHostsTurn && !tile.getUnit().IsHostsUnit))
+                        && moveAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                    {
+                        self.SelectedTile = tile;
+                        moveInProgress = true;
+                        return;
+                    }
+                    //Magic happens here
+                    if (tile.hasUnit() && ((isHostsTurn && tile.getUnit().IsHostsUnit)
+                        || (!isHostsTurn && !tile.getUnit().IsHostsUnit))
+                        && magicAction.IsPointInPolygon(mouseState.X, mouseState.Y))
+                    {
+                        self.SelectedTile = tile;
+                        magicInProgress = true;
+                        return;
                     }
                 }
+
             }
             
             recalculateControlArea();
@@ -637,19 +632,19 @@ namespace Formations
 
 
 
-        private bool playerCanSetUnit(int tileX, int tileY, MouseState mouseState, Player player)
+        private bool playerCanSetUnit(TileBasic tile, Player player)
         {
             bool result = false; 
             Player self = player;
 
-            if (isFirstPhase && (((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
-                || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == true) && !self.IsHost)
-                || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == false))))
+            if (isFirstPhase && (((tile.isHostControlled() == true) && (tile.isGuestControlled() == false) && self.IsHost)
+                || ((tile.isHostControlled() == false) && (tile.isGuestControlled() == true) && !self.IsHost)
+                || ((tile.isHostControlled() == false) && (tile.isGuestControlled() == false))))
             {
                 result = true; 
             }
-            else if (((tiles[tileX, tileY].isHostControlled() == true) && (tiles[tileX, tileY].isGuestControlled() == false) && self.IsHost)
-                || ((tiles[tileX, tileY].isHostControlled() == false) && (tiles[tileX, tileY].isGuestControlled() == true) && !self.IsHost))
+            else if (((tile.isHostControlled() == true) && (tile.isGuestControlled() == false) && self.IsHost)
+                || ((tile.isHostControlled() == false) && (tile.isGuestControlled() == true) && !self.IsHost))
             {
                 result = true; 
             }
