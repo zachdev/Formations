@@ -16,7 +16,10 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoardSinglePlayer gb;
-        private Login login;
+        private Person person;
+        private bool isGameStarted = false;
+        private GameLogin login; 
+        private GameLobby gameLobby;
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;
         public static List<Texture2D> healingTextures;
@@ -64,6 +67,10 @@ namespace Formations
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
             theManager.SetSkin(new Skin(theManager, "Blue"));
+            gameLobby = new GameLobby(theManager);
+            gameLobby.init(this);
+            login = new GameLogin(theManager);
+            login.init(this);
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -93,8 +100,7 @@ namespace Formations
             healingTextures.Add(Content.Load<Texture2D>("sword3"));
 
 
-            gb = new GameBoardSinglePlayer();
-            gb.init(theManager, GraphicsDevice, "Formations", true); 
+
             // TODO: use this.Content to load your game content here
             
         }
@@ -107,7 +113,20 @@ namespace Formations
         {
             // TODO: Unload any non ContentManager content here
         }
+        internal void setPerson(Person person)
+        {
+            this.person = person;
+            newGame();
+        }
+        private void challengePerson()
+        {
 
+        }
+        private void newGame()
+        {
+            gb = new GameBoardSinglePlayer();
+            gb.init(theManager, GraphicsDevice, "Formations", true); 
+        }
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -116,8 +135,11 @@ namespace Formations
         protected override void Update(GameTime gameTime)
         {
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            gb.update();
-            mouseListener.update(mouseState);
+            if (login.isLoggedIn)
+            {
+                gb.update();
+                mouseListener.update(mouseState);
+            }
 
             base.Update(gameTime);
 
@@ -152,14 +174,17 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
             spriteBatch.Begin();
-
-            gb.draw(spriteBatch);
-
+            if (login.isLoggedIn)
+            {
+                gb.draw(spriteBatch);
+            }
             spriteBatch.End();
             theManager.EndDraw();
 
             base.Draw(gameTime);
 
         }
+
+
     }
 }
