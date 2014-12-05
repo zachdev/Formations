@@ -16,6 +16,7 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoardSinglePlayer gb;
+        private Login login;
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;
         public static List<Texture2D> healingTextures;
@@ -31,9 +32,10 @@ namespace Formations
         public Formations()
             : base()
         {
+            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            
             theManager = new Manager(this, graphics, "Default");
             theManager.AutoCreateRenderTarget = true;
             theManager.TargetFrames = 60;
@@ -44,6 +46,7 @@ namespace Formations
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
             graphics.ApplyChanges();
+            
         }
 
         /// <summary>

@@ -50,16 +50,17 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AnimationLightening.cs" />
+    <Compile Include="Animations\AnimationLightening.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
     <Compile Include="Connection\ConnectionMessage.cs" />
-    <Compile Include="FloatingText.cs" />
+    <Compile Include="Animations\FloatingText.cs" />
+    <Compile Include="Person.cs" />
     <Compile Include="PlayerContext.cs" />
     <Compile Include="ScoreCard.cs" />
     <Compile Include="StaminaComponent.cs" />
     <Compile Include="GameBoardSinglePlayer.cs" />
-    <Compile Include="Particle.cs" />
+    <Compile Include="Animations\Particle.cs" />
     <Compile Include="Lobby.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,7 +73,7 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParticleEngine.cs" />
+    <Compile Include="Animations\ParticleEngine.cs" />
     <Compile Include="SerialClass.cs" />
     <Compile Include="GameColors.cs" />
     <Compile Include="IKeyboardListener.cs" />
