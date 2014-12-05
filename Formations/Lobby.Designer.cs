@@ -82,6 +82,7 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Red;
+            this.button2.Font = new System.Drawing.Font("MS Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(620, 326);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";

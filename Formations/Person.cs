@@ -37,5 +37,9 @@ namespace Formations
             this.Name = name;
             this.Password = password;
         }
+        public override String ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -67,8 +67,7 @@ namespace Formations
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
             theManager.SetSkin(new Skin(theManager, "Blue"));
-            gameLobby = new GameLobby(theManager);
-            gameLobby.init(this);
+
             login = new GameLogin(theManager);
             login.init(this);
         }
@@ -116,11 +115,16 @@ namespace Formations
         internal void setPerson(Person person)
         {
             this.person = person;
-            newGame();
+            createLobby();
+            //newGame();
         }
         private void challengePerson()
         {
 
+        }
+        private void createLobby(){
+            gameLobby = GameLobby.getInstance();
+            gameLobby.init(this, theManager, person);
         }
         private void newGame()
         {
@@ -135,7 +139,7 @@ namespace Formations
         protected override void Update(GameTime gameTime)
         {
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            if (login.isLoggedIn)
+            if (login.isLoggedIn && gameLobby.IsChallengeAccepted)
             {
                 gb.update();
                 mouseListener.update(mouseState);
@@ -174,7 +178,7 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
             spriteBatch.Begin();
-            if (login.isLoggedIn)
+            if (login.isLoggedIn && gameLobby.IsChallengeAccepted)
             {
                 gb.draw(spriteBatch);
             }
