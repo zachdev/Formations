@@ -130,6 +130,7 @@ public class ConnectionManager
         char[] chars = new char[buffer.Length / sizeof(char)];
         System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
         String ip = new String(chars);
+        chatHistoryTextbox.Text += ip + "\n";
 
         Listener();
 
