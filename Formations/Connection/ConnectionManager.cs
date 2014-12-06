@@ -111,6 +111,15 @@ public class ConnectionManager
         }
         serverSenderNS = server.GetStream();
 
+        byte[] buffer = new byte[server.ReceiveBufferSize];
+
+        //---read incoming stream--- Will place the data into the buffer
+        int bytesRead = serverSenderNS.Read(buffer, 0, server.ReceiveBufferSize);
+
+        char[] chars = new char[buffer.Length / sizeof(char)];
+        System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
+        String ip = new String(chars);
+
         Listener();
 
         // Set-up the listener for the server.
