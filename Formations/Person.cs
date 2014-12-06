@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Formations
 {
+    [Serializable]
     class Person
     {
         private String _name;
