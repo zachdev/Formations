@@ -33,9 +33,6 @@ public class ConnectionManager
     private ConnectionManager()
     {
         // Get the Person info before going further
-
-        // Start up a thread to connect
-        serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
 
     #endregion - Contructors
@@ -55,6 +52,8 @@ public class ConnectionManager
     public void setUpChat(TextBox chatHistoryTextbox)
     {
         this.chatHistoryTextbox = chatHistoryTextbox;
+        // Start up a thread to connect
+        serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
 
     /*
@@ -110,7 +109,7 @@ public class ConnectionManager
             return;
         }
         serverSenderNS = server.GetStream();
-
+        Listener();
         // Set-up the listener for the server.
         // serverListenThread = Task.Factory.StartNew(() => Listener());
     }
@@ -145,7 +144,7 @@ public class ConnectionManager
     private void listen()
     {
         // Something is available
-        if (server.Available > 0)
+        if (server.Available != 0)
         {
             byte[] buffer = new byte[server.ReceiveBufferSize];
 
