@@ -278,11 +278,16 @@ namespace Formations
         }
         public override void draw(SpriteBatch spriteBatch)
         {
+
+            tileHex.draw(spriteBatch);
+        }
+
+        internal void updateHexHover()
+        {
             if (hovered)
             {
                 tileHex.updateHover();
             }
-            tileHex.draw(spriteBatch);
         }
     }
 }

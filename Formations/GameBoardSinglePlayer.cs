@@ -282,6 +282,9 @@ namespace Formations
             }
             return tempArray;
         }
+            
+
+        #region - Mouse Methods
         public void mousePressed(MouseState mouseState)
         {
             if (mouseState.RightButton == ButtonState.Pressed)
@@ -362,50 +365,6 @@ namespace Formations
                 }
             }
         }
-
-        private Player selectPlayer()
-        {
-            Player self;
-            if ((isHost && isHostsTurn))
-            {
-                self = players[0];
-            }
-            else
-            {
-                self = players[1];
-            }
-            return self;
-        }
-        private void resetBools()
-        {
-            attPlacementInProgress = false;
-            defPlacementInProgress = false;
-            magPlacementInProgress = false;
-            moveInProgress = false;
-            attackInProgress = false;
-        }
-        public void showEndTurn()
-        {
-            uiManager.Add(endTurnWindow);
-            endTurnIsVisible = true;
-        }
-
-        public void hideEndTurn()
-        {
-            uiManager.Remove(endTurnWindow);
-            endTurnIsVisible = false;
-        }
-        public void toggleEndTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
-        {
-            if (endTurnIsVisible)
-            {
-                hideEndTurn();
-            }
-            else
-            {
-                showEndTurn();
-            }
-        }
         public void mouseReleased(MouseState mouseState)
         {
             //selecting the correct player  
@@ -453,22 +412,13 @@ namespace Formations
                 }
 
             }
-            
+
             recalculateControlArea();
         }
         public void mouseDragged(MouseState mouseState)
         {
             currentMouseState = mouseState;
-            //if (hexInfo == null)
-            //{
-            //    hexInfo = new Label(uiManager);
-            //    uiManager.Add(hexInfo);
-            //    hexInfo.SetSize(100, 25);
-            //    hexInfo.TextColor = Color.Black;
-           // }
 
-            //hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
-            //setHoverLabel(mouseState);
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
@@ -483,8 +433,8 @@ namespace Formations
 
             if (!chatManager.chatIsVisible() && !endTurnIsVisible)
             {
-               // if (hexInfo == null)
-               // {
+                // if (hexInfo == null)
+                // {
                 //    hexInfo = new Label(uiManager);
                 //    uiManager.Add(hexInfo);
                 //    hexInfo.SetSize(150, 25);
@@ -502,9 +452,66 @@ namespace Formations
                         tiles[i, j].mouseMoved(mouseState);
                     }
                 }
-            }  
+            }
         }
-        
+        /// <summary>
+        /// Used to determine which players turn it is
+        /// </summary>
+        /// <returns></returns>
+        private Player selectPlayer()
+        {
+            Player self;
+            if ((isHost && isHostsTurn))
+            {
+                self = players[0];
+            }
+            else
+            {
+                self = players[1];
+            }
+            return self;
+        }
+        /// <summary>
+        /// Resets the current booleans to false
+        /// </summary>
+        private void resetBools()
+        {
+            attPlacementInProgress = false;
+            defPlacementInProgress = false;
+            magPlacementInProgress = false;
+            moveInProgress = false;
+            attackInProgress = false;
+        }
+
+        #endregion - Mouse Methods
+
+
+
+
+
+        public void showEndTurn()
+        {
+            uiManager.Add(endTurnWindow);
+            endTurnIsVisible = true;
+        }
+
+        public void hideEndTurn()
+        {
+            uiManager.Remove(endTurnWindow);
+            endTurnIsVisible = false;
+        }
+        public void toggleEndTurn(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            if (endTurnIsVisible)
+            {
+                hideEndTurn();
+            }
+            else
+            {
+                showEndTurn();
+            }
+        }
+
         //TODO: change or remove
         private void setHoverLabel(MouseState mouseState)
         {
@@ -744,6 +751,13 @@ namespace Formations
             foreach (Player player in players)
             {
                 player.update();
+            }
+            foreach (TileBasic tile in tiles)
+            {
+                if (tile.isHovered())
+                {
+                    tile.updateHexHover();
+                }
             }
 
         }

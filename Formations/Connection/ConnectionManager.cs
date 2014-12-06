@@ -34,7 +34,6 @@ public class ConnectionManager
     {
         // Get the Person info before going further
 
-
         // Start up a thread to connect
         serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
