@@ -87,7 +87,7 @@ public class ConnectionManager
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
-        if (isConnected)
+        if (server.Connected)
         {
             serverSenderNS.Close();
             //serverListenNS.Close();
