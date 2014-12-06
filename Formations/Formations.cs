@@ -129,7 +129,8 @@ namespace Formations
         private void newGame()
         {
             gb = new GameBoardSinglePlayer();
-            gb.init(theManager, GraphicsDevice, "Formations", true); 
+            gb.init(theManager, GraphicsDevice, "Formations", true);
+            mouseListener.startListener();
         }
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -138,11 +139,11 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            //var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             if (login.isLoggedIn && gameLobby.IsChallengeAccepted)
             {
                 gb.update();
-                mouseListener.update(mouseState);
+                //mouseListener.update(mouseState);
             }
 
             base.Update(gameTime);
