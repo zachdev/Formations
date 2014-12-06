@@ -120,6 +120,8 @@ public class ConnectionManager
             chatHistoryTextbox.Text += "Unable to connect.\n";
             return;
         }
+        serverSenderNS = server.GetStream();
+
         byte[] buffer = new byte[server.ReceiveBufferSize];
 
         //---read incoming stream--- Will place the data into the buffer
@@ -129,7 +131,6 @@ public class ConnectionManager
         System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
         String ip = new String(chars);
 
-        serverSenderNS = server.GetStream();
         Listener();
 
         // Set-up the listener for the server.
