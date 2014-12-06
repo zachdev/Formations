@@ -48,7 +48,7 @@ namespace Formations
             this.uiManager = uiManager;
             this.person = person;
 
-            //connectionManager = get connection manager reference here
+            connectionManager = ConnectionManager.getInstance();
 
             lobbyChat = new Chat();
             lobbyChat.init(uiManager);
