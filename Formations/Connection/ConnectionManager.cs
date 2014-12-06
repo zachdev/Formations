@@ -13,6 +13,7 @@ using TomShane.Neoforce.Controls;
 public class ConnectionManager
 {
     private static ConnectionManager cm = new ConnectionManager();
+    private const String SERVER_IP = "146.57.195.125";
     private const int PORT = 15000;
 
     private TextBox chatHistoryTextbox;
@@ -21,30 +22,40 @@ public class ConnectionManager
 
     private TcpClient server;
     private TcpClient client;
-    private NetworkStream ns;
-    private NetworkStream ns2;
+    private NetworkStream serverSenderNS;
+    private NetworkStream serverListenNS;
 
-    private Task sendThread;
-    private Task listenThread;
+    private Task serverSenderThread;
+    private Task serverListenThread;
 
-    // Constructors
-
+    #region - Constructors
 
     private ConnectionManager()
     {
         // Start up a thread to connect
-        sendThread = Task.Factory.StartNew(() => Sender("146.57.195.125"));
+        serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
 
+    #endregion - Contructors
+
+    #region - Public Methods
+
+    // Call to getting the Connection Manager
     public static ConnectionManager getInstance()
     {
         if (cm == null)
-        {
             cm = new ConnectionManager();
-        }
+
         return cm;
     }
 
+    // Chat Textbox pass in
+    public void setUpChat(TextBox chatHistoryTextbox)
+    {
+        this.chatHistoryTextbox = chatHistoryTextbox;
+    }
+
+    /*
     public ConnectionManager(TextBox chatHistoryTextbox)
     {
         // Default, will be the host and will prep for the listening side
@@ -54,15 +65,7 @@ public class ConnectionManager
         // Start up a thread to listen
         listenThread = Task.Factory.StartNew(() => Listener());
     }
-
-    public void setUpChat(TextBox chatHistoryTextbox)
-    {
-        this.chatHistoryTextbox = chatHistoryTextbox;
-        // Default, will be the host and will prep for the listening side
-        chatHistoryTextbox.Text += "\nAttempt connection...";
-    }
-
-    // -- Public Methods --
+     */
 
     // Method for sending a String, specifially the chat method.
     public void sendMessage(String message)
@@ -71,26 +74,44 @@ public class ConnectionManager
         {
             ConnectionMessage obj = Serialize(message);
 
-            ns.Write(obj.Data, 0, obj.Data.Length);
-            ns.Flush();
-
-            chatHistoryTextbox.Text += "\n<You> " + message;
+            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
+            serverSenderNS.Flush();
         }
     }
+
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
         if (isConnected)
         {
-            ns.Close();
-            ns2.Close();
+            serverSenderNS.Close();
+            serverListenNS.Close();
             server.Close();
             client.Close();
         }
     }
 
+    #endregion - Public Methods
 
-    // -- Private Methods --
+    #region - Private Methods
+
+    // Build's the sender datastream, uses the server TcpClient
+    private void Sender()
+    {
+        try
+        {
+            server = new TcpClient(SERVER_IP, PORT);
+        }
+        catch (SocketException)
+        {
+            chatHistoryTextbox.Text += "Unable to connect.\n";
+            return;
+        }
+        serverSenderNS = server.GetStream();
+
+        // Set-up the listener for the server.
+        serverListenThread = Task.Factory.StartNew(() => Listener());
+    }
 
     // Listener method will be placed on its own thread, uses the client TcpClient
     private void Listener()
@@ -104,19 +125,9 @@ public class ConnectionManager
         client = listener.AcceptTcpClient();
 
         //---get the incoming data through a network stream---
-        ns2 = client.GetStream();
+        serverListenNS = client.GetStream();
 
-        // In the case of the host, needs to have this data done now.
-        if (server == null)
-        {
-            // Convert the connection we just recieved into an outgoing connection for two way sending.
-            IPEndPoint ep = client.Client.RemoteEndPoint as IPEndPoint;
-            IPAddress ipa = ep.Address;
-
-            sendThread = Task.Factory.StartNew(() => Sender(ipa.ToString()));
-        }
-
-        chatHistoryTextbox.Text += "\nConnection established...";
+        chatHistoryTextbox.Text += "Connection to server established.\n";
         isConnected = true;
 
         while (true)
@@ -125,25 +136,6 @@ public class ConnectionManager
         }
     }
 
-    // Build's the sender datastream, uses the server TcpClient
-    private void Sender(String ip)
-    {
-        try
-        {
-            server = new TcpClient(ip, PORT);
-        }
-        catch (SocketException)
-        {
-            chatHistoryTextbox.Text += "\nUnable to connect.";
-            return;
-        }
-        ns = server.GetStream();
-
-        if (client == null)
-        {
-            listenThread = Task.Factory.StartNew(() => Listener());
-        }
-    }
 
 
     // The constant listening function
@@ -152,7 +144,7 @@ public class ConnectionManager
         byte[] buffer = new byte[client.ReceiveBufferSize];
 
         //---read incoming stream--- Will place the data into the buffer
-        int bytesRead = ns2.Read(buffer, 0, client.ReceiveBufferSize);
+        int bytesRead = serverListenNS.Read(buffer, 0, client.ReceiveBufferSize);
 
         ConnectionMessage message = new ConnectionMessage { Data = buffer };
 
@@ -160,7 +152,7 @@ public class ConnectionManager
         object obj = Deserialize(message);
         if (obj is String)
         {
-            chatHistoryTextbox.Text += "\n<Received> " + (obj as String); //---write back the text to the client---
+            chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
         }
         //else if (obj is SerialClass)
         //    Class.someMethodToUse(obj as SerialClass);
@@ -184,5 +176,7 @@ public class ConnectionManager
             return (new BinaryFormatter()).Deserialize(memoryStream);
         }
     }
+
+    #endregion - Private Methods
 
 }
