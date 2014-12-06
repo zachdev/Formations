@@ -16,7 +16,7 @@ namespace Formations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoardSinglePlayer gb;
-        private Person person;
+        private Person _person;
         private bool isGameStarted = false;
         private GameLogin login; 
         private GameLobby gameLobby;
@@ -31,6 +31,17 @@ namespace Formations
 
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
+        public Person person 
+        { 
+            get 
+            {
+                return _person; 
+            } 
+            set 
+            { 
+                _person = value; 
+            } 
+        }
 
         public Formations()
             : base()

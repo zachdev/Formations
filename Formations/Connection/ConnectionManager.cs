@@ -82,7 +82,19 @@ public class ConnectionManager
             serverSenderNS.Flush();
         }
     }
+    public void sendPerson(Person person)
+    {
+        if (server.Connected)
+        {
+            // Need to add the current player's name to the message
+            //message = "<" + player.Name + "> " + message;
 
+            ConnectionMessage obj = Serialize(person);
+
+            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
+            serverSenderNS.Flush();
+        }
+    }
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
@@ -108,8 +120,10 @@ public class ConnectionManager
             chatHistoryTextbox.Text += "Unable to connect.\n";
             return;
         }
+
         serverSenderNS = server.GetStream();
         Listener();
+
         // Set-up the listener for the server.
         // serverListenThread = Task.Factory.StartNew(() => Listener());
     }
@@ -158,6 +172,10 @@ public class ConnectionManager
             if (obj is String)
             {
                 chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
+            }
+            if (obj is Person)
+            {
+                chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
             }
         }
 

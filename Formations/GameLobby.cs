@@ -50,6 +50,7 @@ namespace Formations
 
             connectionManager = ConnectionManager.getInstance();
 
+
             lobbyChat = new Chat();
             lobbyChat.init(uiManager);
 
@@ -75,9 +76,10 @@ namespace Formations
 
         void challengeButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
-            sendChallengeRequest(temp);
-            lobbyChat.toggle(sender, e);
+            connectionManager.sendPerson(formation.person);
+           // Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
+//sendChallengeRequest(temp);
+            //lobbyChat.toggle(sender, e);
         }
         public void sendChallengeRequest(Person person)
         {

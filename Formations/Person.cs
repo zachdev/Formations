@@ -6,7 +6,7 @@ using System.Text;
 namespace Formations
 {
     [Serializable]
-    class Person
+    public class Person
     {
         private String _name;
         private String _password;
