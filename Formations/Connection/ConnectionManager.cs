@@ -18,7 +18,7 @@ public class ConnectionManager
 
     private TextBox chatHistoryTextbox;
 
-    public Boolean isConnected = false;
+    //public Boolean isConnected = false;
 
     private TcpClient server;
     //private TcpClient client;
@@ -111,6 +111,8 @@ public class ConnectionManager
         }
         serverSenderNS = server.GetStream();
 
+        Listener();
+
         // Set-up the listener for the server.
         // serverListenThread = Task.Factory.StartNew(() => Listener());
     }
@@ -130,7 +132,7 @@ public class ConnectionManager
         //serverListenNS = client.GetStream();
 
         chatHistoryTextbox.Text += "Connection to server established.\n";
-        isConnected = true;
+        //isConnected = true;
 
         while (true)
         {
@@ -145,7 +147,7 @@ public class ConnectionManager
     private void listen()
     {
         // Something is available
-        if (server.Available > 0)
+        if (server.Available != 0)
         {
             byte[] buffer = new byte[server.ReceiveBufferSize];
 

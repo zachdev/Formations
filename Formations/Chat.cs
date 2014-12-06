@@ -180,14 +180,7 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            if (connectionManager == null || !connectionManager.isConnected)
-            {
-
-            }
-            else
-            {
-                connectionManager.sendMessage(inputTextBox.Text);
-            }
+            connectionManager.sendMessage(inputTextBox.Text);
             inputTextBox.Text = "";
         }
     }
