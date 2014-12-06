@@ -73,7 +73,7 @@ public class ConnectionManager
     // Method for sending a String, specifially the chat method.
     public void sendMessage(String message)
     {
-        if (isConnected)
+        if (server.Connected)
         {
             // Need to add the current player's name to the message
             //message = "<" + player.Name + "> " + message;
@@ -88,13 +88,10 @@ public class ConnectionManager
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
-        if (server.Connected)
-        {
             serverSenderNS.Close();
             //serverListenNS.Close();
             server.Close();
             //client.Close();
-        }
     }
 
     #endregion - Public Methods
