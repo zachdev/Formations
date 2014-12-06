@@ -46,12 +46,7 @@ namespace Formations
             inputTextBox = new TextBox(theManager);
             chatSendButton = new Button(theManager);
 
-            // Now initialize them all
-            chatPanel.Init();
-            chatScrollbar.Init();
-            chatHistoryTextbox.Init();
-            inputTextBox.Init();
-            chatSendButton.Init();
+
 
             // Main chat panel
             chatPanel.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -81,14 +76,25 @@ namespace Formations
             chatSendButton.Text = "Send";
             chatSendButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.sendMessage);
 
+            // Now initialize them all
+            chatPanel.Init();
+            chatScrollbar.Init();
+            chatHistoryTextbox.Init();
+            inputTextBox.Init();
+            chatSendButton.Init();
+
             // Add all the components to the gui manager
             chatScrollbar.Add(chatHistoryTextbox);
             chatPanel.Add(chatScrollbar);
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
 
+
+
             connectionManager = ConnectionManager.getInstance();
             connectionManager.setUpChat(chatHistoryTextbox);
+
+            show();
         }
 
         public void toggle(object sender, TomShane.Neoforce.Controls.EventArgs e)

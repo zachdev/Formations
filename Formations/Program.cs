@@ -30,10 +30,9 @@ namespace Formations
 
                 //db.Players.Add(player1);
                 //db.SaveChanges();
-                Console.Write("Player 1 has been added to the database.");
-
-                
-            }          
+                Console.Write("Player 1 has been added to the database."); 
+            }
+              
         }
     }
 #endif
