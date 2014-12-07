@@ -16,6 +16,7 @@ public class ConnectionManager
     private const String SERVER_IP = "96.42.67.194";
     private const int PORT = 15000;
     private GameLobby gameLobby;
+    private bool requestAccepted = false;
 
     public Boolean isConnected = false;
 
@@ -58,18 +59,17 @@ public class ConnectionManager
         serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
 
-    /*
-    public ConnectionManager(TextBox chatHistoryTextbox)
+    public void sendChallengeRequect(ChallengeRequest request)
     {
-        // Default, will be the host and will prep for the listening side
-        this.chatHistoryTextbox = chatHistoryTextbox;
-        chatHistoryTextbox.Text += "\nListening for connection...";
+        if (server.Connected)
+        {
 
-        // Start up a thread to listen
-        listenThread = Task.Factory.StartNew(() => Listener());
+            ConnectionMessage obj = Serialize(request);
+
+            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
+            serverSenderNS.Flush();
+        }
     }
-     */
-
     // Method for sending a String, specifially the chat method.
     public void sendMessage(String message)
     {
@@ -88,9 +88,6 @@ public class ConnectionManager
     {
         if (server.Connected)
         {
-            // Need to add the current player's name to the message
-            //message = "<" + player.Name + "> " + message;
-
             ConnectionMessage obj = Serialize(person);
 
             serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
@@ -198,6 +195,13 @@ public class ConnectionManager
             {
                 gameLobby.chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
                 gameLobby.updatePlayersList((Person)obj);
+            }
+            if (obj is ChallengeRequest)
+            {
+                //requestAccepted = true;
+                gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
+                System.Console.WriteLine("ChallengeRequest");
+
             }
         }
 

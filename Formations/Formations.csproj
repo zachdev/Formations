@@ -51,6 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animations\AnimationLightening.cs" />
+    <Compile Include="ChallengeRequest.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
     <Compile Include="Connection\ConnectionMessage.cs" />

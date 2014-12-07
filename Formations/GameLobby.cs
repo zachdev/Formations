@@ -19,6 +19,7 @@ namespace Formations
         private Formations formation;
         private Manager uiManager;
         private bool _challengeAccepted = false;
+        private bool endTurnIsVisible = false;
 
         // GUI Stuff
         private Panel chatPanel;
@@ -26,6 +27,10 @@ namespace Formations
         public TextBox chatHistoryTextbox;
         private TextBox inputTextBox;
         public ListBox playerlist;
+        private Button endTurn;
+        private Window endTurnWindow;
+        private Button endYesButton;
+        private Button endNoButton;
         private Button chatSendButton;
         private Button challengeButton;
         private int count = 1;
@@ -129,6 +134,34 @@ namespace Formations
             chatHistoryTextbox.Init();
             inputTextBox.Init();
             chatSendButton.Init();
+            /*
+            * End Turn Button/Window
+             */
+            endTurn = new Button(uiManager);
+            endTurn.SetPosition(10, 150);
+            endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            endTurn.Text = "EndTurn";
+            endYesButton = new Button(uiManager);
+            //endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
+            endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            endYesButton.Text = "Yes";
+            endYesButton.SetPosition(0, 0);
+            endYesButton.SetSize(100, 100);
+            endNoButton = new Button(uiManager);
+            endNoButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            endNoButton.Text = "No";
+            endNoButton.SetPosition(0, 100);
+            endNoButton.SetSize(100, 100);
+            endTurnWindow = new Window(uiManager);
+            endTurnWindow.SetSize(114, 235);
+            endTurnWindow.SetPosition(500, 250);
+            endTurnWindow.Text = "  End Turn?";
+            endTurnWindow.Shadow = true;
+            endTurnWindow.CloseButtonVisible = false;
+            endTurnWindow.Add(endYesButton);
+            endTurnWindow.Add(endNoButton);
+
+
 
             // Add all the components to the gui manager
             chatScrollbar.Add(chatHistoryTextbox);
@@ -136,6 +169,7 @@ namespace Formations
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
 
+            uiManager.Add(endTurn);
             uiManager.Add(chatPanel);
             uiManager.Add(challengeButton);
             uiManager.Add(playerlist);
@@ -144,11 +178,34 @@ namespace Formations
             connectionManager.setUpChat(chatHistoryTextbox);
 
         }
+        public void showChallengeAccept()
+        {
+            uiManager.Add(endTurnWindow);
+            endTurnIsVisible = true;
+        }
 
+        public void hideChallengeAccept()
+        {
+            uiManager.Remove(endTurnWindow);
+            endTurnIsVisible = false;
+        }
+        private void toggleChallengeAccept(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            if (endTurnIsVisible)
+            {
+                hideChallengeAccept();
+            }
+            else
+            {
+                showChallengeAccept();
+            }
+        }
         void challengeButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            connectionManager.sendPerson(formation.person);
-            // Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
+            //connectionManager.sendPerson(formation.person);
+            Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
+            
+            connectionManager.sendChallengeRequect(new ChallengeRequest(person, temp));
             //sendChallengeRequest(temp);
             //lobbyChat.toggle(sender, e);
         }
@@ -159,6 +216,10 @@ namespace Formations
             uiManager.Remove(challengeButton);
             this.IsChallengeAccepted = true;
             formation.challengePerson();
+        }
+        public void AcceptChallengeWindowOpen(ChallengeRequest request)
+        {
+            showChallengeAccept();
         }
         public void updatePlayersList(Person newPerson)
         {
