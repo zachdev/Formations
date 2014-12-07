@@ -193,7 +193,7 @@ public class ConnectionManager
             }
             if (obj is Person)
             {
-                gameLobby.chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
+                //gameLobby.chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
                 gameLobby.updatePlayersList((Person)obj);
             }
             if (obj is ChallengeRequest)
