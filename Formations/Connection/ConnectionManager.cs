@@ -12,11 +12,10 @@ using TomShane.Neoforce.Controls;
 
 public class ConnectionManager
 {
-    private static ConnectionManager cm = new ConnectionManager();
+    private static ConnectionManager cm;
     private const String SERVER_IP = "96.42.67.194";
     private const int PORT = 15000;
-
-    private TextBox chatHistoryTextbox;
+    private GameLobby gameLobby;
 
     public Boolean isConnected = false;
 
@@ -43,16 +42,19 @@ public class ConnectionManager
     public static ConnectionManager getInstance()
     {
         if (cm == null)
+        {
             cm = new ConnectionManager();
-
+        }
         return cm;
     }
 
     // Chat Textbox pass in
     public void setUpChat(TextBox chatHistoryTextbox)
     {
-        this.chatHistoryTextbox = chatHistoryTextbox;
-        // Start up a thread to connect
+        if (gameLobby == null)
+        {
+            gameLobby = GameLobby.getInstance();
+        }
         serverSenderThread = Task.Factory.StartNew(() => Sender());
     }
 
@@ -117,7 +119,7 @@ public class ConnectionManager
         }
         catch (SocketException)
         {
-            chatHistoryTextbox.Text += "Unable to connect.\n";
+            gameLobby.chatHistoryTextbox.Text += "Unable to connect.\n";
             return;
         }
         serverSenderNS = server.GetStream();
@@ -129,8 +131,17 @@ public class ConnectionManager
 
         char[] chars = new char[buffer.Length / sizeof(char)];
         System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
-        String ip = new String(chars);
-        chatHistoryTextbox.Text += ip + "\n";
+        String ip = "";
+        for (int i = 0; i < 16; i++)
+        {
+            System.Console.WriteLine(chars[i]);
+            if (chars[i] == '\0') { break; }
+            ip += chars[i];
+            
+        }
+        gameLobby.person.ipAddress = ip;
+
+        gameLobby.chatHistoryTextbox.Text += ip + "\n";
 
         Listener();
 
@@ -152,7 +163,7 @@ public class ConnectionManager
         //---get the incoming data through a network stream---
         //serverListenNS = client.GetStream();
 
-        chatHistoryTextbox.Text += "Connection to server established.\n";
+        gameLobby.chatHistoryTextbox.Text += "Connection to server established.\n";
         isConnected = true;
 
         while (true)
@@ -181,11 +192,12 @@ public class ConnectionManager
             object obj = Deserialize(message);
             if (obj is String)
             {
-                chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
+                gameLobby.chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
             }
             if (obj is Person)
             {
-                chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
+                gameLobby.chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
+                gameLobby.updatePlayersList((Person)obj);
             }
         }
 

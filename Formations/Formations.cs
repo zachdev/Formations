@@ -156,6 +156,10 @@ namespace Formations
                 gb.update();
                 //mouseListener.update(mouseState);
             }
+            else if(gameLobby != null)
+            {
+                gameLobby.update();
+            }
 
             base.Update(gameTime);
 

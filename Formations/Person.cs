@@ -6,10 +6,11 @@ using System.Text;
 namespace Formations
 {
     [Serializable]
-    public class Person
+    public class Person : IEquatable<Person>
     {
         private String _name;
         private String _password;
+        public String ipAddress { get; set; }
 
         public String Name 
         { 
@@ -40,7 +41,32 @@ namespace Formations
         }
         public override String ToString()
         {
-            return Name;
+            return Name + " - " + ipAddress;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Person objAsPart = obj as Person;
+            if (objAsPart == null) return false;
+            else return Equals(objAsPart);
+        }
+        public bool Equals(Person other)
+        {
+            bool result = true;
+            if (!this.Name.Equals(other.Name))
+            {
+                result = false;
+            }
+            if (!this.Password.Equals(other.Password))
+            {
+                result = false;
+            }
+            if (!this.ipAddress.Equals(other.ipAddress))
+            {
+                result = false;
+            }
+            return result;
         }
     }
 }
