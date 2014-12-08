@@ -224,12 +224,9 @@ namespace Formations
         }
         public void AcceptChallengeWindowOpen(ChallengeRequest request)
         {
-            if (CurrentRequest != null)
-            {
                 acceptWindow.Text = "Challenge from " + request.Sender.Name;
                 showChallengeAccept();
                 CurrentRequest = request;
-            }
         }
         public void updatePlayersList(Person newPerson)
         {
@@ -267,7 +264,7 @@ namespace Formations
 
         public void update()
         {
-            if (count >= 1000)
+            if (count >= 10000)
             {
                 playerlist.Items.Clear();
                 count = 1;
