@@ -81,8 +81,6 @@ namespace Formations
             this.uiManager = uiManager;
             this.person = person;
 
-            connectionManager = ConnectionManager.getInstance();
-
             playerlist = new ListBox(uiManager);
             playerlist.SetPosition(1100, 8);
             playerlist.SetSize(100, 200);
