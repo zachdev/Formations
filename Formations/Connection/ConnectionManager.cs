@@ -105,12 +105,16 @@ public class ConnectionManager
     // Returns if the playerClient is connected
     public Boolean isConnectedToPlayer()
     {
+        if (playerClient == null)
+            return false;
         return playerClient.Connected;
     }
 
     // Returns if the serverClient is connected
     public Boolean isConnectedToServer()
     {
+        if (serverClient == null)
+            return false;
         return serverClient.Connected;
     }
 
@@ -199,7 +203,8 @@ public class ConnectionManager
         }
         catch (Exception)
         {
-            gameLobby.chatHistoryTextbox.Text += "Exception happened with Player. Connection Ended.\n";
+            gameLobby.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
+            playerClient = null;
             return;
         }
     }
@@ -247,11 +252,20 @@ public class ConnectionManager
     // Listener method will be placed on its own thread, uses the client TcpClient
     private void ServerListener()
     {
-        while (serverClient.Connected)
+        try
         {
-            // This will make the server listen
-            listen(serverClient);
-            Thread.Sleep(10);
+            while (serverClient.Connected)
+            {
+                // This will make the server listen
+                listen(serverClient);
+                Thread.Sleep(10);
+            }
+        }
+        catch (Exception)
+        {
+            gameLobby.chatHistoryTextbox.Text += "Exception happened with ServerClient. Connection Ended.\n";
+            serverClient = null;
+            return;
         }
     }
 
