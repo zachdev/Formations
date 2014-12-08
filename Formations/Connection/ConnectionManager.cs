@@ -82,7 +82,7 @@ public class ConnectionManager
     }
 
     // Method for sending a String, specifially the chat method.
-    public void sendMessage(String message)
+    public void sendMessageServer(String message)
     {
         // Add additional logic to use this for playerClient
         if (serverClient.Connected)
@@ -95,7 +95,20 @@ public class ConnectionManager
             serverClientNS.Flush();
         }
     }
+    // Method for sending a String, specifially the chat method.
+    public void sendMessagePlayer(String message)
+    {
+        // Add additional logic to use this for playerClient
+        if (playerClient.Connected)
+        {
+            message = "<" + gameLobby.person.Name + "> " + message;
 
+            ConnectionMessage obj = Serialize(message);
+
+            playerClientNS.Write(obj.Data, 0, obj.Data.Length);
+            playerClientNS.Flush();
+        }
+    }
     public void sendPerson(Person person)
     {
         if (serverClient.Connected)

@@ -90,8 +90,6 @@ namespace Formations
             chatPanel.Add(chatSendButton);
 
             connectionManager = ConnectionManager.getInstance();
-
-            show();
         }
 
         public void toggle(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -180,7 +178,7 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            connectionManager.sendMessage(inputTextBox.Text);
+            connectionManager.sendMessagePlayer(inputTextBox.Text);
             inputTextBox.Text = "";
         }
     }

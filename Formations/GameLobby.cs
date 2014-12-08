@@ -243,7 +243,7 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            connectionManager.sendMessage(inputTextBox.Text);
+            connectionManager.sendMessageServer(inputTextBox.Text);
             inputTextBox.Text = "";
         }
 
