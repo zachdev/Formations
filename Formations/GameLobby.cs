@@ -170,7 +170,12 @@ namespace Formations
         }
         public bool isGameStarted()
         {
-            return false;
+            bool result = false;
+            if (connectionManager != null)
+            {
+               result = connectionManager.isConnectedToPlayer();
+            }
+            return result;
         }
         public void showChallengeAccept()
         {
