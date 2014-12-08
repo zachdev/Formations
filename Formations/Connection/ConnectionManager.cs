@@ -12,27 +12,34 @@ using TomShane.Neoforce.Controls;
 
 public class ConnectionManager
 {
-    private static ConnectionManager cm;
+    // Connection info
     private const String SERVER_IP = "96.42.67.194";
     private const int PORT = 15000;
-    private GameLobby gameLobby;
 
+    // This
+    private static ConnectionManager cm;
 
-    public Boolean isConnected = false;
-
+    // Server connection objects
     private TcpClient server;
-    //private TcpClient client;
-    private NetworkStream serverSenderNS;
-    //private NetworkStream serverListenNS;
-
+    private NetworkStream serverNS;
     private Task serverSenderThread;
-    //private Task serverListenThread;
+
+    // Other player connection objects
+    private TcpClient playerClient;
+    private NetworkStream playerClientNS;
+
+    private GameLobby gameLobby;
 
     #region - Constructors
 
     private ConnectionManager()
     {
-        // Get the Person info before going further
+        if (gameLobby == null)
+        {
+            gameLobby = GameLobby.getInstance();
+        }
+
+        serverSenderThread = Task.Factory.StartNew(() => ServerConnection());
     }
 
     #endregion - Contructors
@@ -49,27 +56,17 @@ public class ConnectionManager
         return cm;
     }
 
-    // Chat Textbox pass in
-    public void setUpChat(TextBox chatHistoryTextbox)
-    {
-        if (gameLobby == null)
-        {
-            gameLobby = GameLobby.getInstance();
-        }
-        serverSenderThread = Task.Factory.StartNew(() => Sender());
-    }
-
     public void sendChallengeRequect(ChallengeRequest request)
     {
         if (server.Connected)
         {
-
             ConnectionMessage obj = Serialize(request);
 
-            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
-            serverSenderNS.Flush();
+            serverNS.Write(obj.Data, 0, obj.Data.Length);
+            serverNS.Flush();
         }
     }
+
     // Method for sending a String, specifially the chat method.
     public void sendMessage(String message)
     {
@@ -80,27 +77,27 @@ public class ConnectionManager
 
             ConnectionMessage obj = Serialize(message);
 
-            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
-            serverSenderNS.Flush();
+            serverNS.Write(obj.Data, 0, obj.Data.Length);
+            serverNS.Flush();
         }
     }
+
     public void sendPerson(Person person)
     {
         if (server.Connected)
         {
             ConnectionMessage obj = Serialize(person);
 
-            serverSenderNS.Write(obj.Data, 0, obj.Data.Length);
-            serverSenderNS.Flush();
+            serverNS.Write(obj.Data, 0, obj.Data.Length);
+            serverNS.Flush();
         }
     }
+
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
-            serverSenderNS.Close();
-            //serverListenNS.Close();
-            server.Close();
-            //client.Close();
+        serverNS.Close();
+        server.Close();
     }
 
     #endregion - Public Methods
@@ -108,10 +105,11 @@ public class ConnectionManager
     #region - Private Methods
 
     // Build's the sender datastream, uses the server TcpClient
-    private void Sender()
+    private void ServerConnection()
     {
         try
         {
+            // This is the connection to the server
             server = new TcpClient(SERVER_IP, PORT);
         }
         catch (SocketException)
@@ -119,13 +117,16 @@ public class ConnectionManager
             gameLobby.chatHistoryTextbox.Text += "Unable to connect.\n";
             return;
         }
-        serverSenderNS = server.GetStream();
 
+        // Set the NS stream reference
+        serverNS = server.GetStream();
+
+        // Create a byte array to store the incoming IP address
         byte[] buffer = new byte[server.ReceiveBufferSize];
 
-        //---read incoming stream--- Will place the data into the buffer
-        int bytesRead = serverSenderNS.Read(buffer, 0, server.ReceiveBufferSize);
-
+        // Read the data that's come in
+        int bytesRead = serverNS.Read(buffer, 0, server.ReceiveBufferSize);
+        // Getting only the IP
         char[] chars = new char[buffer.Length / sizeof(char)];
         System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
         String ip = "";
@@ -134,54 +135,39 @@ public class ConnectionManager
             System.Console.WriteLine(chars[i]);
             if (chars[i] == '\0') { break; }
             ip += chars[i];
-            
         }
         gameLobby.person.ipAddress = ip;
-
         gameLobby.chatHistoryTextbox.Text += ip + "\n";
 
-        Listener();
+        gameLobby.chatHistoryTextbox.Text += "Connection to server established.\n";
+
+        ServerListener();
 
         // Set-up the listener for the server.
         // serverListenThread = Task.Factory.StartNew(() => Listener());
     }
 
     // Listener method will be placed on its own thread, uses the client TcpClient
-    private void Listener()
+    private void ServerListener()
     {
-        //---listen at the specified IP and port no.---
-        //IPAddress localAdd = IPAddress.Any;
-        //TcpListener listener = new TcpListener(localAdd, PORT);
-        //listener.Start();
-
-        //---incoming client connected---
-        //client = listener.AcceptTcpClient();
-
-        //---get the incoming data through a network stream---
-        //serverListenNS = client.GetStream();
-
-        gameLobby.chatHistoryTextbox.Text += "Connection to server established.\n";
-        isConnected = true;
-
-        while (true)
+        while (server.Connected)
         {
-            listen();
+            // This will make the server listen
+            listen(server);
             Thread.Sleep(10);
         }
     }
 
-
-
     // The constant listening function
-    private void listen()
+    private void listen(TcpClient client)
     {
         // Something is available
-        if (server.Available != 0)
+        if (client.Available != 0)
         {
-            byte[] buffer = new byte[server.ReceiveBufferSize];
+            byte[] buffer = new byte[client.ReceiveBufferSize];
 
             //---read incoming stream--- Will place the data into the buffer
-            int bytesRead = serverSenderNS.Read(buffer, 0, server.ReceiveBufferSize);
+            int bytesRead = client.GetStream().Read(buffer, 0, client.ReceiveBufferSize);
 
             ConnectionMessage message = new ConnectionMessage { Data = buffer };
 
@@ -191,22 +177,18 @@ public class ConnectionManager
             {
                 gameLobby.chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
             }
-            if (obj is Person)
+            else if (obj is Person)
             {
                 //gameLobby.chatHistoryTextbox.Text += (obj as Person) + "\n"; //---write back the text to the client---
                 gameLobby.updatePlayersList((Person)obj);
             }
-            if (obj is ChallengeRequest)
+            else if (obj is ChallengeRequest)
             {
                 gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
                 System.Console.WriteLine("ChallengeRequest");
 
             }
         }
-
-
-        //else if (obj is SerialClass)
-        //    Class.someMethodToUse(obj as SerialClass);
     }
 
     // Encode message for use
