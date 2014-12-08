@@ -12,6 +12,7 @@ namespace Formations
 {
     class GameBoardSinglePlayer : IMouseListener, IKeyboardListener
     {
+        private ConnectionManager connectionManager = ConnectionManager.getInstance();
         private Player[] players = new Player[2];
         private Manager uiManager;
         private string gameName;

@@ -262,6 +262,10 @@ namespace Formations
             if (CurrentRequest != null && CurrentRequest.IsAccepted)
             {
                 formation.challengePerson();
+                uiManager.Remove(endTurn);
+                uiManager.Remove(chatPanel);
+                uiManager.Remove(challengeButton);
+                uiManager.Remove(playerlist);
             }
             if (count >= 10000)
             {
