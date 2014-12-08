@@ -89,10 +89,7 @@ namespace Formations
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
 
-
-
             connectionManager = ConnectionManager.getInstance();
-            connectionManager.setUpChat(chatHistoryTextbox);
 
             show();
         }

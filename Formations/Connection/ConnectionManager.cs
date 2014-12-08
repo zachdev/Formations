@@ -20,8 +20,8 @@ public class ConnectionManager
     private static ConnectionManager cm;
 
     // Server connection objects
-    private TcpClient server;
-    private NetworkStream serverNS;
+    private TcpClient serverClient;
+    private NetworkStream serverClientNS;
     private Task serverSenderThread;
 
     // Other player connection objects
@@ -58,107 +58,67 @@ public class ConnectionManager
 
     public void sendChallengeRequect(ChallengeRequest request)
     {
-        if (server.Connected)
+        if (serverClient.Connected)
         {
             ConnectionMessage obj = Serialize(request);
 
-            serverNS.Write(obj.Data, 0, obj.Data.Length);
-            serverNS.Flush();
+            serverClientNS.Write(obj.Data, 0, obj.Data.Length);
+            serverClientNS.Flush();
         }
     }
 
     // Method for sending a String, specifially the chat method.
     public void sendMessage(String message)
     {
-        if (server.Connected)
+        // Add additional logic to use this for playerClient
+        if (serverClient.Connected)
         {
-            // Need to add the current player's name to the message
-            //message = "<" + player.Name + "> " + message;
+            message = "<" + gameLobby.person.Name + "> " + message;
 
             ConnectionMessage obj = Serialize(message);
 
-            serverNS.Write(obj.Data, 0, obj.Data.Length);
-            serverNS.Flush();
+            serverClientNS.Write(obj.Data, 0, obj.Data.Length);
+            serverClientNS.Flush();
         }
     }
 
     public void sendPerson(Person person)
     {
-        if (server.Connected)
+        if (serverClient.Connected)
         {
             ConnectionMessage obj = Serialize(person);
 
-            serverNS.Write(obj.Data, 0, obj.Data.Length);
-            serverNS.Flush();
+            serverClientNS.Write(obj.Data, 0, obj.Data.Length);
+            serverClientNS.Flush();
         }
     }
 
     // Close the damn connection, the .NET framework seems to be taking care of it, so... that's good.
     public void closeConnection()
     {
-        serverNS.Close();
-        server.Close();
+        playerClientNS.Close();
+        playerClient.Close();
+        serverClientNS.Close();
+        serverClient.Close();
+    }
+
+    // Returns if the playerClient is connected
+    public Boolean isConnectedToPlayer()
+    {
+        return playerClient.Connected;
+    }
+
+    // Returns if the serverClient is connected
+    public Boolean isConnectedToServer()
+    {
+        return serverClient.Connected;
     }
 
     #endregion - Public Methods
 
     #region - Private Methods
 
-    // Build's the sender datastream, uses the server TcpClient
-    private void ServerConnection()
-    {
-        try
-        {
-            // This is the connection to the server
-            server = new TcpClient(SERVER_IP, PORT);
-        }
-        catch (SocketException)
-        {
-            gameLobby.chatHistoryTextbox.Text += "Unable to connect.\n";
-            return;
-        }
-
-        // Set the NS stream reference
-        serverNS = server.GetStream();
-
-        // Create a byte array to store the incoming IP address
-        byte[] buffer = new byte[server.ReceiveBufferSize];
-
-        // Read the data that's come in
-        int bytesRead = serverNS.Read(buffer, 0, server.ReceiveBufferSize);
-        // Getting only the IP
-        char[] chars = new char[buffer.Length / sizeof(char)];
-        System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
-        String ip = "";
-        for (int i = 0; i < 16; i++)
-        {
-            System.Console.WriteLine(chars[i]);
-            if (chars[i] == '\0') { break; }
-            ip += chars[i];
-        }
-        gameLobby.person.ipAddress = ip;
-        gameLobby.chatHistoryTextbox.Text += ip + "\n";
-
-        gameLobby.chatHistoryTextbox.Text += "Connection to server established.\n";
-
-        ServerListener();
-
-        // Set-up the listener for the server.
-        // serverListenThread = Task.Factory.StartNew(() => Listener());
-    }
-
-    // Listener method will be placed on its own thread, uses the client TcpClient
-    private void ServerListener()
-    {
-        while (server.Connected)
-        {
-            // This will make the server listen
-            listen(server);
-            Thread.Sleep(10);
-        }
-    }
-
-    // The constant listening function
+    // The constant listen fuction, works for server and otherPlayer
     private void listen(TcpClient client)
     {
         // Something is available
@@ -188,6 +148,110 @@ public class ConnectionManager
                 System.Console.WriteLine("ChallengeRequest");
 
             }
+        }
+    }
+
+    // This is to send off to a player to establish the connection "Join Game"
+    private void PlayerConnect()
+    {
+        try
+        {
+            // This is the connection to the player, need it to attempt a few times.
+            playerClient = new TcpClient(gameLobby.CurrentRequest.Sender.ipAddress, PORT);
+        }
+        catch (SocketException)
+        {
+            gameLobby.chatHistoryTextbox.Text += "Unable to connect.\n";
+            return;
+        }
+        // Set the NS stream reference
+        playerClientNS = playerClient.GetStream();
+
+        // Place the listen on its own thread
+        var t = Task.Factory.StartNew(() => PlayerListener());
+    }
+
+    // Listener method will be placed on its own thread, uses the client TcpClient
+    private void PlayerListener()
+    {
+        // To start hosting
+        if (playerClient == null)
+        {
+            IPAddress localAdd = IPAddress.Any;
+            TcpListener listener = new TcpListener(localAdd, PORT);
+            listener.Start();
+
+            // Accept the connection
+            playerClient = listener.AcceptTcpClient();
+
+            // Get the data stream from the player
+            playerClientNS = playerClient.GetStream();
+        }
+
+        try
+        {
+            while (playerClient.Connected)
+            {
+                // This will make the server listen
+                listen(playerClient);
+                Thread.Sleep(10);
+            }
+        }
+        catch (Exception)
+        {
+            gameLobby.chatHistoryTextbox.Text += "Exception happened with Player. Connection Ended.\n";
+            return;
+        }
+    }
+
+    // Build's the sender datastream, uses the server TcpClient
+    private void ServerConnection()
+    {
+        try
+        {
+            // This is the connection to the server
+            serverClient = new TcpClient(SERVER_IP, PORT);
+        }
+        catch (SocketException)
+        {
+            gameLobby.chatHistoryTextbox.Text += "Unable to connect.\n";
+            return;
+        }
+
+        // Set the NS stream reference
+        serverClientNS = serverClient.GetStream();
+
+        // Create a byte array to store the incoming IP address
+        byte[] buffer = new byte[serverClient.ReceiveBufferSize];
+
+        // Read the data that's come in
+        int bytesRead = serverClientNS.Read(buffer, 0, serverClient.ReceiveBufferSize);
+        // Getting only the IP
+        char[] chars = new char[buffer.Length / sizeof(char)];
+        System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
+        String ip = "";
+        for (int i = 0; i < 16; i++)
+        {
+            System.Console.WriteLine(chars[i]);
+            if (chars[i] == '\0') { break; }
+            ip += chars[i];
+        }
+        gameLobby.person.ipAddress = ip;
+        gameLobby.chatHistoryTextbox.Text += ip + "\n";
+
+        gameLobby.chatHistoryTextbox.Text += "Connection to server established.\n";
+
+        ServerListener();
+    }
+
+    // Listener method will be placed on its own thread, uses the client TcpClient
+    private void ServerListener()
+    {
+        while (serverClient.Connected)
+        {
+            // This will make the server listen
+            listen(serverClient);
+            Thread.Sleep(10);
         }
     }
 
