@@ -156,15 +156,20 @@ public class ConnectionManager
             else if (obj is ChallengeRequest)
             {
                 var cr = obj as ChallengeRequest;
+
                 if (cr.IsAccepted && gameLobby.person.Equals(cr.Sender))
                 {
                     // Start player host
                     var t = Task.Factory.StartNew(() => PlayerListener());
                 }
-
-                gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
-                System.Console.WriteLine("ChallengeRequest");
-
+                else
+                {
+                    if (!gameLobby.person.Equals(cr.Sender))
+                    {
+                        gameLobby.chatHistoryTextbox.Text += "Challenge Request\n"; //---write back the text to the client---
+                        gameLobby.AcceptChallengeWindowOpen(cr);
+                    }
+                }
             }
         }
     }
