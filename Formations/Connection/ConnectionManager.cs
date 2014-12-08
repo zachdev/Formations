@@ -14,7 +14,8 @@ public class ConnectionManager
 {
     // Connection info
     private const String SERVER_IP = "96.42.67.194";
-    private const int PORT = 15000;
+    private const int SERVER_PORT = 15000;
+    private const int PLAYER_PORT = 16000;
 
     // This
     private static ConnectionManager cm;
@@ -174,7 +175,7 @@ public class ConnectionManager
         try
         {
             // This is the connection to the player, need it to attempt a few times.
-            playerClient = new TcpClient(gameLobby.CurrentRequest.Sender.ipAddress, PORT);
+            playerClient = new TcpClient(gameLobby.CurrentRequest.Sender.ipAddress, PLAYER_PORT);
         }
         catch (SocketException)
         {
@@ -195,7 +196,7 @@ public class ConnectionManager
         if (playerClient == null)
         {
             IPAddress localAdd = IPAddress.Any;
-            TcpListener listener = new TcpListener(localAdd, PORT);
+            TcpListener listener = new TcpListener(localAdd, PLAYER_PORT);
             listener.Start();
 
             // Accept the connection
@@ -230,7 +231,7 @@ public class ConnectionManager
         try
         {
             // This is the connection to the server
-            serverClient = new TcpClient(SERVER_IP, PORT);
+            serverClient = new TcpClient(SERVER_IP, SERVER_PORT);
         }
         catch (SocketException)
         {
