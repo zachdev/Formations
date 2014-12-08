@@ -25,7 +25,7 @@ namespace Formations
         // GUI Stuff
         private Panel chatPanel;
         private ScrollBar chatScrollbar;
-        private TextBox chatHistoryTextbox;
+        public TextBox chatHistoryTextbox;
         private TextBox inputTextBox;
         private Button chatSendButton;
 
@@ -105,7 +105,10 @@ namespace Formations
                 show();
             }
         }
-
+        public Chat getChat()
+        {
+            return this;
+        }
         public bool chatIsVisible()
         {
             return isVisible;

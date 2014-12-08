@@ -155,7 +155,7 @@ public class ConnectionManager
             {
                 if (game != null)
                 {
-                    //set chat history here chat.
+                    chat.chatHistoryTextbox.Text += (obj as String) + "\n";//set chat history here chat.
                 }
                 else
                 {
