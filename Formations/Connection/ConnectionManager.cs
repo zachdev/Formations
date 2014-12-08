@@ -160,13 +160,14 @@ public class ConnectionManager
                 if (cr.IsAccepted && gameLobby.person.Equals(cr.Sender))
                 {
                     // Start player host
+                    gameLobby.chatHistoryTextbox.Text += cr.ToString() + " is Accepted\n"; //---write back the text to the client---
                     var t = Task.Factory.StartNew(() => PlayerListener());
                 }
                 else
                 {
-                    if (!gameLobby.person.Equals(cr.Sender) && gameLobby.person.Equals(cr.Reciever))
+                    if (!gameLobby.person.Equals(cr.Sender) && gameLobby.person.Equals(cr.Reciever) && !cr.IsAccepted)
                     {
-                        gameLobby.chatHistoryTextbox.Text += cr.ToString() + "\n"; //---write back the text to the client---
+                        gameLobby.chatHistoryTextbox.Text += cr.ToString() + " is Recieving\n"; //---write back the text to the client---
                         gameLobby.AcceptChallengeWindowOpen(cr);
                     }
                 }
