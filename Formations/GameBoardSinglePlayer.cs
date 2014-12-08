@@ -10,7 +10,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    class GameBoardSinglePlayer : IMouseListener, IKeyboardListener
+    public class GameBoardSinglePlayer : IMouseListener, IKeyboardListener
     {
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
         private Player[] players = new Player[2];

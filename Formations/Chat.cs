@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Formations
 {
-    class Chat
+    public class Chat
     {
         public ConnectionManager connectionManager;
 
