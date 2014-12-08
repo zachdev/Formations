@@ -160,6 +160,7 @@ public class ConnectionManager
 
                 if (cr.IsAccepted && gameLobby.person.Equals(cr.Sender))
                 {
+                    gameLobby.CurrentRequest = cr;
                     // Start player host
                     gameLobby.chatHistoryTextbox.Text += cr.ToString() + " is Accepted\n"; //---write back the text to the client---
                     var t = Task.Factory.StartNew(() => PlayerListener());

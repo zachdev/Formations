@@ -48,7 +48,7 @@ namespace Formations
         public ChallengeRequest CurrentRequest
         {
             get { return _currentRequest; }
-            private set { _currentRequest = value; }
+            set { _currentRequest = value; }
         }
         private GameLobby()
         {
@@ -259,7 +259,7 @@ namespace Formations
 
         public void update()
         {
-            if (connectionManager.isConnectedToPlayer())
+            if (CurrentRequest != null && CurrentRequest.IsAccepted)
             {
                 formation.challengePerson();
             }
