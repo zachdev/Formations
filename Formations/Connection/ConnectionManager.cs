@@ -16,7 +16,7 @@ public class ConnectionManager
     private const String SERVER_IP = "96.42.67.194";
     private const int PORT = 15000;
     private GameLobby gameLobby;
-    private bool requestAccepted = false;
+
 
     public Boolean isConnected = false;
 
@@ -198,7 +198,6 @@ public class ConnectionManager
             }
             if (obj is ChallengeRequest)
             {
-                //requestAccepted = true;
                 gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
                 System.Console.WriteLine("ChallengeRequest");
 

@@ -20,7 +20,8 @@ namespace Formations
         private Manager uiManager;
         private bool _challengeAccepted = false;
         private bool endTurnIsVisible = false;
-
+        private bool requestAccepted = false;
+        private ChallengeRequest _currentRequest;
         // GUI Stuff
         private Panel chatPanel;
         private ScrollBar chatScrollbar;
@@ -28,9 +29,9 @@ namespace Formations
         private TextBox inputTextBox;
         public ListBox playerlist;
         private Button endTurn;
-        private Window endTurnWindow;
-        private Button endYesButton;
-        private Button endNoButton;
+        private Window acceptWindow;
+        private Button acceptButton;
+        private Button unacceptButton;
         private Button chatSendButton;
         private Button challengeButton;
         private int count = 1;
@@ -56,6 +57,11 @@ namespace Formations
             {
                 _person = value; 
             }
+        }
+        public ChallengeRequest CurrentRequest
+        {
+            get { return _currentRequest; }
+            private set { _currentRequest = value; }
         }
         private GameLobby()
         {
@@ -137,29 +143,29 @@ namespace Formations
             /*
             * End Turn Button/Window
              */
-            endTurn = new Button(uiManager);
-            endTurn.SetPosition(10, 150);
-            endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
-            endTurn.Text = "EndTurn";
-            endYesButton = new Button(uiManager);
+            //endTurn = new Button(uiManager);
+           // endTurn.SetPosition(10, 150);
+           // endTurn.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            //endTurn.Text = "EndTurn";
+            acceptButton = new Button(uiManager);
             //endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
-            endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
-            endYesButton.Text = "Yes";
-            endYesButton.SetPosition(0, 0);
-            endYesButton.SetSize(100, 100);
-            endNoButton = new Button(uiManager);
-            endNoButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
-            endNoButton.Text = "No";
-            endNoButton.SetPosition(0, 100);
-            endNoButton.SetSize(100, 100);
-            endTurnWindow = new Window(uiManager);
-            endTurnWindow.SetSize(114, 235);
-            endTurnWindow.SetPosition(500, 250);
-            endTurnWindow.Text = "  End Turn?";
-            endTurnWindow.Shadow = true;
-            endTurnWindow.CloseButtonVisible = false;
-            endTurnWindow.Add(endYesButton);
-            endTurnWindow.Add(endNoButton);
+            acceptButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            acceptButton.Text = "Accept";
+            acceptButton.SetPosition(0, 0);
+            acceptButton.SetSize(100, 100);
+            unacceptButton = new Button(uiManager);
+            unacceptButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            unacceptButton.Text = "Unaccept";
+            unacceptButton.SetPosition(0, 100);
+            unacceptButton.SetSize(100, 100);
+            acceptWindow = new Window(uiManager);
+            acceptWindow.SetSize(200, 235);
+            acceptWindow.SetPosition(500, 250);
+            acceptWindow.Text = "";
+            acceptWindow.Shadow = true;
+            acceptWindow.CloseButtonVisible = false;
+            acceptWindow.Add(acceptButton);
+            acceptWindow.Add(unacceptButton);
 
 
 
@@ -180,13 +186,13 @@ namespace Formations
         }
         public void showChallengeAccept()
         {
-            uiManager.Add(endTurnWindow);
+            uiManager.Add(acceptWindow);
             endTurnIsVisible = true;
         }
 
         public void hideChallengeAccept()
         {
-            uiManager.Remove(endTurnWindow);
+            uiManager.Remove(acceptWindow);
             endTurnIsVisible = false;
         }
         private void toggleChallengeAccept(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -200,18 +206,33 @@ namespace Formations
                 showChallengeAccept();
             }
         }
+        private void challengeAccept(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            toggleChallengeAccept(sender, e);
+            if (_challengeAccepted)
+            {
+                Person currentSender = CurrentRequest.Sender;
+                //set up new connection listener
+            }
+            else
+            {
+                _challengeAccepted = true;
+                connectionManager.sendChallengeRequect(new ChallengeRequest(person, CurrentRequest.Sender));
+                //connectionManager.setUpChallenge(true);
+                //set up new connection sender
+            }
+        }
         void challengeButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            //connectionManager.sendPerson(formation.person);
-            Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
-            
-            connectionManager.sendChallengeRequect(new ChallengeRequest(person, temp));
-            //sendChallengeRequest(temp);
-            //lobbyChat.toggle(sender, e);
+            if (playerlist.ItemIndex != -1)
+            {
+                _challengeAccepted = true;
+                Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
+                connectionManager.sendChallengeRequect(new ChallengeRequest(person, temp));
+            }
         }
         public void sendChallengeRequest(Person person)
         {
-            //connectionManager.sendMessage(person);
             uiManager.Remove(playerlist);
             uiManager.Remove(challengeButton);
             this.IsChallengeAccepted = true;
@@ -219,7 +240,21 @@ namespace Formations
         }
         public void AcceptChallengeWindowOpen(ChallengeRequest request)
         {
-            showChallengeAccept();
+            if (CurrentRequest != null && !CurrentRequest.Equals(request))
+            {
+                if (CurrentRequest.Sender.Equals(request.Reciever) && CurrentRequest.Reciever.Equals(request.Sender))
+                {
+
+                }
+
+            }
+            else
+            {
+                acceptWindow.Text = "Challenge from " + request.Sender.Name;
+                showChallengeAccept();
+                CurrentRequest = request;
+            }
+
         }
         public void updatePlayersList(Person newPerson)
         {
