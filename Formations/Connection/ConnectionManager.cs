@@ -102,7 +102,7 @@ public class ConnectionManager
         if (playerClient.Connected)
         {
             message = "<" + gameLobby.person.Name + "> " + message;
-
+            chat.chatHistoryTextbox.Text +=  message;
             ConnectionMessage obj = Serialize(message);
 
             playerClientNS.Write(obj.Data, 0, obj.Data.Length);

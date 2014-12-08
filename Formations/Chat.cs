@@ -179,6 +179,7 @@ namespace Formations
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
             connectionManager.sendMessagePlayer(inputTextBox.Text);
+
             inputTextBox.Text = "";
         }
     }
