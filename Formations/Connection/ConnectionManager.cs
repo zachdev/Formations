@@ -164,9 +164,9 @@ public class ConnectionManager
                 }
                 else
                 {
-                    if (!gameLobby.person.Equals(cr.Sender))
+                    if (!gameLobby.person.Equals(cr.Sender) && gameLobby.person.Equals(cr.Reciever))
                     {
-                        gameLobby.chatHistoryTextbox.Text += "Challenge Request\n"; //---write back the text to the client---
+                        gameLobby.chatHistoryTextbox.Text += cr.ToString() + "\n"; //---write back the text to the client---
                         gameLobby.AcceptChallengeWindowOpen(cr);
                     }
                 }
