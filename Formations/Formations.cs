@@ -11,11 +11,15 @@ namespace Formations
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game, IMouseListener, IKeyboardListener
+    public class Formations : Game, IMouseListener, IKeyboardListener
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameBoardSinglePlayer gb;
+        private Person _person;
+        private bool isGameStarted = false;
+        private GameLogin login; 
+        private GameLobby gameLobby;
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;
         public static List<Texture2D> healingTextures;
@@ -27,13 +31,25 @@ namespace Formations
 
         // Neoforce GUI manager
         private Manager theManager{ get; set; }
+        public Person person 
+        { 
+            get 
+            {
+                return _person; 
+            } 
+            set 
+            { 
+                _person = value; 
+            } 
+        }
 
-        public Game1()
+        public Formations()
             : base()
         {
+            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            
             theManager = new Manager(this, graphics, "Default");
             theManager.AutoCreateRenderTarget = true;
             theManager.TargetFrames = 60;
@@ -44,6 +60,7 @@ namespace Formations
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
             graphics.ApplyChanges();
+            
         }
 
         /// <summary>
@@ -61,6 +78,9 @@ namespace Formations
             mouseListener = new MouseListener(mouseState, this);
             theManager.Initialize();
             theManager.SetSkin(new Skin(theManager, "Blue"));
+
+            login = new GameLogin(theManager);
+            login.init(this);
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -90,8 +110,7 @@ namespace Formations
             healingTextures.Add(Content.Load<Texture2D>("sword3"));
 
 
-            gb = new GameBoardSinglePlayer();
-            gb.init(theManager, GraphicsDevice, "Formations", true); 
+
             // TODO: use this.Content to load your game content here
             
         }
@@ -104,7 +123,26 @@ namespace Formations
         {
             // TODO: Unload any non ContentManager content here
         }
-
+        internal void setPerson(Person person)
+        {
+            this.person = person;
+            createLobby();
+            //newGame();
+        }
+       public void challengePerson()
+        {
+            newGame();
+        }
+        private void createLobby(){
+            gameLobby = GameLobby.getInstance();
+            gameLobby.init(this, theManager, person);
+        }
+        private void newGame()
+        {
+            gb = new GameBoardSinglePlayer();
+            gb.init(theManager, GraphicsDevice, "Formations", true);
+            mouseListener.startListener();
+        }
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -112,9 +150,16 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            gb.update();
-            mouseListener.update(mouseState);
+            //var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            if (login.isLoggedIn && gameLobby.isGameStarted())
+            {
+                gb.update();
+                //mouseListener.update(mouseState);
+            }
+            else if(gameLobby != null)
+            {
+                gameLobby.update();
+            }
 
             base.Update(gameTime);
 
@@ -148,15 +193,18 @@ namespace Formations
             // TODO: Add your drawing code here
             
             theManager.BeginDraw(gameTime);
-            spriteBatch.Begin();
-
-            gb.draw(spriteBatch);
-
-            spriteBatch.End();
+            //spriteBatch.Begin();
+            if (login.isLoggedIn && gameLobby.isGameStarted())
+            {
+                gb.draw(spriteBatch);
+            }
+           // spriteBatch.End();
             theManager.EndDraw();
 
             base.Draw(gameTime);
 
         }
+
+
     }
 }

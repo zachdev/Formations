@@ -13,6 +13,8 @@ namespace Formations
 {
     class Chat
     {
+        public ConnectionManager connectionManager;
+
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
 
@@ -31,9 +33,7 @@ namespace Formations
 
         private Boolean sliding;
 
-        private ConnectionManger connectionManager;
-
-        public Chat() {}
+        public Chat() { }
 
         public void init(Manager manager)
         {
@@ -46,12 +46,7 @@ namespace Formations
             inputTextBox = new TextBox(theManager);
             chatSendButton = new Button(theManager);
 
-            // Now initialize them all
-            chatPanel.Init();
-            chatScrollbar.Init();
-            chatHistoryTextbox.Init();
-            inputTextBox.Init();
-            chatSendButton.Init();
+
 
             // Main chat panel
             chatPanel.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -81,11 +76,22 @@ namespace Formations
             chatSendButton.Text = "Send";
             chatSendButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.sendMessage);
 
+            // Now initialize them all
+            chatPanel.Init();
+            chatScrollbar.Init();
+            chatHistoryTextbox.Init();
+            inputTextBox.Init();
+            chatSendButton.Init();
+
             // Add all the components to the gui manager
             chatScrollbar.Add(chatHistoryTextbox);
             chatPanel.Add(chatScrollbar);
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
+
+            connectionManager = ConnectionManager.getInstance();
+
+            show();
         }
 
         public void toggle(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -171,23 +177,7 @@ namespace Formations
 
         private void sendMessage(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            if (connectionManager == null || !connectionManager.isConnected)
-            {
-                if (inputTextBox.Text.Contains("/host"))
-                {
-                    connectionManager = new ConnectionManger(chatHistoryTextbox);
-                }
-                else if (inputTextBox.Text.Contains("/join"))
-                {
-                    string[] words = inputTextBox.Text.Split(' ');
-
-                    connectionManager = new ConnectionManger(chatHistoryTextbox, words[1]);
-                }
-            }
-            else
-            {
-                connectionManager.sendMessage(inputTextBox.Text);
-            }
+            connectionManager.sendMessage(inputTextBox.Text);
             inputTextBox.Text = "";
         }
     }

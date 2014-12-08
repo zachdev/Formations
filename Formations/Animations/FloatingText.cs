@@ -24,7 +24,7 @@ namespace Formations
         public FloatingText(UnitAbstract unit)
         {
             this.unit = unit;
-            damageTextFont = Game1.damageFont;
+            damageTextFont = Formations.damageFont;
         }
         public void displayDamageTaken(int damage, bool isDamage)
         {
