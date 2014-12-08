@@ -64,6 +64,12 @@ public class ConnectionManager
 
             serverClientNS.Write(obj.Data, 0, obj.Data.Length);
             serverClientNS.Flush();
+
+            if (request.IsAccepted)
+            {
+                var t = Task.Factory.StartNew(() => PlayerConnect());
+            }
+
         }
     }
 
@@ -152,7 +158,7 @@ public class ConnectionManager
                 if (cr.IsAccepted && gameLobby.person.Equals(cr.Sender))
                 {
                     // Start player host
-                    System.Console.WriteLine("Reached");
+                    var t = Task.Factory.StartNew(() => PlayerListener());
                 }
 
                 gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
