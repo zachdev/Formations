@@ -202,7 +202,6 @@ namespace Formations
         }
         private void challengeAccept(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
-            toggleChallengeAccept(sender, e);
             CurrentRequest.IsAccepted = true;
             connectionManager.sendChallengeRequect(CurrentRequest);
 
@@ -232,10 +231,7 @@ namespace Formations
             if (!playerlist.Items.Contains(newPerson))
             {
                 playerlist.Items.Add(newPerson);
-
             }
-
-            
         }
         private void handleTextInput(object sender, TomShane.Neoforce.Controls.KeyEventArgs e)
         {
