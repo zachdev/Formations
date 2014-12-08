@@ -250,7 +250,7 @@ namespace Formations
             chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
             //chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(resizeBoard);
             chatButton.Text = "Chat";
-            
+            connectionManager.setGame(this);
             Label chatLabel = new Label(uiManager);
             uiManager.Add(chatButton);
             uiManager.Add(endTurn);

@@ -144,6 +144,7 @@ namespace Formations
             gb.init(theManager, GraphicsDevice, "Formations", true);
             mouseListener.startListener();
             isGameStarted = true;
+            
         }
         /// <summary>
         /// Allows the game to run logic such as updating the world,
