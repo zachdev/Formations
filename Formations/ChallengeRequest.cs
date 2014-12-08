@@ -48,5 +48,9 @@ namespace Formations
             }
             return result;
         }
+        public String ToString()
+        {
+            return "Sender is " + Sender.Name + "\nReceiver is " + Reciever.Name + "\nIsAccepted is " + IsAccepted;
+        }
     }
 }
