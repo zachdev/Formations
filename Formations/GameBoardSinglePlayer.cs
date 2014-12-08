@@ -489,7 +489,10 @@ namespace Formations
 
 
 
-
+        public Chat getChat()
+        {
+            return chatManager;
+        }
         public void showEndTurn()
         {
             uiManager.Add(endTurnWindow);

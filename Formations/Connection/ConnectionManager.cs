@@ -30,6 +30,8 @@ public class ConnectionManager
     private NetworkStream playerClientNS;
 
     private GameLobby gameLobby;
+    private Chat chat;
+    private GameBoardSinglePlayer game;
 
     #region - Constructors
 
@@ -56,7 +58,11 @@ public class ConnectionManager
         }
         return cm;
     }
-
+    public void setGame(GameBoardSinglePlayer game)
+    {
+        this.game = game;
+        this.chat = game.getChat();
+    }
     public void sendChallengeRequect(ChallengeRequest request)
     {
         if (serverClient.Connected)
@@ -147,7 +153,14 @@ public class ConnectionManager
             object obj = Deserialize(message);
             if (obj is String)
             {
-                gameLobby.chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
+                if (game != null)
+                {
+                    //set chat history here chat.
+                }
+                else
+                {
+                    gameLobby.chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
+                }
             }
             else if (obj is Person)
             {

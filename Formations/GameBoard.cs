@@ -294,6 +294,7 @@ namespace Formations
                 }
             }
         }
+
         public void showEndTurn()
         {
             uiManager.Add(endTurnWindow);
