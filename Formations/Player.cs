@@ -10,7 +10,7 @@ using System.Data.Entity;
 
 
 namespace Formations
-{   
+{
     class Player
     {
         private TileBasic _selectedTile;
@@ -32,6 +32,7 @@ namespace Formations
         private Color borderColor;
         private Manager uiManager;
         public string playerName { get; set; }
+        public int playerId { get; set; }
 
 
         public TileBasic SelectedTile

@@ -55,7 +55,6 @@
     <Compile Include="Connection\ConnectionManager.cs" />
     <Compile Include="Connection\ConnectionMessage.cs" />
     <Compile Include="FloatingText.cs" />
-    <Compile Include="PlayerContext.cs" />
     <Compile Include="ScoreCard.cs" />
     <Compile Include="StaminaComponent.cs" />
     <Compile Include="GameBoardSinglePlayer.cs" />
@@ -152,6 +151,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App.config" />
     <None Include="Content\DamageFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

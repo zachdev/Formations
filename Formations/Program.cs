@@ -19,19 +19,9 @@ namespace Formations
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
-            //using (var db = new PlayerContext()) 
-            //{
+            using (var game = new Game1()) 
                 game.Run();
-                Console.Write("New Player Database has been created.");
-                //var player1 = new Player { playerName = "missmagdalene" };
-
-                //db.Players.Add(player1);
-                //db.SaveChanges();
-                Console.Write("Player 1 has been added to the database.");
-
-                
-            //}          
+          
         }
     }
 #endif
