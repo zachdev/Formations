@@ -203,9 +203,7 @@ namespace Formations
         {
             toggleChallengeAccept(sender, e);
             CurrentRequest.IsAccepted = true;
-            connectionManager.sendChallengeRequect(new ChallengeRequest(person, CurrentRequest.Sender));
-            //connectionManager.setUpChallenge(true);
-            //set up new connection sender
+            connectionManager.sendChallengeRequect(CurrentRequest);
 
         }
         void challengeButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
