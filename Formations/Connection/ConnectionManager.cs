@@ -68,6 +68,7 @@ public class ConnectionManager
 
             if (request.IsAccepted)
             {
+                gameLobby.chatHistoryTextbox.Text += request.ToString() + " is sending Challenge\n"; 
                 var t = Task.Factory.StartNew(() => PlayerConnect());
             }
 
