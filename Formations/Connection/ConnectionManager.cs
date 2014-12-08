@@ -148,6 +148,13 @@ public class ConnectionManager
             }
             else if (obj is ChallengeRequest)
             {
+                var cr = obj as ChallengeRequest;
+                if (cr.IsAccepted && gameLobby.person.Equals(cr.Sender))
+                {
+                    // Start player host
+                    System.Console.WriteLine("Reached");
+                }
+
                 gameLobby.AcceptChallengeWindowOpen((ChallengeRequest)obj);
                 System.Console.WriteLine("ChallengeRequest");
 
@@ -194,6 +201,8 @@ public class ConnectionManager
 
         try
         {
+            gameLobby.chatHistoryTextbox.Text += "Player connection established.\n";
+
             while (playerClient.Connected)
             {
                 // This will make the server listen
