@@ -18,7 +18,7 @@ namespace Formations
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
 
-        private Manager theManager;
+        private Manager uiManager;
 
         private bool isVisible;
 
@@ -37,20 +37,17 @@ namespace Formations
 
         public void init(Manager manager)
         {
-            theManager = manager;
-            manager.SetSkin(new Skin(theManager, "Blue"));
+            uiManager = manager;
+            manager.SetSkin(new Skin(uiManager, "Blue"));
 
-            chatPanel = new Panel(theManager);
-            chatScrollbar = new ScrollBar(theManager, Orientation.Vertical);
-            chatHistoryTextbox = new TextBox(theManager);
-            inputTextBox = new TextBox(theManager);
-            chatSendButton = new Button(theManager);
-
-
+            chatPanel = new Panel(uiManager);
+            chatScrollbar = new ScrollBar(uiManager, Orientation.Vertical);
+            chatHistoryTextbox = new TextBox(uiManager);
+            inputTextBox = new TextBox(uiManager);
+            chatSendButton = new Button(uiManager);
 
             // Main chat panel
             chatPanel.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-            //chatPanel.SetPosition(800, 10);
 
             // Scrollbar
             chatScrollbar.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -154,7 +151,7 @@ namespace Formations
 
         private void windowSlideRight(object sender, ElapsedEventArgs e)
         {
-            theManager.Add(chatPanel);
+            uiManager.Add(chatPanel);
             isVisible = true;
             sliding = true;
 

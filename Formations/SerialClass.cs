@@ -5,19 +5,16 @@ using System.Text;
 
 namespace Formations
 {
-    class SerialClass
+    [Serializable]
+    public class SerialClass
     {
-        Player person;
-        Player guest;
-        TileBasic[,] tiles;
-        Chat chat;
+        public Player[] players;
+        public TileBasic[,] tiles;
 
-        public SerialClass(Player person, Player guest, TileBasic[,] tiles, Chat chat)
+        public SerialClass(Player[] players, TileBasic[,] tiles)
         {
-            this.person = person;
-            this.guest = guest;
+            this.players = players;
             this.tiles = tiles;
-            this.chat = chat;
         }
 
     }
