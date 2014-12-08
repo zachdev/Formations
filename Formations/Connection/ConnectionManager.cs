@@ -68,7 +68,7 @@ public class ConnectionManager
 
             if (request.IsAccepted)
             {
-                gameLobby.chatHistoryTextbox.Text += request.ToString() + " is sending Challenge\n"; 
+                gameLobby.chatHistoryTextbox.Text += request.ToString() + " is sending Challenge\n";
                 var t = Task.Factory.StartNew(() => PlayerConnect());
             }
 
@@ -179,6 +179,8 @@ public class ConnectionManager
     // This is to send off to a player to establish the connection "Join Game"
     private void PlayerConnect()
     {
+        Thread.Sleep(2000);
+
         try
         {
             // This is the connection to the player, need it to attempt a few times.
