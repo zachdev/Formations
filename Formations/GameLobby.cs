@@ -135,6 +135,7 @@ namespace Formations
             acceptButton = new Button(uiManager);
             //endYesButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.newTurn);
             acceptButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.toggleChallengeAccept);
+            acceptButton.Click += new TomShane.Neoforce.Controls.EventHandler(this.challengeAccept);
             acceptButton.Text = "Accept";
             acceptButton.SetPosition(0, 0);
             acceptButton.SetSize(100, 100);
