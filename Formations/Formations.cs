@@ -151,7 +151,7 @@ namespace Formations
         protected override void Update(GameTime gameTime)
         {
             //var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            if (login.isLoggedIn && gameLobby.IsChallengeAccepted)
+            if (login.isLoggedIn && gameLobby.isGameStarted())
             {
                 gb.update();
                 //mouseListener.update(mouseState);
@@ -194,7 +194,7 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
             //spriteBatch.Begin();
-            if (login.isLoggedIn && gameLobby.IsChallengeAccepted)
+            if (login.isLoggedIn && gameLobby.isGameStarted())
             {
                 gb.draw(spriteBatch);
             }

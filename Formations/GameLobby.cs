@@ -18,10 +18,9 @@ namespace Formations
         private Person _person;
         private Formations formation;
         private Manager uiManager;
-        private bool _challengeAccepted = false;
         private bool endTurnIsVisible = false;
-        private bool requestAccepted = false;
         private ChallengeRequest _currentRequest;
+
         // GUI Stuff
         private Panel chatPanel;
         private ScrollBar chatScrollbar;
@@ -35,18 +34,6 @@ namespace Formations
         private Button chatSendButton;
         private Button challengeButton;
         private int count = 1;
-
-        public bool IsChallengeAccepted
-        {
-            get
-            {
-                return _challengeAccepted;
-            }
-            private set
-            {
-                _challengeAccepted = value;
-            }
-        }
         public Person person 
         { 
             get 
@@ -179,8 +166,11 @@ namespace Formations
             uiManager.Add(playerlist);
 
             connectionManager = ConnectionManager.getInstance();
-            connectionManager.setUpChat(chatHistoryTextbox);
 
+        }
+        public bool isGameStarted()
+        {
+            return false;
         }
         public void showChallengeAccept()
         {
@@ -207,24 +197,16 @@ namespace Formations
         private void challengeAccept(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
             toggleChallengeAccept(sender, e);
-            if (_challengeAccepted)
-            {
-                Person currentSender = CurrentRequest.Sender;
-                //set up new connection listener
-            }
-            else
-            {
-                _challengeAccepted = true;
-                connectionManager.sendChallengeRequect(new ChallengeRequest(person, CurrentRequest.Sender));
-                //connectionManager.setUpChallenge(true);
-                //set up new connection sender
-            }
+            CurrentRequest.IsAccepted = true;
+            connectionManager.sendChallengeRequect(new ChallengeRequest(person, CurrentRequest.Sender));
+            //connectionManager.setUpChallenge(true);
+            //set up new connection sender
+
         }
         void challengeButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
         {
             if (playerlist.ItemIndex != -1)
             {
-                _challengeAccepted = true;
                 Person temp = (Person)playerlist.Items.ElementAt<object>(playerlist.ItemIndex);//grabs the person that was selected
                 connectionManager.sendChallengeRequect(new ChallengeRequest(person, temp));
             }
@@ -233,26 +215,16 @@ namespace Formations
         {
             uiManager.Remove(playerlist);
             uiManager.Remove(challengeButton);
-            this.IsChallengeAccepted = true;
             formation.challengePerson();
         }
         public void AcceptChallengeWindowOpen(ChallengeRequest request)
         {
-            if (CurrentRequest != null && !CurrentRequest.Equals(request))
-            {
-                if (CurrentRequest.Sender.Equals(request.Reciever) && CurrentRequest.Reciever.Equals(request.Sender))
-                {
-
-                }
-
-            }
-            else
+            if (CurrentRequest != null)
             {
                 acceptWindow.Text = "Challenge from " + request.Sender.Name;
                 showChallengeAccept();
                 CurrentRequest = request;
             }
-
         }
         public void updatePlayersList(Person newPerson)
         {

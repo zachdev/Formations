@@ -10,6 +10,8 @@ namespace Formations
     {
         private Person _sender;
         private Person _reciever;
+        private bool _isAccepted = false;
+
         public Person Sender
         {
             get { return _sender; }
@@ -19,6 +21,11 @@ namespace Formations
         {
             get { return _reciever; }
             private set { _reciever = value; }
+        }
+        public bool IsAccepted
+        {
+            get { return _isAccepted; }
+            set { _isAccepted = value; }
         }
         public ChallengeRequest(Person sender, Person reciever)
         {
