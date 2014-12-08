@@ -136,6 +136,7 @@ namespace Formations
         private void createLobby(){
             gameLobby = GameLobby.getInstance();
             gameLobby.init(this, theManager, person);
+            isGameStarted = true;
         }
         private void newGame()
         {
@@ -151,7 +152,7 @@ namespace Formations
         protected override void Update(GameTime gameTime)
         {
             //var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            if (login.isLoggedIn && gameLobby.isGameStarted())
+            if (login.isLoggedIn && isGameStarted)
             {
                 gb.update();
                 //mouseListener.update(mouseState);
@@ -194,7 +195,7 @@ namespace Formations
             
             theManager.BeginDraw(gameTime);
             //spriteBatch.Begin();
-            if (login.isLoggedIn && gameLobby.isGameStarted())
+            if (login.isLoggedIn && isGameStarted)
             {
                 gb.draw(spriteBatch);
             }

@@ -259,6 +259,10 @@ namespace Formations
 
         public void update()
         {
+            if (connectionManager.isConnectedToPlayer())
+            {
+                formation.challengePerson();
+            }
             if (count >= 10000)
             {
                 playerlist.Items.Clear();
