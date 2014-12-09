@@ -116,7 +116,7 @@ public class ConnectionManager
         if (playerClient.Connected)
         {
             //message = "<" + gameLobby.person.Name + "> " + message;
-            //chat.chatHistoryTextbox.Text += message + "\n";
+            chat.chatHistoryTextbox.Text += serialClass + " serial class recieved\n";
             ConnectionMessage obj = Serialize(serialClass);
 
             playerClientNS.Write(obj.Data, 0, obj.Data.Length);
@@ -261,7 +261,7 @@ public class ConnectionManager
 
         try
         {
-            gameLobby.chatHistoryTextbox.Text += "Player connection established.\n";
+            chat.chatHistoryTextbox.Text += "Player connection established.\n";
 
             while (playerClient.Connected)
             {
@@ -272,7 +272,7 @@ public class ConnectionManager
         }
         catch (Exception)
         {
-            gameLobby.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
+            chat.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
             playerClient = null;
             return;
         }
