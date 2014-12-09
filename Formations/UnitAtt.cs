@@ -8,6 +8,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
+    [Serializable]
     public class UnitAtt : UnitAbstract
     {
         public const int DAMAGE = 2;

@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Formations
 {
+    [Serializable]
     class Hexagon
     {
         private VertexPositionColor[] vectors;

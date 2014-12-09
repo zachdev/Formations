@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Formations
 {
+    [Serializable]
     class MouseListener
     {
         private MouseState oldState;
