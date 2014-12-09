@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    interface IMouseListener
+    public interface IMouseListener
     {
         void mousePressed(MouseState mouseState);
 

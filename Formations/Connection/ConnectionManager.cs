@@ -31,7 +31,7 @@ public class ConnectionManager
 
     private GameLobby gameLobby;
     private Chat chat;
-    private GameBoardSinglePlayer game;
+    private GameBoard game;
 
     #region - Constructors
 
@@ -58,7 +58,7 @@ public class ConnectionManager
         }
         return cm;
     }
-    public void setGame(GameBoardSinglePlayer game)
+    public void setGame(GameBoard game)
     {
         this.game = game;
         this.chat = game.getChat();
@@ -102,11 +102,26 @@ public class ConnectionManager
         if (playerClient.Connected)
         {
             message = "<" + gameLobby.person.Name + "> " + message;
-
+            chat.chatHistoryTextbox.Text +=  message + "\n";
             ConnectionMessage obj = Serialize(message);
 
             playerClientNS.Write(obj.Data, 0, obj.Data.Length);
             playerClientNS.Flush();
+        }
+    }
+    // Method for sending a String, specifially the chat method.
+    public void sendSerialClassPlayer(SerialClass serialClass)
+    {
+        // Add additional logic to use this for playerClient
+        if (playerClient.Connected)
+        {
+            //message = "<" + gameLobby.person.Name + "> " + message;
+            chat.chatHistoryTextbox.Text += serialClass + " serial class recieved\n";
+            ConnectionMessage obj = Serialize(serialClass);
+
+            playerClientNS.Write(obj.Data, 0, obj.Data.Length);
+            playerClientNS.Flush();
+            Deserialize(obj);
         }
     }
     public void sendPerson(Person person)
@@ -199,6 +214,8 @@ public class ConnectionManager
                         gameLobby.AcceptChallengeWindowOpen(cr);
                     }
                 }
+            }else if(obj is SerialClass){
+                game.setSerialClass((SerialClass)obj);
             }
         }
     }
@@ -244,7 +261,7 @@ public class ConnectionManager
 
         try
         {
-            gameLobby.chatHistoryTextbox.Text += "Player connection established.\n";
+            chat.chatHistoryTextbox.Text += "Player connection established.\n";
 
             while (playerClient.Connected)
             {
@@ -255,7 +272,7 @@ public class ConnectionManager
         }
         catch (Exception)
         {
-            gameLobby.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
+            chat.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
             playerClient = null;
             return;
         }

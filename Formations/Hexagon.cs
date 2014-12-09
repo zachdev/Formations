@@ -7,14 +7,21 @@ using System.Text;
 
 namespace Formations
 {
+    [Serializable]
     class Hexagon
     {
+        [NonSerialized]
         private VertexPositionColor[] vectors;
+        [NonSerialized]
         private VertexPositionColor[] vertices;
+        [NonSerialized]
         private VertexPositionColor[] borders;
+        [NonSerialized]
         private BasicEffect basicEffect;
         private int tileSideLength;
+        [NonSerialized]
         private Color insideColor;
+        [NonSerialized]
         private Color outsideColor;
         private int hoverPosition = 0;
         private int count = 0;

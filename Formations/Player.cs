@@ -11,27 +11,49 @@ using System.Data.Entity;
 
 namespace Formations
 {
-    class Player
+
+    [Serializable]
+    public class Player
     {
+
         private TileBasic _selectedTile;
+
         private int _stamina = 5;
+
         private bool _isHost;
+
         public bool isPlayersTurn = false;
+
         private int _totalAttNotPlaced = 0;
+
         private int _totalDefNotPlaced = 0;
+
         private int _totalMagNotPlaced = 0;
+
         private int count = 0;
+
         private int borderPosition = 0;
+
         private UnitAtt[] _attUnitArray = new UnitAtt[20];
+
         private UnitDef[] _defUnitArray = new UnitDef[20];
+
         private UnitMag[] _magUnitArray = new UnitMag[20];
+        [NonSerialized]
         private StaminaComponent bar;
+        [NonSerialized]
         private UnitsComponent unitsBar;
+        [NonSerialized]
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
+        [NonSerialized]
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
+        [NonSerialized]
         private Color borderColor;
+        [NonSerialized]
         private Manager uiManager;
+
         public string playerName { get; set; }
+
         public int playerId { get; set; }
 
 
@@ -40,6 +62,7 @@ namespace Formations
             get { return _selectedTile; }
             set { _selectedTile = value; }
         }
+
         public int Stamina
         {
             get { return _stamina; }
@@ -49,58 +72,81 @@ namespace Formations
                 if (_stamina > 30) { _stamina = 30; }
             }
         }
+
         public bool IsHost
         {
             get { return _isHost; }
             private set { _isHost = value; }
         }
+
         public int AttUnitsNotPlaced
         {
             get { return _totalAttNotPlaced; }
             private set { _totalAttNotPlaced = value; }
         }
+
         public int DefUnitsNotPlaced
         {
             get { return _totalDefNotPlaced; }
             private set { _totalDefNotPlaced = value; }
         }
+
         public int MagUnitsNotPlaced
         {
             get { return _totalMagNotPlaced; }
             private set { _totalMagNotPlaced = value; }
         }
+
         public Manager UiManager { get { return uiManager; } private set { uiManager = value; } }
+
         public UnitAtt[] AttUnitArray { get { return _attUnitArray;} }
+
         public UnitDef[] DefUnitArray { get { return _defUnitArray;} }
+
         public UnitMag[] MagUnitArray { get { return _magUnitArray;} }
 
 
-        
 
+        [NonSerialized]
         private Label playersNameLabel;
+        [NonSerialized]
         private Label totalAttUnitLabel;
+        [NonSerialized]
         private Label totalDefUnitLabel;
+        [NonSerialized]
         private Label totalMagUnitLabel;
+        [NonSerialized]
         private Label staminaPointsLeft;
-
+        [NonSerialized]
         private Vector2 playerInfoLocation;
+        [NonSerialized]
         private Vector2 playerAttNumberLocation;
+        [NonSerialized]
         private Vector2 playerDefNumberLocation;
+        [NonSerialized]
         private Vector2 playerMagNumberLocation;
-
+        [NonSerialized]
         private Vector2 guestInfoLocation = new Vector2(190, 10);
+        [NonSerialized]
         private Vector2 guestAttNumberLocation = new Vector2(280, 41);
+        [NonSerialized]
         private Vector2 guestDefNumberLocation = new Vector2(280, 51);
+        [NonSerialized]
         private Vector2 guestMagNumberLocation = new Vector2(280, 62);
-
+        [NonSerialized]
         private Vector2 hostInfoLocation = new Vector2(790, 10);
+        [NonSerialized]
         private Vector2 hostAttNumberLocation = new Vector2(880, 41);
+        [NonSerialized]
         private Vector2 hostDefNumberLocation = new Vector2(880, 51);
+        [NonSerialized]
         private Vector2 hostMagNumberLocation = new Vector2(880, 62);
 
-
+        [NonSerialized]
         private Hexagon attHex;
+        [NonSerialized]
         private Hexagon defHex;
+        [NonSerialized]
         private Hexagon magHex;
         public Player(bool isHost)
         {

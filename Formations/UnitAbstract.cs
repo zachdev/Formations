@@ -9,7 +9,8 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    abstract class UnitAbstract : IUpdateDraw
+    [Serializable]
+    public abstract class UnitAbstract : IUpdateDraw
     {
         private bool _isDead = false;
         private bool _isHostsUnit;

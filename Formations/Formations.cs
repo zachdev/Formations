@@ -8,17 +8,25 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
+    
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Formations : Game, IMouseListener, IKeyboardListener
     {
+        [NonSerialized]
         GraphicsDeviceManager graphics;
+        [NonSerialized]
         SpriteBatch spriteBatch;
-        GameBoardSinglePlayer gb;
+        [NonSerialized]
+        IGame gb;
+        [NonSerialized]
         private Person _person;
+        [NonSerialized]
         private bool isGameStarted = false;
-        private GameLogin login; 
+        [NonSerialized]
+        private GameLogin login;
+        [NonSerialized]
         private GameLobby gameLobby;
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;
@@ -129,18 +137,18 @@ namespace Formations
             createLobby();
             //newGame();
         }
-       public void challengePerson()
+       public void challengePerson(IGame game)
         {
-            newGame();
+            newGame(game);
         }
         private void createLobby(){
             gameLobby = GameLobby.getInstance();
             gameLobby.init(this, theManager, person);
             
         }
-        private void newGame()
+        private void newGame(IGame game)
         {
-            gb = new GameBoardSinglePlayer();
+            gb = game;
             gb.init(theManager, GraphicsDevice, "Formations", true);
             mouseListener.startListener();
             isGameStarted = true;

@@ -8,32 +8,55 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
+
     class GameLobby : IUpdateDraw
     {
+
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
-
+        [NonSerialized]
         private ConnectionManager connectionManager;
+        [NonSerialized]
         private static GameLobby gameLobbyInstance;
+        [NonSerialized]
         private Person _person;
+        [NonSerialized]
         private Formations formation;
+        [NonSerialized]
         private Manager uiManager;
+        [NonSerialized]
         private bool endTurnIsVisible = false;
+        [NonSerialized]
         private ChallengeRequest _currentRequest;
 
         // GUI Stuff
+        [NonSerialized]
         private Panel chatPanel;
+        [NonSerialized]
         private ScrollBar chatScrollbar;
+        [NonSerialized]
         public TextBox chatHistoryTextbox;
+        [NonSerialized]
         private TextBox inputTextBox;
+        [NonSerialized]
         public ListBox playerlist;
-        private Button endTurn;
+        //private Button endTurn;
+        [NonSerialized]
         private Window acceptWindow;
+        [NonSerialized]
         private Button acceptButton;
+        [NonSerialized]
         private Button unacceptButton;
+        [NonSerialized]
         private Button chatSendButton;
+        [NonSerialized]
         private Button challengeButton;
+        [NonSerialized]
+        private Button singlePlayerGameButton;
+
+        [NonSerialized]
         private int count = 1;
+
         public Person person 
         { 
             get 
@@ -153,6 +176,11 @@ namespace Formations
             acceptWindow.Add(acceptButton);
             acceptWindow.Add(unacceptButton);
 
+            singlePlayerGameButton = new Button(uiManager);
+            singlePlayerGameButton.Click += singlePlayerGameButton_Click;
+            singlePlayerGameButton.Text = "Single Player Game";
+            singlePlayerGameButton.SetPosition(400, 300);
+            singlePlayerGameButton.SetSize(200, 100);
 
 
             // Add all the components to the gui manager
@@ -161,13 +189,24 @@ namespace Formations
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
 
-            uiManager.Add(endTurn);
+            //uiManager.Add(endTurn);
+            uiManager.Add(singlePlayerGameButton);
             uiManager.Add(chatPanel);
             uiManager.Add(challengeButton);
             uiManager.Add(playerlist);
 
             connectionManager = ConnectionManager.getInstance();
 
+        }
+
+        void singlePlayerGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            formation.challengePerson(new GameBoardSinglePlayer());
+            //uiManager.Remove(endTurn);
+            uiManager.Remove(singlePlayerGameButton);
+            uiManager.Remove(chatPanel);
+            uiManager.Remove(challengeButton);
+            uiManager.Remove(playerlist);
         }
         public bool isGameStarted()
         {
@@ -218,7 +257,7 @@ namespace Formations
         {
             uiManager.Remove(playerlist);
             uiManager.Remove(challengeButton);
-            formation.challengePerson();
+            formation.challengePerson(new GameBoard());
         }
         public void AcceptChallengeWindowOpen(ChallengeRequest request)
         {
@@ -261,8 +300,9 @@ namespace Formations
         {
             if (CurrentRequest != null && CurrentRequest.IsAccepted)
             {
-                formation.challengePerson();
-                uiManager.Remove(endTurn);
+                formation.challengePerson(new GameBoard());
+                //uiManager.Remove(endTurn);
+                uiManager.Remove(singlePlayerGameButton);
                 uiManager.Remove(chatPanel);
                 uiManager.Remove(challengeButton);
                 uiManager.Remove(playerlist);

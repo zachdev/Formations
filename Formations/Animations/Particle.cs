@@ -7,14 +7,23 @@ using Microsoft.Xna.Framework;
 
 namespace Formations
 {
+    [Serializable]
     public class Particle
     {
-        public Texture2D Texture { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
+        [NonSerialized]
+        private Texture2D _texture;
+        [NonSerialized]
+        private Vector2 _position;
+        [NonSerialized]
+        private Vector2 _velocity;
+        [NonSerialized]
+        private Color _color;
+        public Texture2D Texture { get { return _texture; } set { _texture = value; } }
+        public Vector2 Position { get { return _position; } set { _position = value; } }
+        public Vector2 Velocity { get { return _velocity; } set { _velocity = value; } }
         public float Angle { get; set; }
         public float AngularVelocity { get; set; }
-        public Color Color { get; set; }
+        public Color Color { get { return _color; } set { _color = value; } }
         public float Size { get; set; }
         public int TTL { get; set; }
 
