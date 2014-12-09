@@ -11,6 +11,7 @@ using System.Data.Entity;
 
 namespace Formations
 {
+    [Serializable]
     public class Player
     {
         private TileBasic _selectedTile;

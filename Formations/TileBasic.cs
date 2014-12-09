@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Formations
 {
-    
+    [Serializable]
     public class TileBasic : TileAbstract
     {
         private UnitAbstract unit = null;
