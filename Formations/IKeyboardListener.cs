@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Formations
 {
-    [Serializable]
     interface IKeyboardListener
     {
 

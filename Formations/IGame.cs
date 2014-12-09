@@ -7,7 +7,6 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
     public interface IGame : IUpdateDraw, IMouseListener 
     {
         void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName, bool isHost);

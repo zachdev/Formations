@@ -12,7 +12,6 @@ using TomShane.Neoforce.Controls;
 
 public class ConnectionManager
 {
-    [Serializable]
     // Connection info
     private const String SERVER_IP = "96.42.67.194";
     private const int SERVER_PORT = 15000;

@@ -6,7 +6,6 @@ using System.Text;
 
 namespace Formations
 {
-    [Serializable]
     public interface IUpdateDraw
     {
         void update();
