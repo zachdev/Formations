@@ -121,6 +121,7 @@ public class ConnectionManager
 
             playerClientNS.Write(obj.Data, 0, obj.Data.Length);
             playerClientNS.Flush();
+            Deserialize(obj);
         }
     }
     public void sendPerson(Person person)
