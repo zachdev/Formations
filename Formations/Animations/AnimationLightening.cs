@@ -15,7 +15,9 @@ namespace Formations
         private Color lighteningColor;
         [NonSerialized]
         private VertexPositionColor[] lightening;
+        [NonSerialized]
         private List<Point> points = new List<Point>();
+        [NonSerialized]
         private static Random rand = new Random();
         private bool isAnimating = false;
         private const int DEPTH = 3;

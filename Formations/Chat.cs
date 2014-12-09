@@ -17,7 +17,9 @@ namespace Formations
         [NonSerialized]
         public ConnectionManager connectionManager;
 
+        [NonSerialized]
         private static readonly int WINDOW_WIDTH = 300;
+        [NonSerialized]
         private static readonly int WINDOW_HEIGHT = 430;
 
         [NonSerialized]
@@ -37,6 +39,7 @@ namespace Formations
         [NonSerialized]
         private Button chatSendButton;
 
+        [NonSerialized]
         private System.Timers.Timer timer;
 
         private Boolean sliding;
