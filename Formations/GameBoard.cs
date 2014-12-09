@@ -421,8 +421,8 @@ namespace Formations
                         }
                     }
                 }
+                connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
             }
-            connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
         }
         public void mouseReleased(MouseState mouseState)
         {
