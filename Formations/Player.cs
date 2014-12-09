@@ -39,30 +39,30 @@ namespace Formations
         private UnitDef[] _defUnitArray = new UnitDef[20];
 
         private UnitMag[] _magUnitArray = new UnitMag[20];
-        [NonSerializable]
+        [NonSerialized]
         private StaminaComponent bar;
-        [NonSerializable]
+        [NonSerialized]
         private UnitsComponent unitsBar;
-        [NonSerializable]
+        [NonSerialized]
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        [NonSerializable]
+        [NonSerialized]
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        [NonSerializable]
+        [NonSerialized]
         private Color borderColor;
-        [NonSerializable]
+        [NonSerialized]
         private Manager uiManager;
 
         public string playerName { get; set; }
 
         public int playerId { get; set; }
 
-        [NonSerializable]
+
         public TileBasic SelectedTile
         {
             get { return _selectedTile; }
             set { _selectedTile = value; }
         }
-        [NonSerializable]
+
         public int Stamina
         {
             get { return _stamina; }
@@ -72,81 +72,81 @@ namespace Formations
                 if (_stamina > 30) { _stamina = 30; }
             }
         }
-        [NonSerializable]
+
         public bool IsHost
         {
             get { return _isHost; }
             private set { _isHost = value; }
         }
-        [NonSerializable]
+
         public int AttUnitsNotPlaced
         {
             get { return _totalAttNotPlaced; }
             private set { _totalAttNotPlaced = value; }
         }
-        [NonSerializable]
+
         public int DefUnitsNotPlaced
         {
             get { return _totalDefNotPlaced; }
             private set { _totalDefNotPlaced = value; }
         }
-        [NonSerializable]
+
         public int MagUnitsNotPlaced
         {
             get { return _totalMagNotPlaced; }
             private set { _totalMagNotPlaced = value; }
         }
-        [NonSerializable]
+
         public Manager UiManager { get { return uiManager; } private set { uiManager = value; } }
-        [NonSerializable]
+
         public UnitAtt[] AttUnitArray { get { return _attUnitArray;} }
-        [NonSerializable]
+
         public UnitDef[] DefUnitArray { get { return _defUnitArray;} }
-        [NonSerializable]
+
         public UnitMag[] MagUnitArray { get { return _magUnitArray;} }
 
 
 
-        [NonSerializable]
+        [NonSerialized]
         private Label playersNameLabel;
-        [NonSerializable]
+        [NonSerialized]
         private Label totalAttUnitLabel;
-        [NonSerializable]
+        [NonSerialized]
         private Label totalDefUnitLabel;
-        [NonSerializable]
+        [NonSerialized]
         private Label totalMagUnitLabel;
-        [NonSerializable]
+        [NonSerialized]
         private Label staminaPointsLeft;
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 playerInfoLocation;
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 playerAttNumberLocation;
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 playerDefNumberLocation;
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 playerMagNumberLocation;
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 guestInfoLocation = new Vector2(190, 10);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 guestAttNumberLocation = new Vector2(280, 41);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 guestDefNumberLocation = new Vector2(280, 51);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 guestMagNumberLocation = new Vector2(280, 62);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 hostInfoLocation = new Vector2(790, 10);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 hostAttNumberLocation = new Vector2(880, 41);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 hostDefNumberLocation = new Vector2(880, 51);
-        [NonSerializable]
+        [NonSerialized]
         private Vector2 hostMagNumberLocation = new Vector2(880, 62);
 
-        [NonSerializable]
+        [NonSerialized]
         private Hexagon attHex;
-        [NonSerializable]
+        [NonSerialized]
         private Hexagon defHex;
-        [NonSerializable]
+        [NonSerialized]
         private Hexagon magHex;
         public Player(bool isHost)
         {

@@ -8,35 +8,55 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [NonSerializable]
+
     class GameLobby : IUpdateDraw
     {
+
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
-
+        [NonSerialized]
         private ConnectionManager connectionManager;
+        [NonSerialized]
         private static GameLobby gameLobbyInstance;
+        [NonSerialized]
         private Person _person;
+        [NonSerialized]
         private Formations formation;
+        [NonSerialized]
         private Manager uiManager;
+        [NonSerialized]
         private bool endTurnIsVisible = false;
+        [NonSerialized]
         private ChallengeRequest _currentRequest;
 
         // GUI Stuff
+        [NonSerialized]
         private Panel chatPanel;
+        [NonSerialized]
         private ScrollBar chatScrollbar;
+        [NonSerialized]
         public TextBox chatHistoryTextbox;
+        [NonSerialized]
         private TextBox inputTextBox;
+        [NonSerialized]
         public ListBox playerlist;
         //private Button endTurn;
+        [NonSerialized]
         private Window acceptWindow;
+        [NonSerialized]
         private Button acceptButton;
+        [NonSerialized]
         private Button unacceptButton;
+        [NonSerialized]
         private Button chatSendButton;
+        [NonSerialized]
         private Button challengeButton;
+        [NonSerialized]
         private Button singlePlayerGameButton;
 
+        [NonSerialized]
         private int count = 1;
+
         public Person person 
         { 
             get 

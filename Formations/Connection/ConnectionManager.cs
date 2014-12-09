@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TomShane.Neoforce.Controls;
-[NonSerializable]
+
 public class ConnectionManager
 {
     // Connection info

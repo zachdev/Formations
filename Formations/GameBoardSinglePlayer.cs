@@ -10,71 +10,129 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [NonSerializable]
+    
     public class GameBoardSinglePlayer : IGame
     {
+        [NonSerialized]
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
+        [NonSerialized]
         private Player[] players = new Player[2];
+        [NonSerialized]
         private Manager uiManager;
+        [NonSerialized]
         private string gameName;
+        [NonSerialized]
         private Vector2 gameNameLocation = new Vector2(500, 10);
+        [NonSerialized]
         private int movesLeftInPhase = 2;
+        [NonSerialized]
         private bool isHost;
+        [NonSerialized]
         private bool isHostsTurn = true;
+        [NonSerialized]
         private bool isFirstPhase = true;
+        [NonSerialized]
         private bool attackInProgress = false;
+        [NonSerialized]
         private bool moveInProgress = false;
+        [NonSerialized]
         private bool magicInProgress = false;
+        [NonSerialized]
         private bool isSmallBoard = false;
+        [NonSerialized]
         private bool attPlacementInProgress = false;
+        [NonSerialized]
         private bool defPlacementInProgress = false;
+        [NonSerialized]
         private bool magPlacementInProgress = false;
+        [NonSerialized]
         private bool endTurnIsVisible = false;
+        [NonSerialized]
         private MouseState currentMouseState;
+        [NonSerialized]
         private Label hexInfo;
+        [NonSerialized]
         private Label gameInfo;
+        [NonSerialized]
         private Label gameNameLabel;
+        [NonSerialized]
         private Label phaseLabel;
+        [NonSerialized]
         private Hexagon turnSignal;
+        [NonSerialized]
         private Hexagon attUnit;
+        [NonSerialized]
         private Hexagon defUnit;
+        [NonSerialized]
         private Hexagon magUnit;
+        [NonSerialized]
         private Hexagon attHex;
+        [NonSerialized]
         private Hexagon defHex;
+        [NonSerialized]
         private Hexagon magHex;
+        [NonSerialized]
         private Hexagon attAction;
+        [NonSerialized]
         private Hexagon magicAction;
+        [NonSerialized]
         private Hexagon moveAction;
 
+        [NonSerialized]
         private TileBasic currentTile;
+        [NonSerialized]
         private int unitSideLength;
+        [NonSerialized]
         private const int boardHeight = 10;
+        [NonSerialized]
         private const int boardWidth = 19;
+        [NonSerialized]
         private int largeTileSideLength = 30;
+        [NonSerialized]
         private int smallTileSideLength = 15;
+        [NonSerialized]
         private float largeBoardOffsetX = 130;
+        [NonSerialized]
         private float largeBoardOffsetY = 130;
+        [NonSerialized]
         private float smallBoardOffsetX = 660;
+        [NonSerialized]
         private float smallBoardOffsetY = 357;
+        [NonSerialized]
         private float xTileOffset = 27.5F;
+        [NonSerialized]
         private float xAdjustment = 55;
+        [NonSerialized]
         private float yAdjustment = 47;
+        [NonSerialized]
         private float changeInX;
+        [NonSerialized]
         private float changeInY;
+        [NonSerialized]
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
+        [NonSerialized]
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
+        [NonSerialized]
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
+        [NonSerialized]
         private BasicEffect basicEffect;
-
+        
         // Chat class
+        [NonSerialized]
         private Chat chatManager;
+        [NonSerialized]
         private Button chatButton;
 
         // Various buttons
+        [NonSerialized]
         private Button resizeButton;
+        [NonSerialized]
         private Button endTurn;
+        [NonSerialized]
         private Window endTurnWindow;
+        [NonSerialized]
         private Button endYesButton;
+        [NonSerialized]
         private Button endNoButton;
 
         

@@ -8,19 +8,30 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [NonSerializable]
+
     class GameLogin
     {
+        [NonSerialized]
         private Formations formation;
+        [NonSerialized]
         private Window loginWindow;
+        [NonSerialized]
         private Button submitButton;
+        [NonSerialized]
         private Label title;
+        [NonSerialized]
         private Label error;
+        [NonSerialized]
         private Label nameLabel;
+        [NonSerialized]
         private Label passwordLabel;
+        [NonSerialized]
         private TextBox nameText;
+        [NonSerialized]
         private TextBox passwordText;
+        [NonSerialized]
         private Manager uiManager;
+        [NonSerialized]
         private bool _loggedIn = false;
         public bool isLoggedIn 
         { 
