@@ -308,7 +308,7 @@ namespace Formations
             //chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(resizeBoard);
             chatButton.Text = "Chat";
             connectionManager.setGame(this);
-            Label chatLabel = new Label(uiManager);
+            //Label chatLabel = new Label(uiManager);
             uiManager.Add(chatButton);
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
@@ -421,7 +421,7 @@ namespace Formations
                         }
                     }
                 }
-                connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
+
             }
         }
         public void mouseReleased(MouseState mouseState)
@@ -473,7 +473,7 @@ namespace Formations
             }
 
             recalculateControlArea();
-            connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
+            //connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
         }
         public void mouseDragged(MouseState mouseState)
         {
@@ -688,6 +688,7 @@ namespace Formations
             self.SelectedTile = null;
             attackInProgress = false;
             checkForWin();
+
         }
         private void makeMove()
         {
@@ -752,6 +753,7 @@ namespace Formations
                 phaseLabel.Text = "Phase 2 - Game Phase";
 
             }
+            connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
         }
         private void recalculateControlArea()
         {
