@@ -11,6 +11,7 @@ namespace Formations
     public class ParticleEngine
     {
         private Random random;
+        [NonSerialized]
         public Vector2 EmitterLocation { get; set; }
         private List<Particle> particles;
         private List<Texture2D> textures;

@@ -10,8 +10,11 @@ namespace Formations
     [Serializable]
     class MouseListener
     {
+        [NonSerialized]
         private MouseState oldState;
+        [NonSerialized]
         private Formations game;
+        [NonSerialized]
         private Task mouseThread;
         public MouseListener(MouseState mouseState, Formations game)
         {

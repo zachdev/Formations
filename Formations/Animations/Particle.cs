@@ -10,11 +10,15 @@ namespace Formations
     [Serializable]
     public class Particle
     {
+        [NonSerialized]
         public Texture2D Texture { get; set; }
+        [NonSerialized]
         public Vector2 Position { get; set; }
+        [NonSerialized]
         public Vector2 Velocity { get; set; }
         public float Angle { get; set; }
         public float AngularVelocity { get; set; }
+        [NonSerialized]
         public Color Color { get; set; }
         public float Size { get; set; }
         public int TTL { get; set; }

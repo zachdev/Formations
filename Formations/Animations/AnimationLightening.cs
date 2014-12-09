@@ -10,7 +10,10 @@ namespace Formations
     [Serializable]
     class AnimationLightening : IUpdateDraw
     {
+
+        [NonSerialized]
         private Color lighteningColor;
+        [NonSerialized]
         private VertexPositionColor[] lightening;
         private List<Point> points = new List<Point>();
         private static Random rand = new Random();
