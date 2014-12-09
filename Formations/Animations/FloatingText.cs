@@ -20,6 +20,8 @@ namespace Formations
         protected Vector2 damageTextVector;
         protected int damageGiven;
         protected float damageTextAlpha = 1.0f;
+
+        [NonSerialized]
         protected Timer damageTextTimer;
         private bool evenText = true;
         private bool isDamage;
