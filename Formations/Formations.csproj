@@ -59,6 +59,7 @@
     <Compile Include="GameLobby.cs" />
     <Compile Include="GameLogin.cs" />
     <Compile Include="IGame.cs" />
+    <Compile Include="NonSerializable.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="ScoreCard.cs" />
     <Compile Include="StaminaComponent.cs" />

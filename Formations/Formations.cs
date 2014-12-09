@@ -8,7 +8,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
+    [NonSerializable]
     /// <summary>
     /// This is the main type for your game
     /// </summary>

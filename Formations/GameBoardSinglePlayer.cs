@@ -10,7 +10,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
+    [NonSerializable]
     public class GameBoardSinglePlayer : IGame
     {
         private ConnectionManager connectionManager = ConnectionManager.getInstance();

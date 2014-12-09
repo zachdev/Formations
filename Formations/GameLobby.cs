@@ -8,7 +8,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
+    [NonSerializable]
     class GameLobby : IUpdateDraw
     {
         private static readonly int WINDOW_WIDTH = 300;

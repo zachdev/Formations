@@ -10,12 +10,18 @@ namespace Formations
     [Serializable]
     class Hexagon
     {
+        [NonSerializable]
         private VertexPositionColor[] vectors;
+        [NonSerializable]
         private VertexPositionColor[] vertices;
+        [NonSerializable]
         private VertexPositionColor[] borders;
+        [NonSerializable]
         private BasicEffect basicEffect;
         private int tileSideLength;
+        [NonSerializable]
         private Color insideColor;
+        [NonSerializable]
         private Color outsideColor;
         private int hoverPosition = 0;
         private int count = 0;

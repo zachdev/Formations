@@ -10,7 +10,7 @@ namespace Formations
 {
     [Serializable]
     public class TileBasic : TileAbstract
-    {
+    {   
         private UnitAbstract unit = null;
         private Hexagon tileHex;
         private TileBasic[] surroundingTiles;

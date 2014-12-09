@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Formations
 {
-    [Serializable]
+    [NonSerializable]
     public class Chat
     {
         public ConnectionManager connectionManager;

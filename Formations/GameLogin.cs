@@ -8,7 +8,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
+    [NonSerializable]
     class GameLogin
     {
         private Formations formation;
