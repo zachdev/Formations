@@ -9,6 +9,7 @@ using System.Text;
 
 namespace Formations
 {
+    [Serializable]
     public abstract class TileAbstract : IUpdateDraw, IMouseListener
     {
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
