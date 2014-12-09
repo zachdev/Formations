@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    interface IUpdateDraw
+    public interface IUpdateDraw
     {
         void update();
         void draw(SpriteBatch spriteBatch);

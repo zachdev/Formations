@@ -27,12 +27,14 @@ namespace Formations
         public TextBox chatHistoryTextbox;
         private TextBox inputTextBox;
         public ListBox playerlist;
-        private Button endTurn;
+        //private Button endTurn;
         private Window acceptWindow;
         private Button acceptButton;
         private Button unacceptButton;
         private Button chatSendButton;
         private Button challengeButton;
+        private Button singlePlayerGameButton;
+
         private int count = 1;
         public Person person 
         { 
@@ -153,6 +155,11 @@ namespace Formations
             acceptWindow.Add(acceptButton);
             acceptWindow.Add(unacceptButton);
 
+            singlePlayerGameButton = new Button(uiManager);
+            singlePlayerGameButton.Click += singlePlayerGameButton_Click;
+            singlePlayerGameButton.Text = "Single Player Game";
+            singlePlayerGameButton.SetPosition(400, 300);
+            singlePlayerGameButton.SetSize(200, 100);
 
 
             // Add all the components to the gui manager
@@ -161,13 +168,24 @@ namespace Formations
             chatPanel.Add(inputTextBox);
             chatPanel.Add(chatSendButton);
 
-            uiManager.Add(endTurn);
+            //uiManager.Add(endTurn);
+            uiManager.Add(singlePlayerGameButton);
             uiManager.Add(chatPanel);
             uiManager.Add(challengeButton);
             uiManager.Add(playerlist);
 
             connectionManager = ConnectionManager.getInstance();
 
+        }
+
+        void singlePlayerGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {
+            formation.challengePerson(new GameBoardSinglePlayer());
+            //uiManager.Remove(endTurn);
+            uiManager.Remove(singlePlayerGameButton);
+            uiManager.Remove(chatPanel);
+            uiManager.Remove(challengeButton);
+            uiManager.Remove(playerlist);
         }
         public bool isGameStarted()
         {
@@ -218,7 +236,7 @@ namespace Formations
         {
             uiManager.Remove(playerlist);
             uiManager.Remove(challengeButton);
-            formation.challengePerson();
+            formation.challengePerson(new GameBoard());
         }
         public void AcceptChallengeWindowOpen(ChallengeRequest request)
         {
@@ -261,8 +279,9 @@ namespace Formations
         {
             if (CurrentRequest != null && CurrentRequest.IsAccepted)
             {
-                formation.challengePerson();
-                uiManager.Remove(endTurn);
+                formation.challengePerson(new GameBoard());
+                //uiManager.Remove(endTurn);
+                uiManager.Remove(singlePlayerGameButton);
                 uiManager.Remove(chatPanel);
                 uiManager.Remove(challengeButton);
                 uiManager.Remove(playerlist);

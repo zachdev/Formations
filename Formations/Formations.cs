@@ -15,7 +15,7 @@ namespace Formations
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameBoard gb;
+        IGame gb;
         private Person _person;
         private bool isGameStarted = false;
         private GameLogin login; 
@@ -129,18 +129,18 @@ namespace Formations
             createLobby();
             //newGame();
         }
-       public void challengePerson()
+       public void challengePerson(IGame game)
         {
-            newGame();
+            newGame(game);
         }
         private void createLobby(){
             gameLobby = GameLobby.getInstance();
             gameLobby.init(this, theManager, person);
             
         }
-        private void newGame()
+        private void newGame(IGame game)
         {
-            gb = new GameBoard();
+            gb = game;
             gb.init(theManager, GraphicsDevice, "Formations", true);
             mouseListener.startListener();
             isGameStarted = true;
