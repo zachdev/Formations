@@ -9,7 +9,7 @@ using System.Text;
 namespace Formations
 {
     
-    class TileBasic : TileAbstract
+    public class TileBasic : TileAbstract
     {
         private UnitAbstract unit = null;
         private Hexagon tileHex;

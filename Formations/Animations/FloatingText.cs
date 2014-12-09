@@ -9,7 +9,7 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    class FloatingText : IUpdateDraw
+    public class FloatingText : IUpdateDraw
     {
         // Damage text
         private UnitAbstract unit;

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Formations
 {
-    abstract class TileAbstract : IUpdateDraw, IMouseListener
+    public abstract class TileAbstract : IUpdateDraw, IMouseListener
     {
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);
         public abstract void mousePressed(MouseState mouseState);

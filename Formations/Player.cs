@@ -11,7 +11,7 @@ using System.Data.Entity;
 
 namespace Formations
 {
-    class Player
+    public class Player
     {
         private TileBasic _selectedTile;
         private int _stamina = 5;
