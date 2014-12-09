@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Formations
 {
+    [Serializable]
     public class ParticleEngine
     {
         private Random random;

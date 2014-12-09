@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Formations
 {
+    [Serializable]
     class AnimationLightening : IUpdateDraw
     {
         private Color lighteningColor;

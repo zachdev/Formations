@@ -6,6 +6,7 @@ using System.Data.Entity;
 
 namespace Formations
 {
+    [Serializable]
     class ScoreCard
     {
         private int scorecardId { get; set; }

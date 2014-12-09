@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Formations
 {
+    [Serializable]
     public class Particle
     {
         public Texture2D Texture { get; set; }
