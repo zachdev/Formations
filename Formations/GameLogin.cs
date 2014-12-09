@@ -117,18 +117,22 @@ namespace Formations
                 System.Console.WriteLine("password");
                 this.submitClicked(sender, e);
             }
-            if (e.Key == Keys.Enter && sender.Equals(nameText))
+            else if (e.Key == Keys.Enter && sender.Equals(nameText))
             {
                 System.Console.WriteLine("name");
                 this.submitClicked(sender, e);
             }
-            if (e.Key == Keys.Tab && sender.Equals(nameText))
+            else if (e.Key == Keys.Tab)
             {
-                passwordText.Focused = true;
-            }
-            else if (e.Key == Keys.Tab && sender.Equals(passwordText))
-            {
-                nameText.Focused = true;
+                
+                if(nameText.Focused)
+                {
+                    passwordText.SelectAll();
+                }
+                else
+                {
+                    nameText.SelectAll();
+                }
             }
         }
         private void submitClicked(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -143,7 +147,6 @@ namespace Formations
                 formation.setPerson(person);
                 uiManager.Remove(loginWindow);
                 isLoggedIn = true;
-
             }
         }
     }
