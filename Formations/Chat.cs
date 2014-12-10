@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using TomShane.Neoforce.Controls;
 using System.Timers;
 using System.Threading;
+using Formations.Connection;
 
 namespace Formations
 {
