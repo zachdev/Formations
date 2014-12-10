@@ -204,12 +204,12 @@ namespace Formations
             // TODO: Add your drawing code here
             
             theManager.BeginDraw(gameTime);
-            //spriteBatch.Begin();
+            spriteBatch.Begin();
             if (login.isLoggedIn && isGameStarted)
             {
                 gb.draw(spriteBatch);
             }
-           // spriteBatch.End();
+            spriteBatch.End();
             theManager.EndDraw();
 
             base.Draw(gameTime);
