@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using TomShane.Neoforce.Controls;
 using System.Data.Entity;
+using System.Runtime.Serialization;
 
 
 namespace Formations

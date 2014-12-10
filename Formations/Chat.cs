@@ -9,6 +9,7 @@ using TomShane.Neoforce.Controls;
 using System.Timers;
 using System.Threading;
 using Formations.Connection;
+using System.Runtime.Serialization;
 
 namespace Formations
 {

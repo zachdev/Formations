@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 // using Microsoft.Xna.Framework.GamerServices.Gamer;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
