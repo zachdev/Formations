@@ -13,7 +13,7 @@ using TomShane.Neoforce.Controls;
 public class ConnectionManager
 {
     // Connection info
-    private const String SERVER_IP = "96.42.67.194";
+    private const String SERVER_IP = "97.86.247.65";
     private const int SERVER_PORT = 15000;
     private const int PLAYER_PORT = 16000;
 
