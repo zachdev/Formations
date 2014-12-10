@@ -12,11 +12,11 @@ namespace Formations
     public class ParticleEngine
     {
         private Random random;
-        [NonSerialized]
+        
         private Vector2 _emitterLocation;
         public Vector2 EmitterLocation { get { return _emitterLocation; } set { _emitterLocation = value; } }
         private List<Particle> particles;
-        [NonSerialized]
+        
         private List<Texture2D> textures;
 
         public bool particlesOn {get; set;}

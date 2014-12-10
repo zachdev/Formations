@@ -14,126 +14,121 @@ namespace Formations
     
     public class GameBoardSinglePlayer : IGame
     {
-        [NonSerialized]
+        
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
-        [NonSerialized]
+        
         private Player[] players = new Player[2];
-        [NonSerialized]
+        
         private Manager uiManager;
-        [NonSerialized]
+        
         private string gameName;
-        [NonSerialized]
+        
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        [NonSerialized]
+        
         private int movesLeftInPhase = 2;
-        [NonSerialized]
+        
         private bool isHost;
-        [NonSerialized]
+        
         private bool isHostsTurn = true;
-        [NonSerialized]
+        
         private bool isFirstPhase = true;
-        [NonSerialized]
+        
         private bool attackInProgress = false;
-        [NonSerialized]
+        
         private bool moveInProgress = false;
-        [NonSerialized]
+        
         private bool magicInProgress = false;
-        [NonSerialized]
+        
         private bool isSmallBoard = false;
-        [NonSerialized]
+        
         private bool attPlacementInProgress = false;
-        [NonSerialized]
+        
         private bool defPlacementInProgress = false;
-        [NonSerialized]
+        
         private bool magPlacementInProgress = false;
-        [NonSerialized]
+        
         private bool endTurnIsVisible = false;
-        [NonSerialized]
+        
         private MouseState currentMouseState;
-        [NonSerialized]
+        
         private Label hexInfo;
-        [NonSerialized]
+        
         private Label gameInfo;
-        [NonSerialized]
+        
         private Label gameNameLabel;
-        [NonSerialized]
+        
         private Label phaseLabel;
-        [NonSerialized]
+        
         private Hexagon turnSignal;
-        [NonSerialized]
+        
         private Hexagon attUnit;
-        [NonSerialized]
+        
         private Hexagon defUnit;
-        [NonSerialized]
+        
         private Hexagon magUnit;
-        [NonSerialized]
+        
         private Hexagon attHex;
-        [NonSerialized]
+        
         private Hexagon defHex;
-        [NonSerialized]
+        
         private Hexagon magHex;
-        [NonSerialized]
+        
         private Hexagon attAction;
-        [NonSerialized]
+        
         private Hexagon magicAction;
-        [NonSerialized]
+        
         private Hexagon moveAction;
 
-        [NonSerialized]
+        
         private TileBasic currentTile;
-        [NonSerialized]
+        
         private int unitSideLength;
-        [NonSerialized]
+        
         private const int boardHeight = 10;
-        [NonSerialized]
+        
         private const int boardWidth = 19;
-        [NonSerialized]
+        
         private int largeTileSideLength = 30;
-        [NonSerialized]
+        
         private int smallTileSideLength = 15;
-        [NonSerialized]
+        
         private float largeBoardOffsetX = 130;
-        [NonSerialized]
+        
         private float largeBoardOffsetY = 130;
-        [NonSerialized]
+        
         private float smallBoardOffsetX = 660;
-        [NonSerialized]
+        
         private float smallBoardOffsetY = 357;
-        [NonSerialized]
+        
         private float xTileOffset = 27.5F;
-        [NonSerialized]
+        
         private float xAdjustment = 55;
-        [NonSerialized]
+        
         private float yAdjustment = 47;
-        [NonSerialized]
+        
         private float changeInX;
-        [NonSerialized]
+        
         private float changeInY;
-        [NonSerialized]
+        
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
-        [NonSerialized]
+        
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        [NonSerialized]
+        
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        [NonSerialized]
+        
         private BasicEffect basicEffect;
         
-        // Chat class
-        [NonSerialized]
-        private Chat chatManager;
-        [NonSerialized]
-        private Button chatButton;
 
         // Various buttons
-        [NonSerialized]
+        
         private Button resizeButton;
-        [NonSerialized]
+        
         private Button endTurn;
-        [NonSerialized]
+        
         private Window endTurnWindow;
-        [NonSerialized]
+        
         private Button endYesButton;
-        [NonSerialized]
+        
         private Button endNoButton;
 
         
@@ -300,18 +295,7 @@ namespace Formations
             phaseLabel.SetPosition(550, 70);
             phaseLabel.SetSize(200,20);
             phaseLabel.Text = "Phase 1 - Land Grab";
-            /*
-             * Chat stuff
-             */ 
-            chatManager = new Chat();
-            chatManager.init(uiManager);
-            chatButton = new Button(uiManager);
-            chatButton.SetPosition(10, 90);
-            chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(chatManager.toggle);
-            //chatButton.Click += new TomShane.Neoforce.Controls.EventHandler(resizeBoard);
-            chatButton.Text = "Chat";
-            Label chatLabel = new Label(uiManager);
-            uiManager.Add(chatButton);
+
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
             uiManager.Add(gameNameLabel);
@@ -356,8 +340,6 @@ namespace Formations
             Player self;
             self = selectPlayer();
 
-            if (!chatManager.chatIsVisible())// Check if the chat window is visible
-            {
                 if (self.AttUnitsNotPlaced > 0 && attHex.IsPointInPolygon(mouseState.X, mouseState.Y))
                 {
                     resetBools();
@@ -376,53 +358,53 @@ namespace Formations
                 foreach (TileBasic tile in tiles)
 	            {
 		 
-                        if (tile.isHovered())
+                    if (tile.isHovered())
+                    {
+                        tile.mousePressed(mouseState);
+                        if (attPlacementInProgress)
                         {
-                            tile.mousePressed(mouseState);
-                            if (attPlacementInProgress)
+                            if (playerCanSetUnit(tile, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
                             {
-                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitAtt.STAMINA_PLACE_COST)
-                                {
-                                    tile.setUnit(self.getAttUnit());
-                                    self.useStamina(UnitAtt.STAMINA_PLACE_COST);
-                                    makeMove();
-                                    resetBools();
-                                }
-                            }
-                            if (defPlacementInProgress)
-                            {
-                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
-                                {
-                                    tile.setUnit(self.getDefUnit());
-                                    self.useStamina(UnitDef.STAMINA_PLACE_COST);
-                                    makeMove();
-                                    resetBools();
-                                }
-                            }
-                            if (magPlacementInProgress)
-                            {
-                                if (playerCanSetUnit(tile, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
-                                {
-                                    tile.setUnit(self.getMagUnit());
-                                    self.useStamina(UnitMag.STAMINA_PLACE_COST);
-                                    makeMove();
-                                    resetBools();
-                                }
-                            }
-                            if (attackInProgress)
-                            {
-                                unitAttackUnit(mouseState, self);
-                            }
-                            if (moveInProgress)
-                            {
-                                moveUnit(mouseState, self);
-                            }
-                            if (magicInProgress)
-                            {
-                                healUnit(mouseState, self);
+                                tile.setUnit(self.getAttUnit());
+                                self.useStamina(UnitAtt.STAMINA_PLACE_COST);
+                                makeMove();
+                                resetBools();
                             }
                         }
-                }
+                        if (defPlacementInProgress)
+                        {
+                            if (playerCanSetUnit(tile, self) && self.Stamina >= UnitDef.STAMINA_PLACE_COST)
+                            {
+                                tile.setUnit(self.getDefUnit());
+                                self.useStamina(UnitDef.STAMINA_PLACE_COST);
+                                makeMove();
+                                resetBools();
+                            }
+                        }
+                        if (magPlacementInProgress)
+                        {
+                            if (playerCanSetUnit(tile, self) && self.Stamina >= UnitMag.STAMINA_PLACE_COST)
+                            {
+                                tile.setUnit(self.getMagUnit());
+                                self.useStamina(UnitMag.STAMINA_PLACE_COST);
+                                makeMove();
+                                resetBools();
+                            }
+                        }
+                        if (attackInProgress)
+                        {
+                            unitAttackUnit(mouseState, self);
+                        }
+                        if (moveInProgress)
+                        {
+                            moveUnit(mouseState, self);
+                        }
+                        if (magicInProgress)
+                        {
+                            healUnit(mouseState, self);
+                        }
+                    }
+                
             }
         }
         public void mouseReleased(MouseState mouseState)
@@ -491,28 +473,27 @@ namespace Formations
         {
             currentMouseState = mouseState;
 
-            if (!chatManager.chatIsVisible() && !endTurnIsVisible)
+
+            // if (hexInfo == null)
+            // {
+            //    hexInfo = new Label(uiManager);
+            //    uiManager.Add(hexInfo);
+            //    hexInfo.SetSize(150, 25);
+            //    hexInfo.TextColor = Color.Black;
+
+            //}
+
+            //hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
+            //setHoverLabel(mouseState);
+
+            for (int i = 0; i < boardWidth; i++)
             {
-                // if (hexInfo == null)
-                // {
-                //    hexInfo = new Label(uiManager);
-                //    uiManager.Add(hexInfo);
-                //    hexInfo.SetSize(150, 25);
-                //    hexInfo.TextColor = Color.Black;
-
-                //}
-
-                //hexInfo.SetPosition(mouseState.X, mouseState.Y - 15);
-                //setHoverLabel(mouseState);
-
-                for (int i = 0; i < boardWidth; i++)
+                for (int j = 0; j < boardHeight; j++)
                 {
-                    for (int j = 0; j < boardHeight; j++)
-                    {
-                        tiles[i, j].mouseMoved(mouseState);
-                    }
+                    tiles[i, j].mouseMoved(mouseState);
                 }
             }
+            
         }
         /// <summary>
         /// Used to determine which players turn it is
@@ -545,13 +526,6 @@ namespace Formations
 
         #endregion - Mouse Methods
 
-
-
-
-        public Chat getChat()
-        {
-            return chatManager;
-        }
         public void showEndTurn()
         {
             uiManager.Add(endTurnWindow);

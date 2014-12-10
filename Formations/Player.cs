@@ -40,17 +40,17 @@ namespace Formations
         private UnitDef[] _defUnitArray = new UnitDef[20];
 
         private UnitMag[] _magUnitArray = new UnitMag[20];
-        [NonSerialized]
+        
         private StaminaComponent bar;
-        [NonSerialized]
+        
         private UnitsComponent unitsBar;
-        [NonSerialized]
+        
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        [NonSerialized]
+        
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        [NonSerialized]
+        
         private Color borderColor;
-        [NonSerialized]
+        
         private Manager uiManager;
 
         public string playerName { get; set; }
@@ -108,46 +108,46 @@ namespace Formations
 
 
 
-        [NonSerialized]
+        
         private Label playersNameLabel;
-        [NonSerialized]
+        
         private Label totalAttUnitLabel;
-        [NonSerialized]
+        
         private Label totalDefUnitLabel;
-        [NonSerialized]
+        
         private Label totalMagUnitLabel;
-        [NonSerialized]
+        
         private Label staminaPointsLeft;
-        [NonSerialized]
+        
         private Vector2 playerInfoLocation;
-        [NonSerialized]
+        
         private Vector2 playerAttNumberLocation;
-        [NonSerialized]
+        
         private Vector2 playerDefNumberLocation;
-        [NonSerialized]
+        
         private Vector2 playerMagNumberLocation;
-        [NonSerialized]
+        
         private Vector2 guestInfoLocation = new Vector2(190, 10);
-        [NonSerialized]
+        
         private Vector2 guestAttNumberLocation = new Vector2(280, 41);
-        [NonSerialized]
+        
         private Vector2 guestDefNumberLocation = new Vector2(280, 51);
-        [NonSerialized]
+        
         private Vector2 guestMagNumberLocation = new Vector2(280, 62);
-        [NonSerialized]
+        
         private Vector2 hostInfoLocation = new Vector2(790, 10);
-        [NonSerialized]
+        
         private Vector2 hostAttNumberLocation = new Vector2(880, 41);
-        [NonSerialized]
+        
         private Vector2 hostDefNumberLocation = new Vector2(880, 51);
-        [NonSerialized]
+        
         private Vector2 hostMagNumberLocation = new Vector2(880, 62);
 
-        [NonSerialized]
+        
         private Hexagon attHex;
-        [NonSerialized]
+        
         private Hexagon defHex;
-        [NonSerialized]
+        
         private Hexagon magHex;
         public Player(bool isHost)
         {

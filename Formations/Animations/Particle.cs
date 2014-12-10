@@ -11,13 +11,13 @@ namespace Formations
     [Serializable]
     public class Particle
     {
-        [NonSerialized]
+        
         private Texture2D _texture;
-        [NonSerialized]
+        
         private Vector2 _position;
-        [NonSerialized]
+        
         private Vector2 _velocity;
-        [NonSerialized]
+        
         private Color _color;
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Vector2 Position { get { return _position; } set { _position = value; } }
