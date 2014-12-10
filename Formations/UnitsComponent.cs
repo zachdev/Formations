@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     class UnitsComponent : IUpdateDraw
     {
         private Hexagon[] attackUnits;

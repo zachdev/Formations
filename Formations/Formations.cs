@@ -15,19 +15,19 @@ namespace Formations
     /// </summary>
     public class Formations : Game, IMouseListener, IKeyboardListener
     {
-        [IgnoreDataMember]
+        [NonSerialized]
         GraphicsDeviceManager graphics;
-        [IgnoreDataMember]
+        [NonSerialized]
         SpriteBatch spriteBatch;
-        [IgnoreDataMember]
+        [NonSerialized]
         IGame gb;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Person _person;
-        [IgnoreDataMember]
+        [NonSerialized]
         private bool isGameStarted = false;
-        [IgnoreDataMember]
+        [NonSerialized]
         private GameLogin login;
-        [IgnoreDataMember]
+        [NonSerialized]
         private GameLobby gameLobby;
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;

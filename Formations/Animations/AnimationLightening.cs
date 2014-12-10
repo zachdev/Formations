@@ -8,17 +8,17 @@ using System.Text;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     class AnimationLightening : IUpdateDraw
     {
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private Color lighteningColor;
-        [IgnoreDataMember]
+        [NonSerialized]
         private VertexPositionColor[] lightening;
-        [IgnoreDataMember]
+        [NonSerialized]
         private List<Point> points = new List<Point>();
-        [IgnoreDataMember]
+        [NonSerialized]
         private static Random rand = new Random();
         private bool isAnimating = false;
         private const int DEPTH = 3;

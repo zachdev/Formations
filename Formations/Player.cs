@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 namespace Formations
 {
 
-    [DataContract]
+    [Serializable]
     public class Player
     {
 
@@ -40,17 +40,17 @@ namespace Formations
         private UnitDef[] _defUnitArray = new UnitDef[20];
 
         private UnitMag[] _magUnitArray = new UnitMag[20];
-        [IgnoreDataMember]
+        [NonSerialized]
         private StaminaComponent bar;
-        [IgnoreDataMember]
+        [NonSerialized]
         private UnitsComponent unitsBar;
-        [IgnoreDataMember]
+        [NonSerialized]
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        [IgnoreDataMember]
+        [NonSerialized]
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        [IgnoreDataMember]
+        [NonSerialized]
         private Color borderColor;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Manager uiManager;
 
         public string playerName { get; set; }
@@ -108,46 +108,46 @@ namespace Formations
 
 
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label playersNameLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label totalAttUnitLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label totalDefUnitLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label totalMagUnitLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label staminaPointsLeft;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 playerInfoLocation;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 playerAttNumberLocation;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 playerDefNumberLocation;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 playerMagNumberLocation;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 guestInfoLocation = new Vector2(190, 10);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 guestAttNumberLocation = new Vector2(280, 41);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 guestDefNumberLocation = new Vector2(280, 51);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 guestMagNumberLocation = new Vector2(280, 62);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 hostInfoLocation = new Vector2(790, 10);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 hostAttNumberLocation = new Vector2(880, 41);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 hostDefNumberLocation = new Vector2(880, 51);
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 hostMagNumberLocation = new Vector2(880, 62);
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private Hexagon attHex;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Hexagon defHex;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Hexagon magHex;
         public Player(bool isHost)
         {

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     class ScoreCard
     {
         private int scorecardId { get; set; }

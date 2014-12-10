@@ -16,32 +16,32 @@ namespace Formations
     
     public class Chat
     {
-        [IgnoreDataMember]
+        [NonSerialized]
         public ConnectionManager connectionManager;
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private static readonly int WINDOW_WIDTH = 300;
-        [IgnoreDataMember]
+        [NonSerialized]
         private static readonly int WINDOW_HEIGHT = 430;
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private Manager uiManager;
 
         private bool isVisible;
 
         // GUI Stuff
-        [IgnoreDataMember]
+        [NonSerialized]
         private Panel chatPanel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private ScrollBar chatScrollbar;
-        [IgnoreDataMember]
+        [NonSerialized]
         public TextBox chatHistoryTextbox;
-        [IgnoreDataMember]
+        [NonSerialized]
         private TextBox inputTextBox;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Button chatSendButton;
 
-        [IgnoreDataMember]
+        [NonSerialized]
         private System.Timers.Timer timer;
 
         private Boolean sliding;

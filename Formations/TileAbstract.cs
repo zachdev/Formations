@@ -4,13 +4,12 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     public abstract class TileAbstract : IUpdateDraw, IMouseListener
     {
         public abstract void init(float x, float y, GraphicsDevice graphicsDevice);

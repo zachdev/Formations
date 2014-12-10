@@ -8,15 +8,15 @@ using System.Runtime.Serialization;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     public class ParticleEngine
     {
         private Random random;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 _emitterLocation;
         public Vector2 EmitterLocation { get { return _emitterLocation; } set { _emitterLocation = value; } }
         private List<Particle> particles;
-        [IgnoreDataMember]
+        [NonSerialized]
         private List<Texture2D> textures;
 
         public bool particlesOn {get; set;}

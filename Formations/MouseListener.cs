@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     class MouseListener
     {
-        [IgnoreDataMember]
+        [NonSerialized]
         private MouseState oldState;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Formations game;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Task mouseThread;
         public MouseListener(MouseState mouseState, Formations game)
         {

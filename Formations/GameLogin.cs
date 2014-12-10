@@ -12,27 +12,27 @@ namespace Formations
 
     class GameLogin
     {
-        [IgnoreDataMember]
+        [NonSerialized]
         private Formations formation;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Window loginWindow;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Button submitButton;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label title;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label error;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label nameLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Label passwordLabel;
-        [IgnoreDataMember]
+        [NonSerialized]
         private TextBox nameText;
-        [IgnoreDataMember]
+        [NonSerialized]
         private TextBox passwordText;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Manager uiManager;
-        [IgnoreDataMember]
+        [NonSerialized]
         private bool _loggedIn = false;
         public bool isLoggedIn 
         { 

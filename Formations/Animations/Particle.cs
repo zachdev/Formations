@@ -8,16 +8,16 @@ using System.Runtime.Serialization;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     public class Particle
     {
-        [IgnoreDataMember]
+        [NonSerialized]
         private Texture2D _texture;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 _position;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Vector2 _velocity;
-        [IgnoreDataMember]
+        [NonSerialized]
         private Color _color;
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Vector2 Position { get { return _position; } set { _position = value; } }

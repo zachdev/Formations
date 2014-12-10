@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    [DataContract]
+    [Serializable]
     public class ChallengeRequest
     {
         private Person _sender;
