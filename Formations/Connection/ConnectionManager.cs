@@ -116,7 +116,7 @@ namespace Formations.Connection
             if (playerClient.Connected)
             {
                 //message = "<" + gameLobby.person.Name + "> " + message;
-                chat.chatHistoryTextbox.Text += serialClass + " serial class recieved\n";
+                chat.chatHistoryTextbox.Text += serialClass + " serial class sent\n";
                 ConnectionMessage obj = Serialize(serialClass);
 
                 playerClientNS.Write(obj.Data, 0, obj.Data.Length);
@@ -225,7 +225,7 @@ namespace Formations.Connection
         // This is to send off to a player to establish the connection "Join Game"
         private void PlayerConnect()
         {
-            Thread.Sleep(5000);
+            Thread.Sleep(10000);
 
             try
             {
