@@ -7,16 +7,16 @@ using Microsoft.Xna.Framework;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     public class Particle
     {
-        [NonSerialized]
+        [IgnoreDataMember]
         private Texture2D _texture;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Vector2 _position;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Vector2 _velocity;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Color _color;
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Vector2 Position { get { return _position; } set { _position = value; } }

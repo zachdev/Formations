@@ -7,15 +7,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     public class ParticleEngine
     {
         private Random random;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Vector2 _emitterLocation;
         public Vector2 EmitterLocation { get { return _emitterLocation; } set { _emitterLocation = value; } }
         private List<Particle> particles;
-        [NonSerialized]
+        [IgnoreDataMember]
         private List<Texture2D> textures;
 
         public bool particlesOn {get; set;}

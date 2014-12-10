@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     public class Person : IEquatable<Person>
     {
         private String _name;

@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     class ScoreCard
     {
         private int scorecardId { get; set; }

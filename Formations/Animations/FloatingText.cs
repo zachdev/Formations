@@ -9,19 +9,19 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     public class FloatingText : IUpdateDraw
     {
         // Damage text
         private UnitAbstract unit;
-        [NonSerialized]
+        [IgnoreDataMember]
         protected SpriteFont damageTextFont;
-        [NonSerialized]
+        [IgnoreDataMember]
         protected Vector2 damageTextVector;
         protected int damageGiven;
         protected float damageTextAlpha = 1.0f;
 
-        [NonSerialized]
+        [IgnoreDataMember]
         protected Timer damageTextTimer;
         private bool evenText = true;
         private bool isDamage;

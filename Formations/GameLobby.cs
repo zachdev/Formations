@@ -15,47 +15,47 @@ namespace Formations
 
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
-        [NonSerialized]
+        [IgnoreDataMember]
         private ConnectionManager connectionManager;
-        [NonSerialized]
+        [IgnoreDataMember]
         private static GameLobby gameLobbyInstance;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Person _person;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Formations formation;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Manager uiManager;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool endTurnIsVisible = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private ChallengeRequest _currentRequest;
 
         // GUI Stuff
-        [NonSerialized]
+        [IgnoreDataMember]
         private Panel chatPanel;
-        [NonSerialized]
+        [IgnoreDataMember]
         private ScrollBar chatScrollbar;
-        [NonSerialized]
+        [IgnoreDataMember]
         public TextBox chatHistoryTextbox;
-        [NonSerialized]
+        [IgnoreDataMember]
         private TextBox inputTextBox;
-        [NonSerialized]
+        [IgnoreDataMember]
         public ListBox playerlist;
         //private Button endTurn;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Window acceptWindow;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button acceptButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button unacceptButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button chatSendButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button challengeButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button singlePlayerGameButton;
 
-        [NonSerialized]
+        [IgnoreDataMember]
         private int count = 1;
 
         public Person person 

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     class MouseListener
     {
-        [NonSerialized]
+        [IgnoreDataMember]
         private MouseState oldState;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Formations game;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Task mouseThread;
         public MouseListener(MouseState mouseState, Formations game)
         {

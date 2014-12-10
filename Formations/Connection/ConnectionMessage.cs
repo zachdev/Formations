@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Formations.Connection
 {
-    [Serializable]
+    [DataContract]
     class ConnectionMessage
     {
         public byte[] Data { get; set; }

@@ -4,32 +4,33 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     public class TileBasic : TileAbstract
     {
-        [NonSerialized]
+        [IgnoreDataMember]
         private UnitAbstract unit = null;
-
+        [DataMember]
         private Hexagon tileHex;
-        [NonSerialized]
+        [IgnoreDataMember]
         private TileBasic[] surroundingTiles;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool hostControlled;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool guestControlled;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool selected = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool hovered = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int tileSideLength;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float x;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float y;
         public TileBasic(int tileSideLength)
         {

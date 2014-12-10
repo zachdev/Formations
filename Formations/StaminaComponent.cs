@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     class StaminaComponent:IUpdateDraw
     {
         private Hexagon[,] bar;

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Timers;
 using TomShane.Neoforce.Controls;
@@ -14,126 +15,126 @@ namespace Formations
     
     public class GameBoardSinglePlayer : IGame
     {
-        [NonSerialized]
+        [IgnoreDataMember]
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
-        [NonSerialized]
+        [IgnoreDataMember]
         private Player[] players = new Player[2];
-        [NonSerialized]
+        [IgnoreDataMember]
         private Manager uiManager;
-        [NonSerialized]
+        [IgnoreDataMember]
         private string gameName;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        [NonSerialized]
+        [IgnoreDataMember]
         private int movesLeftInPhase = 2;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool isHost;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool isHostsTurn = true;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool isFirstPhase = true;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool attackInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool moveInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool magicInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool isSmallBoard = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool attPlacementInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool defPlacementInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool magPlacementInProgress = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private bool endTurnIsVisible = false;
-        [NonSerialized]
+        [IgnoreDataMember]
         private MouseState currentMouseState;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Label hexInfo;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Label gameInfo;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Label gameNameLabel;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Label phaseLabel;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon turnSignal;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon attUnit;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon defUnit;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon magUnit;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon attHex;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon defHex;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon magHex;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon attAction;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon magicAction;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Hexagon moveAction;
 
-        [NonSerialized]
+        [IgnoreDataMember]
         private TileBasic currentTile;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int unitSideLength;
-        [NonSerialized]
+        [IgnoreDataMember]
         private const int boardHeight = 10;
-        [NonSerialized]
+        [IgnoreDataMember]
         private const int boardWidth = 19;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int largeTileSideLength = 30;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int smallTileSideLength = 15;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float largeBoardOffsetX = 130;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float largeBoardOffsetY = 130;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float smallBoardOffsetX = 660;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float smallBoardOffsetY = 357;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float xTileOffset = 27.5F;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float xAdjustment = 55;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float yAdjustment = 47;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float changeInX;
-        [NonSerialized]
+        [IgnoreDataMember]
         private float changeInY;
-        [NonSerialized]
+        [IgnoreDataMember]
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
-        [NonSerialized]
+        [IgnoreDataMember]
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        [NonSerialized]
+        [IgnoreDataMember]
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        [NonSerialized]
+        [IgnoreDataMember]
         private BasicEffect basicEffect;
         
         // Chat class
-        [NonSerialized]
+        [IgnoreDataMember]
         private Chat chatManager;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button chatButton;
 
         // Various buttons
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button resizeButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button endTurn;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Window endTurnWindow;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button endYesButton;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Button endNoButton;
 
         

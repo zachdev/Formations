@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     class GameColors
     {
 

@@ -3,30 +3,31 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Formations
 {
-    [Serializable]
+    [DataContract]
     class Hexagon
     {
-        [NonSerialized]
+        [IgnoreDataMember]
         private VertexPositionColor[] vectors;
-        [NonSerialized]
+        [IgnoreDataMember]
         private VertexPositionColor[] vertices;
-        [NonSerialized]
+        [IgnoreDataMember]
         private VertexPositionColor[] borders;
-        [NonSerialized]
+        [IgnoreDataMember]
         private BasicEffect basicEffect;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int tileSideLength;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Color insideColor;
-        [NonSerialized]
+        [IgnoreDataMember]
         private Color outsideColor;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int hoverPosition = 0;
-        [NonSerialized]
+        [IgnoreDataMember]
         private int count = 0;
        
         public Hexagon(int tileSideLength)
