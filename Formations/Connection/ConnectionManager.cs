@@ -229,7 +229,7 @@ namespace Formations.Connection
         // This is to send off to a player to establish the connection "Join Game"
         private void PlayerConnect()
         {
-            //Thread.Sleep(10000);
+            Thread.Sleep(3000);
 
             try
             {
