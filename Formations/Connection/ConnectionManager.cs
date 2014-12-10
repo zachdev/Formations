@@ -121,7 +121,7 @@ namespace Formations.Connection
 
                 playerClientNS.Write(obj.Data, 0, obj.Data.Length);
                 playerClientNS.Flush();
-                Deserialize(obj);
+                //Deserialize(obj);
             }
         }
         public void sendPerson(Person person)
@@ -225,7 +225,7 @@ namespace Formations.Connection
         // This is to send off to a player to establish the connection "Join Game"
         private void PlayerConnect()
         {
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
 
             try
             {
