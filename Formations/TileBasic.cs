@@ -13,7 +13,7 @@ namespace Formations
     {
         [NonSerialized]
         private UnitAbstract unit = null;
-        [NonSerialized]
+
         private Hexagon tileHex;
         [NonSerialized]
         private TileBasic[] surroundingTiles;
