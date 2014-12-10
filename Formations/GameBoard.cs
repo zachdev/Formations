@@ -1072,8 +1072,8 @@ namespace Formations
 
         internal void setSerialClass(SerialClass update)
         {
-            this.players = update.players;
-            //this.tiles = update.tiles;
+            //this.players = update.players;
+            this.tiles = update.tiles;
         }
     }
 }
