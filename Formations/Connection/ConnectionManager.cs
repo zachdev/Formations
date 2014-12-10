@@ -243,7 +243,6 @@ namespace Formations.Connection
             }
             // Set the NS stream reference
             playerClientNS = playerClient.GetStream();
-            playerClientNS.SetLength(2000000);
 
             // Place the listen on its own thread
             var t = Task.Factory.StartNew(() => PlayerListener());
@@ -264,7 +263,6 @@ namespace Formations.Connection
 
                 // Get the data stream from the player
                 playerClientNS = playerClient.GetStream();
-                playerClientNS.SetLength(2000000);
             }
 
             try
