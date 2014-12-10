@@ -176,6 +176,8 @@ namespace Formations.Connection
                 //---read incoming stream--- Will place the data into the buffer
                 int bytesRead = client.GetStream().Read(buffer, 0, client.ReceiveBufferSize);
 
+                chat.chatHistoryTextbox.Text += bytesRead + " bytes read.\n"; //---write back the text to the client---
+
                 ConnectionMessage message = new ConnectionMessage { Data = buffer };
 
                 // Deserialize then figure out what the object we got was.
