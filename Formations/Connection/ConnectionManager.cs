@@ -272,9 +272,9 @@ namespace Formations.Connection
                     Thread.Sleep(10);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                chat.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n";
+                chat.chatHistoryTextbox.Text += "Exception happened with PlayerClient. Connection Ended.\n" + e + "\n";
                 playerClient = null;
                 return;
             }
