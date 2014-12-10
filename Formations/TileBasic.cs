@@ -10,16 +10,26 @@ namespace Formations
 {
     [Serializable]
     public class TileBasic : TileAbstract
-    {   
+    {
+        [NonSerialized]
         private UnitAbstract unit = null;
+        [NonSerialized]
         private Hexagon tileHex;
+        [NonSerialized]
         private TileBasic[] surroundingTiles;
+        [NonSerialized]
         private bool hostControlled;
+        [NonSerialized]
         private bool guestControlled;
+        [NonSerialized]
         private bool selected = false;
+        [NonSerialized]
         private bool hovered = false;
+        [NonSerialized]
         private int tileSideLength;
+        [NonSerialized]
         private float x;
+        [NonSerialized]
         private float y;
         public TileBasic(int tileSideLength)
         {

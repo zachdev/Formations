@@ -18,12 +18,15 @@ namespace Formations
         private VertexPositionColor[] borders;
         [NonSerialized]
         private BasicEffect basicEffect;
+        [NonSerialized]
         private int tileSideLength;
         [NonSerialized]
         private Color insideColor;
         [NonSerialized]
         private Color outsideColor;
+        [NonSerialized]
         private int hoverPosition = 0;
+        [NonSerialized]
         private int count = 0;
        
         public Hexagon(int tileSideLength)
