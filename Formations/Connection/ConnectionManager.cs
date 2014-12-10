@@ -115,12 +115,13 @@ namespace Formations.Connection
             // Add additional logic to use this for playerClient
             if (playerClient.Connected)
             {
-                //message = "<" + gameLobby.person.Name + "> " + message;
-                chat.chatHistoryTextbox.Text += serialClass + " serial class sent\n";
                 ConnectionMessage obj = Serialize(serialClass);
 
                 playerClientNS.Write(obj.Data, 0, obj.Data.Length);
                 playerClientNS.Flush();
+
+                // Put this after it was actually sent
+                chat.chatHistoryTextbox.Text += serialClass + " serial class sent. Size " + obj.Data.Length + "\n";
                 //Deserialize(obj);
             }
         }
