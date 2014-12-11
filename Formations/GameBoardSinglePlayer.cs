@@ -16,122 +16,63 @@ namespace Formations
     {
         
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
-        
         private Player[] players = new Player[2];
-        
         private Manager uiManager;
-        
         private string gameName;
-        
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        
         private int movesLeftInPhase = 2;
-        
         private bool isHost;
-        
         private bool isHostsTurn = true;
-        
         private bool isFirstPhase = true;
-        
         private bool attackInProgress = false;
-        
         private bool moveInProgress = false;
-        
         private bool magicInProgress = false;
-        
         private bool isSmallBoard = false;
-        
         private bool attPlacementInProgress = false;
-        
         private bool defPlacementInProgress = false;
-        
         private bool magPlacementInProgress = false;
-        
         private bool endTurnIsVisible = false;
-        
         private MouseState currentMouseState;
-        
         private Label hexInfo;
-        
         private Label gameInfo;
-        
         private Label gameNameLabel;
-        
         private Label phaseLabel;
-        
         private Hexagon turnSignal;
-        
         private Hexagon attUnit;
-        
         private Hexagon defUnit;
-        
         private Hexagon magUnit;
-        
         private Hexagon attHex;
-        
         private Hexagon defHex;
-        
         private Hexagon magHex;
-        
         private Hexagon attAction;
-        
         private Hexagon magicAction;
-        
         private Hexagon moveAction;
-
-        
         private TileBasic currentTile;
-        
         private int unitSideLength;
-        
         private const int boardHeight = 10;
-        
         private const int boardWidth = 19;
-        
         private int largeTileSideLength = 30;
-        
         private int smallTileSideLength = 15;
-        
         private float largeBoardOffsetX = 130;
-        
         private float largeBoardOffsetY = 130;
-        
         private float smallBoardOffsetX = 660;
-        
         private float smallBoardOffsetY = 357;
-        
         private float xTileOffset = 27.5F;
-        
         private float xAdjustment = 55;
-        
         private float yAdjustment = 47;
-        
         private float changeInX;
-        
         private float changeInY;
-        
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
-        
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        
         private BasicEffect basicEffect;
-        
 
         // Various buttons
-        
         private Button resizeButton;
-        
         private Button endTurn;
-        
         private Window endTurnWindow;
-        
         private Button endYesButton;
-        
         private Button endNoButton;
-
-        
 
         /// <summary>
         /// Default Constructor

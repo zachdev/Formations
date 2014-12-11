@@ -16,47 +16,26 @@ namespace Formations
 
         private static readonly int WINDOW_WIDTH = 300;
         private static readonly int WINDOW_HEIGHT = 430;
-        
         private ConnectionManager connectionManager;
-        
         private static GameLobby gameLobbyInstance;
-        
         private Person _person;
-        
         private Formations formation;
-        
         private Manager uiManager;
-        
         private bool endTurnIsVisible = false;
-        
         private ChallengeRequest _currentRequest;
-
         // GUI Stuff
-        
         private Panel chatPanel;
-        
         private ScrollBar chatScrollbar;
-        
         public TextBox chatHistoryTextbox;
-        
         private TextBox inputTextBox;
-        
         public ListBox playerlist;
         //private Button endTurn;
-        
         private Window acceptWindow;
-        
         private Button acceptButton;
-        
         private Button unacceptButton;
-        
         private Button chatSendButton;
-        
         private Button challengeButton;
-        
         private Button singlePlayerGameButton;
-
-        
         private int count = 1;
 
         public Person person 
@@ -94,13 +73,13 @@ namespace Formations
             this.person = person;
 
             playerlist = new ListBox(uiManager);
-            playerlist.SetPosition(1100, 8);
-            playerlist.SetSize(100, 200);
+            playerlist.SetPosition(900, 8);
+            playerlist.SetSize(300, 200);
             
             playerlist.Init();
 
             challengeButton = new Button(uiManager);
-            challengeButton.SetPosition(1100, 220);
+            challengeButton.SetPosition(900, 220);
             challengeButton.SetSize(100, 28);
             challengeButton.Text = "Challenge";
             challengeButton.BackColor = Color.Indigo; 
@@ -125,7 +104,7 @@ namespace Formations
             chatScrollbar.SetPosition(0, 0);
 
             // History text area
-            chatHistoryTextbox.SetSize(300, 400);
+            chatHistoryTextbox.SetSize(600, 400);
             chatHistoryTextbox.SetPosition(0, 0);
             chatHistoryTextbox.WordWrap = true;
             chatHistoryTextbox.Mode = TextBoxMode.Multiline;
