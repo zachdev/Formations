@@ -113,7 +113,7 @@ namespace Formations.Connection
         public void sendSerialClassPlayer(SerialClass serialClass)
         {
             // Add additional logic to use this for playerClient
-            if (playerClient.Connected)
+            /*if (playerClient.Connected)
             {
                 ConnectionMessage obj = Serialize(serialClass);
 
@@ -123,7 +123,7 @@ namespace Formations.Connection
                 // Put this after it was actually sent
                 chat.chatHistoryTextbox.Text += serialClass + " serial class sent. Size " + obj.Data.Length + "\n";
                 //Deserialize(obj);
-            }
+            }*/
         }
         public void sendPerson(Person person)
         {
