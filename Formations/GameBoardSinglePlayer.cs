@@ -14,7 +14,7 @@ namespace Formations
     
     public class GameBoardSinglePlayer : IGame
     {
-
+        
         private Formations formation;
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
         private Player[] players = new Player[2];
@@ -67,7 +67,7 @@ namespace Formations
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
         private BasicEffect basicEffect;
-
+        
         // Various buttons
         private Button resizeButton;
         private Button endTurn;
@@ -75,9 +75,8 @@ namespace Formations
         private Button endYesButton;
         private Button endNoButton;
 
-        //Endding box
-        private Panel endingPanel;
         private Button endGameButton;
+        private Window endingPanel;
         private Label endGameLabel;
         
 
@@ -246,7 +245,7 @@ namespace Formations
             /*
              * ending box
              */ 
-            endingPanel = new Panel(uiManager);
+            endingPanel = new Window(uiManager);
             endingPanel.BackColor = Color.Aqua;
             endingPanel.SetPosition(300, 200);
             endingPanel.SetSize(400, 300);
@@ -270,7 +269,7 @@ namespace Formations
             uiManager.Add(resizeButton);
             uiManager.Add(gameNameLabel);
             uiManager.Add(phaseLabel);
-            uiManager.Add(endingPanel);
+            //uiManager.Add(endingPanel);
         }
 
         private void endGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
