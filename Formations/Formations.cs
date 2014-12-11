@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Threading;
 using TomShane.Neoforce.Controls;
 
 namespace Formations
@@ -135,6 +136,13 @@ namespace Formations
         {
             newGame(game);
         }
+       public void endGame()
+       {
+           isGameStarted = false;
+           Thread.Sleep(50);
+           gb = null;
+           gameLobby.lobbyReconnect();
+       }
         private void createLobby(){
             gameLobby = GameLobby.getInstance();
             gameLobby.init(this, theManager, person);
@@ -143,7 +151,7 @@ namespace Formations
         private void newGame(IGame game)
         {
             gb = game;
-            gb.init(theManager, GraphicsDevice, "Formations", true);
+            gb.init(theManager, GraphicsDevice, this , "Formations", true);
             mouseListener.startListener();
             isGameStarted = true;
             
@@ -165,26 +173,39 @@ namespace Formations
             {
                 gameLobby.update();
             }
-
+            theManager.Update(gameTime);
             base.Update(gameTime);
 
-            theManager.Update(gameTime);
+            
         }
         public void mousePressed(MouseState mouseState)
         {
-            gb.mousePressed(mouseState);
+            if (gb != null)
+            {
+                gb.mousePressed(mouseState);
+            }
+            
         }
         public void mouseReleased(MouseState mouseState)
         {
-            gb.mouseReleased(mouseState);
+            if (gb != null)
+            {
+                gb.mouseReleased(mouseState);
+            }
         }
         public void mouseDragged(MouseState mouseState)
         {
-            gb.mouseDragged(mouseState);
+            if (gb != null)
+            {
+                gb.mouseDragged(mouseState);
+            }
         }
         public void mouseMoved(MouseState mouseState)
         {
-            gb.mouseMoved(mouseState);
+            if (gb != null)
+            {
+                gb.mouseMoved(mouseState);
+            }
         }
 
         /// <summary>
@@ -193,11 +214,12 @@ namespace Formations
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkSlateGray);
+            
             
             // TODO: Add your drawing code here
             
             theManager.BeginDraw(gameTime);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
             spriteBatch.Begin();
             if (login.isLoggedIn && isGameStarted)
             {

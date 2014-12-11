@@ -250,6 +250,14 @@ namespace Formations
             magHex.init(40, 290, graphicsDevice, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
 
         }
+        public void removeUI()
+        {
+            uiManager.Remove(playersNameLabel);
+            uiManager.Remove(totalAttUnitLabel);
+            uiManager.Remove(totalDefUnitLabel);
+            uiManager.Remove(totalMagUnitLabel);
+            uiManager.Remove(staminaPointsLeft);
+        }
         /// <summary>
         /// gets the next unplaced Attack Unit
         /// </summary>

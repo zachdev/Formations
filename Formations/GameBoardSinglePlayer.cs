@@ -14,7 +14,8 @@ namespace Formations
     
     public class GameBoardSinglePlayer : IGame
     {
-        
+
+        private Formations formation;
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
         private Player[] players = new Player[2];
         private Manager uiManager;
@@ -74,6 +75,12 @@ namespace Formations
         private Button endYesButton;
         private Button endNoButton;
 
+        //Endding box
+        private Panel endingPanel;
+        private Button endGameButton;
+        private Label endGameLabel;
+        
+
         /// <summary>
         /// Default Constructor
         /// creates TilesArray for the Board
@@ -96,12 +103,12 @@ namespace Formations
         /// <param name="graphicsDevice"></param>
         /// <param name="font"></param>
         /// <param name="gameName"></param>
-        public void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName, bool isHost)
+        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost)
         {
             this.gameName = gameName;
             this.isHost = isHost;
             this.uiManager = uiManager;
-
+            this.formation = formation;
             players[0] = new Player(true);
             players[1] = new Player(false);
             /*
@@ -236,11 +243,50 @@ namespace Formations
             phaseLabel.SetPosition(550, 70);
             phaseLabel.SetSize(200,20);
             phaseLabel.Text = "Phase 1 - Land Grab";
+            /*
+             * ending box
+             */ 
+            endingPanel = new Panel(uiManager);
+            endingPanel.BackColor = Color.Aqua;
+            endingPanel.SetPosition(300, 200);
+            endingPanel.SetSize(400, 300);
+            endingPanel.Text = "Game Over";
+
+            endGameButton = new Button(uiManager);
+            endGameButton.SetPosition(100, 200);
+            endGameButton.SetSize(200, 100);
+            endGameButton.Text = "Lobby";
+            endGameButton.Click += endGameButton_Click;
+            endGameLabel = new Label(uiManager);
+            endGameLabel.SetPosition(100, 50);
+            endGameLabel.SetSize(200, 100);
+            endingPanel.Init();
+            endGameLabel.Init();
+            endNoButton.Init();
+            endingPanel.Add(endGameLabel);
+            endingPanel.Add(endGameButton);
 
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
             uiManager.Add(gameNameLabel);
             uiManager.Add(phaseLabel);
+            uiManager.Add(endingPanel);
+        }
+
+        private void endGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {   
+            uiManager.Remove(endingPanel);
+            uiManager.Remove(endTurn);
+            uiManager.Remove(resizeButton);
+            uiManager.Remove(gameNameLabel);
+            uiManager.Remove(phaseLabel);
+            uiManager.Remove(endingPanel);
+            players[0].removeUI();
+            players[1].removeUI();
+            formation.endGame();
+            gameDone = true;
+
+
         }
         /// <summary>
         /// Creates the UnitAbstract Array with the correct number of attack units defense units and Manipulation units
@@ -270,7 +316,7 @@ namespace Formations
             
 
         #region - Mouse Methods
-        public void mousePressed(MouseState mouseState)
+        public override void mousePressed(MouseState mouseState)
         {
             if (mouseState.RightButton == ButtonState.Pressed)
             {
@@ -348,7 +394,7 @@ namespace Formations
                 
             }
         }
-        public void mouseReleased(MouseState mouseState)
+        public override void mouseReleased(MouseState mouseState)
         {
             //selecting the correct player  
             Player self;
@@ -398,7 +444,7 @@ namespace Formations
 
             recalculateControlArea();
         }
-        public void mouseDragged(MouseState mouseState)
+        public override void mouseDragged(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -410,7 +456,7 @@ namespace Formations
                 }
             }
         }
-        public void mouseMoved(MouseState mouseState)
+        public override void mouseMoved(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -614,9 +660,6 @@ namespace Formations
             }
         }
 
-
-
-
         private bool playerCanSetUnit(TileBasic tile, Player player)
         {
             bool result = false; 
@@ -713,18 +756,24 @@ namespace Formations
             }
             if (playerZeroTotal == 0)
             {
+                gameDone = true;
+                endGameLabel.Text = players[0].playerName + " has Won!!";
+                uiManager.Add(endingPanel);
                 //host wins
                 turnSignal.setInsideColor(Color.Red);
                 turnSignal.setOutsideColor(Color.Red);
             }
             else if (playerOneTotal == 0)
             {
+                gameDone = true;
+                endGameLabel.Text = players[0].playerName + " has Won!!";
+                uiManager.Add(endingPanel);
                 //guest wins
                 turnSignal.setInsideColor(Color.White);
                 turnSignal.setOutsideColor(Color.White);
             }
         }
-        public void update()
+        public override void update()
         {
             foreach (Player player in players)
             {
@@ -740,7 +789,7 @@ namespace Formations
 
         }
 
-        public void draw(SpriteBatch spriteBatch)
+        public override void draw(SpriteBatch spriteBatch)
         {
             resetButtons();
             basicEffect.CurrentTechnique.Passes[0].Apply();
