@@ -33,9 +33,9 @@ namespace Formations
             this.StaminaPlaceCost = STAMINA_PLACE_COST;
             this.Player = player;
             // Particle engine stuff
-            bloodParticles = new ParticleEngine(Formations.bloodTextures, new Vector2(400, 240));
-            attackParticles = new ParticleEngine(Formations.attackTextures, new Vector2(400, 240));
-            healingParticles = new ParticleEngine(Formations.healingTextures, new Vector2(400, 240));
+            bloodParticles = new BloodParticleEngine(Formations.bloodTextures, new Vector2(400, 240));
+            attackParticles = new AttackParticleEngine(Formations.attackTextures, new Vector2(400, 240));
+            healingParticles = new HealingParticleEngine(Formations.healingTextures, new Vector2(400, 240));
             floatingText = new FloatingText(this);
         }
         public void loadData()

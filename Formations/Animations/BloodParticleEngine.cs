@@ -32,7 +32,7 @@ namespace Formations
 
         public void Update()
         {
-            if (count > 500)
+            if (count > 100)
             {
                 particlesOn = false;
 
@@ -41,7 +41,7 @@ namespace Formations
 
             if (particlesOn)
             {
-                int total = 1;
+                int total = 5;
 
                 for (int i = 0; i < total; i++)
                 {
@@ -67,13 +67,13 @@ namespace Formations
             Texture2D texture = textures[random.Next(textures.Count)];
             Vector2 position = EmitterLocation;
             Vector2 velocity = new Vector2(
-                                    1f * (float)(random.NextDouble() - 1),
-                                    1f * (float)(random.NextDouble() - 1));
+                                    .5f * (float)(random.NextDouble() - .5f),
+                                    .5f * (float)(random.NextDouble() - .5f));
             float angle = 0;
             float angularVelocity = 0;
             Color color = Color.Red;
-            float size = 0.02f;
-            int ttl = 80 + random.Next(40);
+            float size = 0.07f;
+            int ttl = 60 + random.Next(40);
 
             return new Particle(texture, position, velocity, angle, angularVelocity, color, size, ttl);
         }

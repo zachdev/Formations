@@ -103,14 +103,12 @@ namespace Formations
             attackTextures.Add(Content.Load<Texture2D>("sword3"));
 
             bloodTextures = new List<Texture2D>();
-            bloodTextures.Add(Content.Load<Texture2D>("axe"));
-            bloodTextures.Add(Content.Load<Texture2D>("sword2"));
-            bloodTextures.Add(Content.Load<Texture2D>("sword3"));
+            bloodTextures.Add(Content.Load<Texture2D>("bloodparticle"));
 
             healingTextures = new List<Texture2D>();
-            healingTextures.Add(Content.Load<Texture2D>("axe"));
-            healingTextures.Add(Content.Load<Texture2D>("sword2"));
-            healingTextures.Add(Content.Load<Texture2D>("sword3"));
+            healingTextures.Add(Content.Load<Texture2D>("heart"));
+            healingTextures.Add(Content.Load<Texture2D>("heart2"));
+            healingTextures.Add(Content.Load<Texture2D>("star2"));
 
 
 

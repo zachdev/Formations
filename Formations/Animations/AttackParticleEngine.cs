@@ -32,7 +32,7 @@ namespace Formations
 
         public void Update()
         {
-            if (count > 50)
+            if (count > 30)
             {
                 particlesOn = false;
 
