@@ -7,11 +7,20 @@ using TomShane.Neoforce.Controls;
 
 namespace Formations
 {
-    public interface IGame : IUpdateDraw, IMouseListener 
+    public abstract class IGame : IMouseListener
     {
-        void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName, bool isHost);
-        void update();
-        void draw(SpriteBatch spriteBatch);
+        public bool gameDone = false;
+        public abstract void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost);
+        public abstract void update();
+        public abstract void draw(SpriteBatch spriteBatch);
 
+
+        public abstract void mousePressed(Microsoft.Xna.Framework.Input.MouseState mouseState);
+
+        public abstract void mouseReleased(Microsoft.Xna.Framework.Input.MouseState mouseState);
+
+        public abstract void mouseMoved(Microsoft.Xna.Framework.Input.MouseState mouseState);
+
+        public abstract void mouseDragged(Microsoft.Xna.Framework.Input.MouseState mouseState);
     }
 }

@@ -14,6 +14,7 @@ namespace Formations
 
     public class GameBoard : IGame
     {
+        private Formations formation;
         private ConnectionManager connectionManager = ConnectionManager.getInstance();
         private Player[] players = new Player[2];
         
@@ -157,11 +158,12 @@ namespace Formations
         /// <param name="graphicsDevice"></param>
         /// <param name="font"></param>
         /// <param name="gameName"></param>
-        public void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName, bool isHost)
+        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost)
         {
             this.gameName = gameName;
             this.isHost = isHost;
             this.uiManager = uiManager;
+            this.formation = formation;
 
             players[0] = new Player(true);
             players[1] = new Player(false);
@@ -343,7 +345,7 @@ namespace Formations
 
 
         #region - Mouse Methods
-        public void mousePressed(MouseState mouseState)
+        public override void mousePressed(MouseState mouseState)
         {
             if (mouseState.RightButton == ButtonState.Pressed)
             {
@@ -424,7 +426,7 @@ namespace Formations
 
             }
         }
-        public void mouseReleased(MouseState mouseState)
+        public override void mouseReleased(MouseState mouseState)
         {
             //selecting the correct player  
             Player self;
@@ -475,7 +477,7 @@ namespace Formations
             recalculateControlArea();
             //connectionManager.sendSerialClassPlayer(new SerialClass(players, tiles));
         }
-        public void mouseDragged(MouseState mouseState)
+        public override void mouseDragged(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -487,7 +489,7 @@ namespace Formations
                 }
             }
         }
-        public void mouseMoved(MouseState mouseState)
+        public override void mouseMoved(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -811,7 +813,7 @@ namespace Formations
                 turnSignal.setOutsideColor(Color.White);
             }
         }
-        public void update()
+        public override void update()
         {
             foreach (Player player in players)
             {
@@ -827,7 +829,7 @@ namespace Formations
 
         }
 
-        public void draw(SpriteBatch spriteBatch)
+        public override void draw(SpriteBatch spriteBatch)
         {
             resetButtons();
             basicEffect.CurrentTechnique.Passes[0].Apply();

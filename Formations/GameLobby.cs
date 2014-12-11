@@ -219,6 +219,13 @@ namespace Formations
             }
             return result;
         }
+        public void lobbyReconnect()
+        {
+            uiManager.Add(singlePlayerGameButton);
+            uiManager.Add(chatPanel);
+            uiManager.Add(challengeButton);
+            uiManager.Add(playerlist);
+        }
         public void showChallengeAccept()
         {
             uiManager.Add(acceptWindow);

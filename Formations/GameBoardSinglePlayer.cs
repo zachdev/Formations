@@ -14,123 +14,71 @@ namespace Formations
     
     public class GameBoardSinglePlayer : IGame
     {
-        
-        private ConnectionManager connectionManager = ConnectionManager.getInstance();
-        
-        private Player[] players = new Player[2];
-        
-        private Manager uiManager;
-        
-        private string gameName;
-        
-        private Vector2 gameNameLocation = new Vector2(500, 10);
-        
-        private int movesLeftInPhase = 2;
-        
-        private bool isHost;
-        
-        private bool isHostsTurn = true;
-        
-        private bool isFirstPhase = true;
-        
-        private bool attackInProgress = false;
-        
-        private bool moveInProgress = false;
-        
-        private bool magicInProgress = false;
-        
-        private bool isSmallBoard = false;
-        
-        private bool attPlacementInProgress = false;
-        
-        private bool defPlacementInProgress = false;
-        
-        private bool magPlacementInProgress = false;
-        
-        private bool endTurnIsVisible = false;
-        
-        private MouseState currentMouseState;
-        
-        private Label hexInfo;
-        
-        private Label gameInfo;
-        
-        private Label gameNameLabel;
-        
-        private Label phaseLabel;
-        
-        private Hexagon turnSignal;
-        
-        private Hexagon attUnit;
-        
-        private Hexagon defUnit;
-        
-        private Hexagon magUnit;
-        
-        private Hexagon attHex;
-        
-        private Hexagon defHex;
-        
-        private Hexagon magHex;
-        
-        private Hexagon attAction;
-        
-        private Hexagon magicAction;
-        
-        private Hexagon moveAction;
 
-        
+        private Formations formation;
+        private ConnectionManager connectionManager = ConnectionManager.getInstance();
+        private Player[] players = new Player[2];
+        private Manager uiManager;
+        private string gameName;
+        private Vector2 gameNameLocation = new Vector2(500, 10);
+        private int movesLeftInPhase = 2;
+        private bool isHost;
+        private bool isHostsTurn = true;
+        private bool isFirstPhase = true;
+        private bool attackInProgress = false;
+        private bool moveInProgress = false;
+        private bool magicInProgress = false;
+        private bool isSmallBoard = false;
+        private bool attPlacementInProgress = false;
+        private bool defPlacementInProgress = false;
+        private bool magPlacementInProgress = false;
+        private bool endTurnIsVisible = false;
+        private MouseState currentMouseState;
+        private Label hexInfo;
+        private Label gameInfo;
+        private Label gameNameLabel;
+        private Label phaseLabel;
+        private Hexagon turnSignal;
+        private Hexagon attUnit;
+        private Hexagon defUnit;
+        private Hexagon magUnit;
+        private Hexagon attHex;
+        private Hexagon defHex;
+        private Hexagon magHex;
+        private Hexagon attAction;
+        private Hexagon magicAction;
+        private Hexagon moveAction;
         private TileBasic currentTile;
-        
         private int unitSideLength;
-        
         private const int boardHeight = 10;
-        
         private const int boardWidth = 19;
-        
         private int largeTileSideLength = 30;
-        
         private int smallTileSideLength = 15;
-        
         private float largeBoardOffsetX = 130;
-        
         private float largeBoardOffsetY = 130;
-        
         private float smallBoardOffsetX = 660;
-        
         private float smallBoardOffsetY = 357;
-        
         private float xTileOffset = 27.5F;
-        
         private float xAdjustment = 55;
-        
         private float yAdjustment = 47;
-        
         private float changeInX;
-        
         private float changeInY;
-        
         private TileBasic[,] tiles = new TileBasic[boardWidth, boardHeight];
-        
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
-        
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
-        
         private BasicEffect basicEffect;
-        
 
         // Various buttons
-        
         private Button resizeButton;
-        
         private Button endTurn;
-        
         private Window endTurnWindow;
-        
         private Button endYesButton;
-        
         private Button endNoButton;
 
+        //Endding box
+        private Panel endingPanel;
+        private Button endGameButton;
+        private Label endGameLabel;
         
 
         /// <summary>
@@ -155,12 +103,12 @@ namespace Formations
         /// <param name="graphicsDevice"></param>
         /// <param name="font"></param>
         /// <param name="gameName"></param>
-        public void init(Manager uiManager, GraphicsDevice graphicsDevice, string gameName, bool isHost)
+        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost)
         {
             this.gameName = gameName;
             this.isHost = isHost;
             this.uiManager = uiManager;
-
+            this.formation = formation;
             players[0] = new Player(true);
             players[1] = new Player(false);
             /*
@@ -295,11 +243,50 @@ namespace Formations
             phaseLabel.SetPosition(550, 70);
             phaseLabel.SetSize(200,20);
             phaseLabel.Text = "Phase 1 - Land Grab";
+            /*
+             * ending box
+             */ 
+            endingPanel = new Panel(uiManager);
+            endingPanel.BackColor = Color.Aqua;
+            endingPanel.SetPosition(300, 200);
+            endingPanel.SetSize(400, 300);
+            endingPanel.Text = "Game Over";
+
+            endGameButton = new Button(uiManager);
+            endGameButton.SetPosition(100, 200);
+            endGameButton.SetSize(200, 100);
+            endGameButton.Text = "Lobby";
+            endGameButton.Click += endGameButton_Click;
+            endGameLabel = new Label(uiManager);
+            endGameLabel.SetPosition(100, 50);
+            endGameLabel.SetSize(200, 100);
+            endingPanel.Init();
+            endGameLabel.Init();
+            endNoButton.Init();
+            endingPanel.Add(endGameLabel);
+            endingPanel.Add(endGameButton);
 
             uiManager.Add(endTurn);
             uiManager.Add(resizeButton);
             uiManager.Add(gameNameLabel);
             uiManager.Add(phaseLabel);
+            uiManager.Add(endingPanel);
+        }
+
+        private void endGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
+        {   
+            uiManager.Remove(endingPanel);
+            uiManager.Remove(endTurn);
+            uiManager.Remove(resizeButton);
+            uiManager.Remove(gameNameLabel);
+            uiManager.Remove(phaseLabel);
+            uiManager.Remove(endingPanel);
+            players[0].removeUI();
+            players[1].removeUI();
+            formation.endGame();
+            gameDone = true;
+
+
         }
         /// <summary>
         /// Creates the UnitAbstract Array with the correct number of attack units defense units and Manipulation units
@@ -329,7 +316,7 @@ namespace Formations
             
 
         #region - Mouse Methods
-        public void mousePressed(MouseState mouseState)
+        public override void mousePressed(MouseState mouseState)
         {
             if (mouseState.RightButton == ButtonState.Pressed)
             {
@@ -407,7 +394,7 @@ namespace Formations
                 
             }
         }
-        public void mouseReleased(MouseState mouseState)
+        public override void mouseReleased(MouseState mouseState)
         {
             //selecting the correct player  
             Player self;
@@ -457,7 +444,7 @@ namespace Formations
 
             recalculateControlArea();
         }
-        public void mouseDragged(MouseState mouseState)
+        public override void mouseDragged(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -469,7 +456,7 @@ namespace Formations
                 }
             }
         }
-        public void mouseMoved(MouseState mouseState)
+        public override void mouseMoved(MouseState mouseState)
         {
             currentMouseState = mouseState;
 
@@ -673,9 +660,6 @@ namespace Formations
             }
         }
 
-
-
-
         private bool playerCanSetUnit(TileBasic tile, Player player)
         {
             bool result = false; 
@@ -772,18 +756,24 @@ namespace Formations
             }
             if (playerZeroTotal == 0)
             {
+                gameDone = true;
+                endGameLabel.Text = players[0].playerName + " has Won!!";
+                uiManager.Add(endingPanel);
                 //host wins
                 turnSignal.setInsideColor(Color.Red);
                 turnSignal.setOutsideColor(Color.Red);
             }
             else if (playerOneTotal == 0)
             {
+                gameDone = true;
+                endGameLabel.Text = players[0].playerName + " has Won!!";
+                uiManager.Add(endingPanel);
                 //guest wins
                 turnSignal.setInsideColor(Color.White);
                 turnSignal.setOutsideColor(Color.White);
             }
         }
-        public void update()
+        public override void update()
         {
             foreach (Player player in players)
             {
@@ -799,7 +789,7 @@ namespace Formations
 
         }
 
-        public void draw(SpriteBatch spriteBatch)
+        public override void draw(SpriteBatch spriteBatch)
         {
             resetButtons();
             basicEffect.CurrentTechnique.Passes[0].Apply();
