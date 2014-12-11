@@ -139,7 +139,7 @@ namespace Formations
        public void endGame()
        {
            isGameStarted = false;
-           Thread.Sleep(2000);
+           Thread.Sleep(50);
            gb = null;
            gameLobby.lobbyReconnect();
        }
