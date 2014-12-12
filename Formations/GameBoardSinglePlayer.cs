@@ -121,6 +121,7 @@ namespace Formations
             players[0].init("Player 1", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
             players[1].init("Player 2", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
                 players[0].isPlayersTurn = true;
+                players[1].isPlayersTurn = false;
                 
            // }
            // else

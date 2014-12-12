@@ -433,9 +433,13 @@ namespace Formations
             }
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, 2);
             spriteBatch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, borderLines, 0, 4);
-            attHex.draw(spriteBatch);
-            defHex.draw(spriteBatch);
-            magHex.draw(spriteBatch);
+            if (isPlayersTurn)
+            {
+                attHex.draw(spriteBatch);
+                defHex.draw(spriteBatch);
+                magHex.draw(spriteBatch);
+            }
+
             bar.updateBar(Stamina);
             unitsBar.updateUnitHex(AttUnitsNotPlaced, DefUnitsNotPlaced, MagUnitsNotPlaced);
             bar.draw(spriteBatch);
