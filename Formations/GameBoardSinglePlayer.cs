@@ -21,7 +21,7 @@ namespace Formations
         private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        private int movesLeftInPhase = 2;
+        private int movesLeftInPhase = 6;
         private bool isHost;
         private bool isHostsTurn = true;
         private bool isFirstPhase = true;
@@ -954,8 +954,8 @@ namespace Formations
         private void createButtonArea()
         {
 
-            float width = largeBoardOffsetX - 50;
-            float height = 600 - largeBoardOffsetY - 10;
+            float width = 85;
+            float height = 150;
             if (gameInfo == null)
             {
                 gameInfo = new Label(uiManager);
@@ -964,8 +964,9 @@ namespace Formations
                 gameInfo.Width = (int)width;
                 //gameInfo.DrawBorders = true;
                 gameInfo.MaximumWidth = (int)width;
-                gameInfo.SetPosition(10, (int)largeBoardOffsetY);
+                gameInfo.SetPosition(4, (int)largeBoardOffsetY+210);
                 gameInfo.TextColor = Color.White;
+                gameInfo.BackColor = Color.Indigo;
                 //gameInfo.WordWrap = true;
                 uiManager.Add(gameInfo);
             }
@@ -975,7 +976,7 @@ namespace Formations
             {   tempUnit = tile.getUnit();
                 if (tile.isHovered() && tile.hasUnit())
                 {
-                    gameInfo.Text += "\n\n\n";
+                    gameInfo.Text += "\n";
                     gameInfo.Text += tempUnit.getUnitType() + "\n";
                     gameInfo.Text += "Life: " + tempUnit.Life + "\n";
                     gameInfo.Text += "Damage: " + tempUnit.calculateAtt() + "\n";
