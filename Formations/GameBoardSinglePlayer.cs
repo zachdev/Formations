@@ -853,12 +853,10 @@ namespace Formations
             if (isHostsTurn)
             {
                 tempColor = GameColors.HostControlOutsideColor;
-                System.Console.WriteLine("Is hosts turn");
             }
             else
             {
                 tempColor = GameColors.guestControlOutsideColor;
-                System.Console.WriteLine("Is guests turn");
             }
 
             if (attPlacementInProgress)

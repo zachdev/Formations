@@ -249,7 +249,7 @@ namespace Formations
 
             //System.Console.WriteLine("is this even working");
 
-            if (isPlayersTurn)
+            if (IsHost)
             {
                 tempColor = GameColors.HostControlOutsideColor;
                 System.Console.WriteLine("Is hosts turn");
