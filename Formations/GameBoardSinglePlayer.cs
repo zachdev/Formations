@@ -848,6 +848,19 @@ namespace Formations
         }
         private void drawUnitButtons(TileBasic currentTile, SpriteBatch spriteBatch)
         {
+            Color tempColor;
+
+            if (isHostsTurn)
+            {
+                tempColor = GameColors.HostControlOutsideColor;
+                System.Console.WriteLine("Is hosts turn");
+            }
+            else
+            {
+                tempColor = GameColors.guestControlOutsideColor;
+                System.Console.WriteLine("Is guests turn");
+            }
+
             if (attPlacementInProgress)
             {
 
@@ -882,7 +895,7 @@ namespace Formations
             }
             else if(attackInProgress)
             {
-                attAction.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.attButton, GameColors.attButton);
+                attAction.moveHex(currentMouseState.X, currentMouseState.Y, tempColor, tempColor);
                 attAction.draw(spriteBatch);
             }
             else if(magicInProgress)
@@ -897,7 +910,7 @@ namespace Formations
 
                     if ((currentUnit.IsHostsUnit && isHostsTurn) || (!currentUnit.IsHostsUnit && !isHostsTurn))
                     {
-                        attAction.moveHex(x + changeInX, y - changeInY, GameColors.attButton, GameColors.attButton);
+                        attAction.moveHex(x + changeInX, y - changeInY, tempColor, tempColor);
                         moveAction.moveHex(x - changeInX, y - changeInY, GameColors.moveButton, GameColors.moveButton);
                         attAction.draw(spriteBatch);
                         moveAction.draw(spriteBatch);
@@ -913,13 +926,26 @@ namespace Formations
         }
         private void resetButtons()
         {
+            Color tempColor;
+
+            if (isHostsTurn)
+            {
+                tempColor = GameColors.HostControlOutsideColor;
+                System.Console.WriteLine("Is hosts turn");
+            }
+            else
+            {
+                tempColor = GameColors.guestControlOutsideColor;
+                System.Console.WriteLine("Is guests turn");
+            }
+
             createButtonArea();
-            attAction.moveHex(-100, -100, GameColors.attButton, GameColors.attButton);
-            moveAction.moveHex(-100, -100, GameColors.moveButton, GameColors.moveButton);
-            magicAction.moveHex(-100, -100, GameColors.magicButton, GameColors.magicButton);
-            attUnit.moveHex(-100, -100, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-            defUnit.moveHex(-100, -100, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magUnit.moveHex(-100, -100, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
+            attAction.moveHex(-100, -100, tempColor, tempColor);
+            moveAction.moveHex(-100, -100, tempColor, tempColor);
+            magicAction.moveHex(-100, -100, tempColor, tempColor);
+            attUnit.moveHex(-100, -100, tempColor, tempColor);
+            defUnit.moveHex(-100, -100, tempColor, tempColor);
+            magUnit.moveHex(-100, -100, tempColor, tempColor);
 
         }
         private void drawUnitInfo(SpriteBatch spriteBatch)

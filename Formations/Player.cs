@@ -23,7 +23,7 @@ namespace Formations
 
         private bool _isHost;
 
-        public bool isPlayersTurn = false;
+        public bool isPlayersTurn = true;
 
         private int _totalAttNotPlaced = 0;
 
@@ -245,12 +245,27 @@ namespace Formations
             uiManager.Add(totalMagUnitLabel);
             uiManager.Add(staminaPointsLeft);
 
-            attHex = new Hexagon(20);
-            defHex = new Hexagon(20);
-            magHex = new Hexagon(20);
-            attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-            defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magHex.init(40, 290, graphicsDevice, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
+            Color tempColor;
+
+            //System.Console.WriteLine("is this even working");
+
+            if (isPlayersTurn)
+            {
+                tempColor = GameColors.HostControlOutsideColor;
+                System.Console.WriteLine("Is hosts turn");
+            }
+            else
+            {
+                tempColor = GameColors.guestControlOutsideColor;
+                System.Console.WriteLine("Is guests turn");
+            }
+
+            attHex = new Hexagon(25);
+            defHex = new Hexagon(25);
+            magHex = new Hexagon(25);
+            attHex.init(40, 205, graphicsDevice, tempColor, tempColor);
+            defHex.init(40, 255, graphicsDevice, tempColor, tempColor);
+            magHex.init(40, 305, graphicsDevice, tempColor, tempColor);
 
         }
         public void removeUI()
@@ -308,6 +323,8 @@ namespace Formations
         {
             Stamina += 30;
             staminaPointsLeft.Text = Stamina + "";
+
+         
         }
         public void useStamina(int staminaToUse)
         {
@@ -424,6 +441,9 @@ namespace Formations
             bar.draw(spriteBatch);
             unitsBar.draw(spriteBatch);
 
+            spriteBatch.Draw(Formations.attackSprite, new Rectangle(25, 190, 30, 30), Color.White);
+            spriteBatch.Draw(Formations.defenderSprite, new Rectangle(25, 240, 30, 30), Color.White);
+            spriteBatch.Draw(Formations.healerSprite, new Rectangle(30, 290, 22, 30), Color.White);
         }    
     }
 }
