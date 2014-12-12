@@ -48,6 +48,8 @@ namespace Formations
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
+
+        private List<Texture2D> unitTextures;
         
         private Color borderColor;
         
@@ -159,17 +161,18 @@ namespace Formations
             // TODO: Complete member initialization
         }
 
-        public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager)
+        public void init(string nameOfPlayer, UnitAbstract[,] units, GraphicsDevice graphicsDevice, Manager uiManager, List<Texture2D> unitTextures)
         {
             playerName = nameOfPlayer;
             this.uiManager = uiManager;
+            this.unitTextures = unitTextures;
             uiManager.SetSkin(new Skin(uiManager, "Default"));
             for (int i = 0; i < 20; i++)
             {
                 if (units[0, i] != null)
                 {
                     _attUnitArray[i] = (UnitAtt)units[0, i];
-                    _attUnitArray[i].init(IsHost, this);
+                    _attUnitArray[i].init(IsHost, this, unitTextures[0]);
                     AttUnitsNotPlaced++;
                 }
             }
@@ -178,7 +181,7 @@ namespace Formations
                 if (units[1, i] != null)
                 {
                     _defUnitArray[i] = (UnitDef)units[1, i];
-                    _defUnitArray[i].init(IsHost, this);
+                    _defUnitArray[i].init(IsHost, this, unitTextures[1]);
                     DefUnitsNotPlaced++;
                 }
             }
@@ -187,7 +190,7 @@ namespace Formations
                 if (units[2, i] != null)
                 {
                     _magUnitArray[i] = (UnitMag)units[2, i];
-                    _magUnitArray[i].init(IsHost, this);
+                    _magUnitArray[i].init(IsHost, this, unitTextures[2]);
                     MagUnitsNotPlaced++;
                 }
             }

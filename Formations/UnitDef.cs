@@ -21,7 +21,9 @@ namespace Formations
         public const int STAMINA_PLACE_COST = 5;
         private int absorbAmount = 1;
 
-        public override void init(bool isHostsUnit, Player player)
+        public static Texture2D sprite = Formations.defenderSprite;
+
+        public override void init(bool isHostsUnit, Player player, Texture2D sprite)
         {
             this.IsHostsUnit = isHostsUnit;
             this.Damage = DAMAGE;
@@ -32,6 +34,7 @@ namespace Formations
             this.StaminaMoveCost = STAMINA_MOVE_COST;
             this.StaminaPlaceCost = STAMINA_PLACE_COST;
             this.Player = player;
+            //this.sprite = sprite;
             // Particle engine stuff
             bloodParticles = new BloodParticleEngine(Formations.bloodTextures, new Vector2(400, 240));
             attackParticles = new AttackParticleEngine(Formations.attackTextures, new Vector2(400, 240));
@@ -94,6 +97,12 @@ namespace Formations
 
         public override void draw(SpriteBatch spriteBatch)
         {
+
+            if (ContainingTile != null && ContainingTile.getUnit() != null)
+            {
+                spriteBatch.Draw(sprite, new Rectangle((int)ContainingTile.getX() - 20, (int)ContainingTile.getY() - 20, 40, 40), Color.White);
+            }
+
             // Particles
             attackParticles.Draw(spriteBatch);
             bloodParticles.Draw(spriteBatch);

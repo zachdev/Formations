@@ -1,5 +1,6 @@
 ﻿using Formations.Connection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,9 @@ namespace Formations
         private Button challengeButton;
         private Button singlePlayerGameButton;
         private int count = 1;
+
+        private AttackParticleEngine attackParticleEngine;
+        private HealingParticleEngine healingParticleEngine;
 
         public Person person 
         { 
@@ -178,6 +182,9 @@ namespace Formations
 
             connectionManager = ConnectionManager.getInstance();
 
+            //attackParticleEngine = new AttackParticleEngine();
+            healingParticleEngine = new HealingParticleEngine(Formations.healingTextures, new Vector2(0, 200));
+
         }
 
         void singlePlayerGameButton_Click(object sender, TomShane.Neoforce.Controls.EventArgs e)
@@ -286,6 +293,8 @@ namespace Formations
 
         public void update()
         {
+            //healingParticleEngine = new HealingParticleEngine(Formations.healingTextures, new Vector2(500, 200));
+
             if (CurrentRequest != null && CurrentRequest.IsAccepted)
             {
                 formation.challengePerson(new GameBoard());
@@ -305,11 +314,15 @@ namespace Formations
                 connectionManager.sendPerson(person);
             }
             count++;
+
+            healingParticleEngine.Update();
         }
 
-        public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public void draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            healingParticleEngine.Draw(spriteBatch);
         }
     }
 }

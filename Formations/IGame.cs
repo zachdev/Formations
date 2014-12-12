@@ -10,7 +10,7 @@ namespace Formations
     public abstract class IGame : IMouseListener
     {
         public bool gameDone = false;
-        public abstract void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost);
+        public abstract void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost, List<Texture2D> unitTextures);
         public abstract void update();
         public abstract void draw(SpriteBatch spriteBatch);
 

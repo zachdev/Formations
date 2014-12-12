@@ -26,6 +26,12 @@ namespace Formations
         public static List<Texture2D> attackTextures;
         public static List<Texture2D> bloodTextures;
         public static List<Texture2D> healingTextures;
+
+        public static Texture2D attackSprite;
+        public static Texture2D defenderSprite;
+        public static Texture2D healerSprite;
+
+        public static List<Texture2D> unitTextures;
         //MouseState mouseState;
         MouseListener mouseListener;
 
@@ -110,6 +116,15 @@ namespace Formations
             healingTextures.Add(Content.Load<Texture2D>("heart2"));
             healingTextures.Add(Content.Load<Texture2D>("star2"));
 
+            unitTextures = new List<Texture2D>();
+            attackSprite = Content.Load<Texture2D>("attackunit");
+            defenderSprite = Content.Load<Texture2D>("defendunit");
+            healerSprite = Content.Load<Texture2D>("magicunit");
+
+            unitTextures.Add(attackSprite);
+            unitTextures.Add(defenderSprite);
+            unitTextures.Add(healerSprite);
+
 
 
             // TODO: use this.Content to load your game content here
@@ -149,7 +164,7 @@ namespace Formations
         private void newGame(IGame game)
         {
             gb = game;
-            gb.init(theManager, GraphicsDevice, this , "Formations", true);
+            gb.init(theManager, GraphicsDevice, this , "Formations", true, unitTextures);
             mouseListener.startListener();
             isGameStarted = true;
             
@@ -222,6 +237,10 @@ namespace Formations
             if (login.isLoggedIn && isGameStarted)
             {
                 gb.draw(spriteBatch);
+            }
+            else if (gameLobby != null)
+            {
+                gameLobby.draw(spriteBatch);
             }
             spriteBatch.End();
             theManager.EndDraw();

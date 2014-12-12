@@ -84,7 +84,7 @@ namespace Formations
             get { return _attacksThisRound; }
             private set { _attacksThisRound = value; }
         }
-        public abstract void init(bool isOwnedByPlayer, Player player);
+        public abstract void init(bool isOwnedByPlayer, Player player, Texture2D sprite);
         public abstract string  getUnitType();
         public abstract void attack(UnitAbstract unit);
         public abstract void defend(UnitAbstract unit);

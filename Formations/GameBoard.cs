@@ -116,6 +116,8 @@ namespace Formations
         
         private BasicEffect basicEffect;
 
+        public List<Texture2D> unitTextures;
+
         // Chat class
         
         private Chat chatManager;
@@ -158,12 +160,13 @@ namespace Formations
         /// <param name="graphicsDevice"></param>
         /// <param name="font"></param>
         /// <param name="gameName"></param>
-        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost)
+        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost, List<Texture2D> unitTextures)
         {
             this.gameName = gameName;
             this.isHost = isHost;
             this.uiManager = uiManager;
             this.formation = formation;
+            this.unitTextures = unitTextures;
 
             players[0] = new Player(true);
             players[1] = new Player(false);
@@ -172,8 +175,8 @@ namespace Formations
              */
             // if (isHost)
             // {
-            players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-            players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+            players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
+            players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
             players[0].isPlayersTurn = true;
 
             // }

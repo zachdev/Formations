@@ -187,11 +187,11 @@ namespace Formations.Connection
                 {
                     if (game != null)
                     {
-                        chat.chatHistoryTextbox.Text += (obj as String) + "\n";//set chat history here chat.
+                        chat.chatHistoryTextbox.Text = (obj as String) + "\n" + chat.chatHistoryTextbox.Text;//set chat history here chat.
                     }
                     else
                     {
-                        gameLobby.chatHistoryTextbox.Text += (obj as String) + "\n"; //---write back the text to the client---
+                        gameLobby.chatHistoryTextbox.Text = (obj as String) + "\n" + gameLobby.chatHistoryTextbox.Text; //---write back the text to the client---
                     }
                 }
                 else if (obj is Person)

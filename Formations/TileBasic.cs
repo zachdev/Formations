@@ -92,24 +92,35 @@ namespace Formations
             }
             else//if the passed in unit is not null then you need to check if there is already a unit and what type the passed in unit is
             {
+                Color tempColor;
+
+                if (newUnit.Player.IsHost)
+                {
+                    tempColor = GameColors.HostControlOutsideColor;
+                }
+                else
+                {
+                    tempColor = GameColors.guestControlOutsideColor;
+                }
+
                 if (newUnit.GetType() == typeof(UnitAtt) && unit == null) 
                 {
-                    tileHex.setInsideColor(GameColors.attUnitInsideColor);
-                    tileHex.setOutsideColor(GameColors.attUnitOutsideColor);
+                    tileHex.setInsideColor(tempColor);
+                    tileHex.setOutsideColor(tempColor);
                     unit = newUnit;
                     unit.ContainingTile = this;
                 }
                 if (newUnit.GetType() == typeof(UnitDef) && unit == null) 
                 {
-                    tileHex.setInsideColor(GameColors.defUnitInsideColor);
-                    tileHex.setOutsideColor(GameColors.defUnitOutsideColor);
+                    tileHex.setInsideColor(tempColor);
+                    tileHex.setOutsideColor(tempColor);
                     unit = newUnit;
                     unit.ContainingTile = this;
                 }
                 if (newUnit.GetType() == typeof(UnitMag) && unit == null) 
                 {
-                    tileHex.setInsideColor(GameColors.magUnitInsideColor);
-                    tileHex.setOutsideColor(GameColors.magUnitOutsideColor);
+                    tileHex.setInsideColor(tempColor);
+                    tileHex.setOutsideColor(tempColor);
                     unit = newUnit;
                     unit.ContainingTile = this;
                 }
@@ -290,6 +301,7 @@ namespace Formations
         {
 
             tileHex.draw(spriteBatch);
+           
         }
 
         internal void updateHexHover()

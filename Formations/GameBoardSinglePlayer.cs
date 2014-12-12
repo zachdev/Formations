@@ -67,6 +67,8 @@ namespace Formations
         private VertexPositionColor[] vertices = new VertexPositionColor[6];
         private VertexPositionColor[] borderLines = new VertexPositionColor[8];
         private BasicEffect basicEffect;
+
+        public List<Texture2D> unitTextures;
         
         // Various buttons
         private Button resizeButton;
@@ -102,12 +104,13 @@ namespace Formations
         /// <param name="graphicsDevice"></param>
         /// <param name="font"></param>
         /// <param name="gameName"></param>
-        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost)
+        public override void init(Manager uiManager, GraphicsDevice graphicsDevice, Formations formation, string gameName, bool isHost, List<Texture2D> unitTextures)
         {
             this.gameName = gameName;
             this.isHost = isHost;
             this.uiManager = uiManager;
             this.formation = formation;
+            this.unitTextures = unitTextures;
             players[0] = new Player(true);
             players[1] = new Player(false);
             /*
@@ -115,8 +118,8 @@ namespace Formations
              */
            // if (isHost)
            // {
-                players[0].init("<HostNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
-                players[1].init("<GuestNameHere>", createUnitArray(10, 5, 5), graphicsDevice, uiManager);
+            players[0].init("Player 1", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
+            players[1].init("Player 2", createUnitArray(10, 5, 5), graphicsDevice, uiManager, unitTextures);
                 players[0].isPlayersTurn = true;
                 
            // }
@@ -180,21 +183,37 @@ namespace Formations
             magicAction = new Hexagon(unitSideLength);
             /*
              * initiallizing the Hexagons
-             */ 
+             */
+            Color tempColor;
+
+            //System.Console.WriteLine("is this even working");
+
+            if (isHostsTurn)
+            {
+                tempColor = GameColors.HostControlOutsideColor;
+                System.Console.WriteLine("Is hosts turn");
+            }
+            else
+            {
+                tempColor = GameColors.guestControlOutsideColor;
+                System.Console.WriteLine("Is guests turn");
+            }
+            
             turnSignal.init(600,50, graphicsDevice, GameColors.turnButtonInsideColor, GameColors.turnButtonOutsideColor);
-            attUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            magUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            defUnit.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            attAction.init(0, 0, graphicsDevice, GameColors.attButton, GameColors.attButton);
-            moveAction.init(0, 0, graphicsDevice, GameColors.moveButton, GameColors.moveButton);
-            magicAction.init(0, 0, graphicsDevice, GameColors.magicButton, GameColors.magicButton);
+            attUnit.init(0, 0, graphicsDevice, tempColor, tempColor);
+            magUnit.init(0, 0, graphicsDevice, tempColor, tempColor);
+            defUnit.init(0, 0, graphicsDevice, tempColor, tempColor);
+            attAction.init(0, 0, graphicsDevice, tempColor, tempColor);
+            moveAction.init(0, 0, graphicsDevice, tempColor, tempColor);
+            magicAction.init(0, 0, graphicsDevice, tempColor, tempColor);
 
             attHex = new Hexagon(20);
             defHex = new Hexagon(20);
             magHex = new Hexagon(20);
-            attHex.init(40, 200, graphicsDevice, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-            defHex.init(40, 245, graphicsDevice, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-            magHex.init(40, 290, graphicsDevice, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
+
+            attHex.init(40, 200, graphicsDevice, tempColor, tempColor);
+            defHex.init(40, 245, graphicsDevice, tempColor, tempColor);
+            magHex.init(40, 290, graphicsDevice, tempColor, tempColor);
             /*
              * Resize Button
              */ 
@@ -811,12 +830,16 @@ namespace Formations
                     }
                 }
             }
-            drawUnitButtons(currentTile, spriteBatch);
-            // drawUnitInfo(spriteBatch);
             foreach (Player player in players)
             {
                 player.draw(spriteBatch);
             }
+
+            drawUnitButtons(currentTile, spriteBatch);
+            // drawUnitInfo(spriteBatch);
+
+            
+            
 
             turnSignal.draw(spriteBatch);
 
@@ -827,18 +850,22 @@ namespace Formations
         {
             if (attPlacementInProgress)
             {
-                attUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.attUnitInsideColor, GameColors.attUnitOutsideColor);
-                attUnit.draw(spriteBatch);
+
+                //attUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.noUnitInsideColor, GameColors.noControlOutsideColor);
+                //attUnit.draw(spriteBatch);
+                spriteBatch.Draw(Formations.attackSprite, new Rectangle((int)currentMouseState.X - 20, (int)currentMouseState.Y - 20, 40, 40), Color.White);
             }
             if (defPlacementInProgress)
             {
-                defUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.defUnitInsideColor, GameColors.defUnitOutsideColor);
-                defUnit.draw(spriteBatch);
+                //defUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.noUnitInsideColor, GameColors.noControlOutsideColor);
+                //defUnit.draw(spriteBatch);
+                spriteBatch.Draw(Formations.defenderSprite, new Rectangle((int)currentMouseState.X - 20, (int)currentMouseState.Y - 20, 40, 40), Color.White);
             }
             if (magPlacementInProgress)
             {
-                magUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.magUnitInsideColor, GameColors.magUnitOutsideColor);
-                magUnit.draw(spriteBatch);
+                //magUnit.moveHex(currentMouseState.X, currentMouseState.Y, GameColors.noUnitInsideColor, GameColors.noControlOutsideColor);
+                //magUnit.draw(spriteBatch);
+                spriteBatch.Draw(Formations.healerSprite, new Rectangle((int)currentMouseState.X - 15, (int)currentMouseState.Y - 20, 30, 40), Color.White);
             }
             if (currentTile == null)
             {

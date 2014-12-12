@@ -22,8 +22,10 @@ namespace Formations
         private int healAmount = 1;
         private List<AnimationLightening> lightening = new List<AnimationLightening>();
 
+        public static Texture2D sprite = Formations.healerSprite;
 
-        public override void init(bool isHostsUnit, Player player)
+
+        public override void init(bool isHostsUnit, Player player, Texture2D sprite)
         {
             this.IsHostsUnit = isHostsUnit;
             this.Damage = DAMAGE;
@@ -34,6 +36,7 @@ namespace Formations
             this.StaminaMoveCost = STAMINA_MOVE_COST;
             this.StaminaPlaceCost = STAMINA_PLACE_COST;
             this.Player = player;
+            //this.sprite = sprite;
 
             for (int i = 0; i < 5; i++)
             {
@@ -134,11 +137,18 @@ namespace Formations
             {
                 strike.update();
             }
+
             bloodParticles.Update();
         }
 
         public override void draw(SpriteBatch spriteBatch)
         {
+
+            if (ContainingTile != null && ContainingTile.getUnit() != null)
+            {
+                spriteBatch.Draw(sprite, new Rectangle((int)ContainingTile.getX() - 15, (int)ContainingTile.getY() - 20, 30, 40), Color.White);
+            }
+
             foreach (AnimationLightening strike in lightening)
             {
                 strike.draw(spriteBatch);
