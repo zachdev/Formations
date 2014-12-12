@@ -25,9 +25,9 @@ namespace Formations
         private int _attacksThisRound;
         private TileBasic _containingTile;
         private Player _player;
-        protected ParticleEngine attackParticles;
-        protected ParticleEngine bloodParticles;
-        protected ParticleEngine healingParticles;
+        protected AttackParticleEngine attackParticles;
+        protected BloodParticleEngine bloodParticles;
+        protected HealingParticleEngine healingParticles;
         protected FloatingText floatingText;
         public bool isDead
         { 

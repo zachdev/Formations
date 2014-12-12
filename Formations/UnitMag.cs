@@ -39,8 +39,8 @@ namespace Formations
             {
                 lightening.Add(new AnimationLightening());
             }
-            bloodParticles = new ParticleEngine(Formations.bloodTextures, new Vector2(400, 240));
-            healingParticles = new ParticleEngine(Formations.healingTextures, new Vector2(400, 240));
+            bloodParticles = new BloodParticleEngine(Formations.bloodTextures, new Vector2(400, 240));
+            healingParticles = new HealingParticleEngine(Formations.healingTextures, new Vector2(400, 240));
             floatingText = new FloatingText(this);
         }
         public override string getUnitType()

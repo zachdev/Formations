@@ -51,6 +51,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animations\AnimationLightening.cs" />
+    <Compile Include="Animations\AttackParticleEngine.cs" />
+    <Compile Include="Animations\BloodParticleEngine.cs" />
+    <Compile Include="Animations\HealingParticleEngine.cs" />
     <Compile Include="ChallengeRequest.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
@@ -134,6 +137,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\axe.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bloodparticle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\heart.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\heart2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\star1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\star2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\star3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sword.png">
