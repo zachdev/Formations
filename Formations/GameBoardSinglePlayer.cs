@@ -21,7 +21,7 @@ namespace Formations
         private Manager uiManager;
         private string gameName;
         private Vector2 gameNameLocation = new Vector2(500, 10);
-        private int movesLeftInPhase = 6;
+        private int movesLeftInPhase = 4;
         private bool isHost;
         private bool isHostsTurn = true;
         private bool isFirstPhase = true;
